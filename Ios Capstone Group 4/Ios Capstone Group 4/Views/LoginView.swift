@@ -9,6 +9,12 @@ import SwiftUI
 struct LoginView : View{
     
     @State private var viewModel = ViewModel()
+    @State private var isLoggedIn: Bool = false
+    
+    init(isLoggedIn: Bool) {
+        self.isLoggedIn = isLoggedIn
+    }
+    
     var body: some View {
         VStack {
             Text("Login")
@@ -30,12 +36,14 @@ struct LoginView : View{
                     }
                     
                     if resp.success {
-                        Text("You did it!")
+                        isLoggedIn = true
                     }
                 }
             }
             .buttonStyle(.borderedProminent)
-            .disabled(viewModel.loginDisabled)
+            .disabled(viewModel.loginDisabled).navigationDestination(isPresented: $isLoggedIn) {
+                DefaultView(isLoggedIn: isLoggedIn)
+            }
             
             if !viewModel.errorMessage.isEmpty {
                 Text(viewModel.errorMessage)
@@ -83,7 +91,4 @@ extension LoginView {
         }
         
     }
-}
-#Preview{
-    LoginView()
 }

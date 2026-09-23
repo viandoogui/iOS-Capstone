@@ -2,22 +2,13 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var current: String = ""
-    
+    @State private var isLoggedIn = false
     var body: some View {
         NavigationStack {
             VStack {
-                switch current{
-                case "home":
-                    DefaultView()
-                default:
-                    LoginView()
-                }	
+                LoginView(isLoggedIn: isLoggedIn)
             }
         }
     }
     
-}
-
-#Preview {
-    ContentView()
 }
