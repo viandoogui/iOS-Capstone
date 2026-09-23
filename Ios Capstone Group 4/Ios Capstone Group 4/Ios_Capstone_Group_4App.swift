@@ -11,11 +11,20 @@ import CoreData
 @main
 struct Ios_Capstone_Group_4App: App {
     let persistenceController = PersistenceController.shared
-
+    @StateObject var authStatus = AuthStatus()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            if authStatus.isLoggedIn {
+                ContentView()
+                    .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                    .environmentObject(authStatus)
+            }
+            else {
+                LoginView()
+                    .environmentObject(authStatus)
+            }
+           
         }
     }
 }

@@ -7,13 +7,10 @@
 import SwiftUI
 
 struct LoginView : View{
+    @EnvironmentObject var authStatus: AuthStatus
     
     @State private var viewModel = ViewModel()
-    @State private var isLoggedIn: Bool = false
-    
-    init(isLoggedIn: Bool) {
-        self.isLoggedIn = isLoggedIn
-    }
+
     
     var body: some View {
         VStack {
@@ -35,15 +32,11 @@ struct LoginView : View{
                         return
                     }
                     
-                    if resp.success {
-                        isLoggedIn = true
-                    }
+                    authStatus.updateLoginStatus(success: resp.success, authToken: resp.accessToken, refreshToken: resp.refreshToken)
                 }
             }
             .buttonStyle(.borderedProminent)
-            .disabled(viewModel.loginDisabled).navigationDestination(isPresented: $isLoggedIn) {
-                DefaultView(isLoggedIn: isLoggedIn)
-            }
+            .disabled(viewModel.loginDisabled)
             
             if !viewModel.errorMessage.isEmpty {
                 Text(viewModel.errorMessage)

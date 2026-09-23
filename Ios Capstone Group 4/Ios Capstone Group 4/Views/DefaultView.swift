@@ -7,19 +7,13 @@
 import SwiftUI
 
 struct DefaultView: View {
-    
-    @State private var isLoggedIn: Bool = false
+    @EnvironmentObject var authStatus: AuthStatus
     @Environment(\.dismiss) private var dismiss
-    
-    init(isLoggedIn: Bool) {
-        self.isLoggedIn = isLoggedIn
-    }
     
     var body: some View {
         Text("Hello, World!")
         Button("Log Out"){
-            isLoggedIn = false
-            dismiss()
+            authStatus.updateLoginStatus(success: false)
         }
     }
 }
