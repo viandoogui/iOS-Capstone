@@ -8,7 +8,8 @@ struct ContentView: View {
             VStack {
                 switch current {
                 default:
-                    DefaultView()
+                   // DefaultView()
+                    ProductListView()
                 }
             }
         }
