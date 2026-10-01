@@ -21,8 +21,9 @@ struct Ios_Capstone_Group_4App: App {
                     .environmentObject(authStatus)
             }
             else {
-                LoginView()
-                    .environmentObject(authStatus)
+//                LoginView()
+//                    .environmentObject(authStatus)
+                EmployeeList(repository: MockEmployeeRepository())
             }
            
         }
