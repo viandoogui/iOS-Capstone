@@ -41,13 +41,13 @@ class MockEmployeeRepository: RepositoryProtocol<Employee>{
             ),
         Employee(
             id: 102,
-            firstName: "John",
-            lastName: "Snow",
+            firstName: "Bobby",
+            lastName: "Bower",
             title: nil,
-            shift: "Full-time",
-            department: "Engineering",
+            shift: "Intern",
+            department: "IT",
             hireDate: Date(),
-            jobTitle: "Software Engineer",
+            jobTitle: "Early Career Developer",
             ),
         Employee(
             id: 103,
