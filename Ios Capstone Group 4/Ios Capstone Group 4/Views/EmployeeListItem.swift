@@ -15,11 +15,30 @@ struct EmployeeListItem: View {
     }
     
     var body: some View {
-        GridRow {
-            Text("\(employee.firstName)")
-            Text("\(employee.lastName)")
-            Text("\(employee.department)")
-        }
         
+        HStack {
+            GridRow {
+                Text("\(employee.firstName)")
+                Text("\(employee.lastName)")
+                Text("\(employee.department)")
+            }
+            .onTapGesture {}
+            .frame(maxWidth: .infinity, maxHeight: 50)
+            .foregroundStyle(Color.blue)
+            .padding(5)
+            
+        }
+        .border(Color.black, width: 1)
+        .background {
+            HStack {
+                Spacer()
+                Divider().gridCellUnsizedAxes(.vertical)
+                Spacer()
+                Divider().gridCellUnsizedAxes(.vertical)
+                Spacer()
+            }
+            .padding(5)
+        }
+
     }
 }

@@ -18,65 +18,69 @@ struct EmployeeList: View {
     var body: some View {
         VStack {
             NavigationStack {
-                VStack() {
-                    HStack(){
-                        TextField("Search Full Name...", text: $viewModel.filter)
+                VStack {
+                    VStack {
+                        HStack {
+                            TextField("Search Full Name...", text: $viewModel.filter)
+                                .padding(5)
+                                .background(Color.white)
+                                .cornerRadius(5)
+                            Spacer()
+                            Button("Filter") {}
+                                .padding(12)
+                                .background(Color.white, in: Capsule())
+                        }
+                        .padding(10)
+                        
+                        ScrollView {                        Grid(horizontalSpacing: 0, verticalSpacing: 0){
+                            
+                            HStack {
+                                GridRow {
+                                    Text("First Name")
+                                    Text("Last Name")
+                                    Text("Department")
+                                }
+                                .frame(maxWidth: .infinity)
+                            }
                             .padding(5)
-                        Spacer()
-                        Button("Filter") {}
-                        .padding(12)
-                        .background(
-                            Capsule()
-                                .stroke(Color.blue, lineWidth: 2)
-                        )
-                    }
-                    .padding(2)
-                    
-                    Grid(horizontalSpacing: 0, verticalSpacing: 0){
-                        GridRow {
-                            Text("First Name")
-                            Text("Last Name")
-                            Text("Department")
-                        }
-                        .frame(maxWidth: .infinity, maxHeight: 50)
-                        .border(Color.black, width: 0.2)
-                        
-                        
-                        ForEach(viewModel.matchingEmployees) { employee in
-                            EmployeeListItem(employee: employee)
                             
-                                .onTapGesture {}
-                                .frame(maxWidth: .infinity, maxHeight: 50)
+                            ForEach(viewModel.matchingEmployees) { employee in
+                                
+                                EmployeeListItem(employee: employee)
+                                    .padding(10)
+                            }
                             
                         }
-                        .background(Color.blue.opacity(0.7))
-                        .border(Color.black, width: 0.2)
+                        }
+                        .background(Color.white)
+                        .padding(20)
                         
                     }
-                    .background(Color.gray.opacity(0.2))
-                    .border(Color.black, width: 0.2)
-                }
-                .navigationTitle("Employee List")
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button( action: {} ) {
-                            Image(systemName: "arrowshape.turn.up.backward.fill")
+                    .navigationTitle("Employee List")
+                    .background(Color.blue)
+                    .padding(10)
+                    .cornerRadius(20)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarLeading) {
+                            Button( action: {} ) {
+                                Image(systemName: "arrowshape.turn.up.backward.fill")
+                            }
                         }
-                    }
-                    ToolbarSpacer()
-                    ToolbarItem() {
-                        Button( action: {} ) {
-                            Image(systemName: "house")
+                        ToolbarSpacer()
+                        ToolbarItem() {
+                            Button( action: {} ) {
+                                Image(systemName: "house")
+                            }
                         }
+                        
                     }
                     
+                    Spacer()
                 }
-                
-                Spacer()
+                .background(Color.cyan)
+                .padding(10)
                 
             }
-            
-            .padding(10)
             .frame(alignment: .top)
             .task {
                 await viewModel.loadEmployees()
