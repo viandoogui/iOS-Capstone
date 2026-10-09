@@ -57,6 +57,9 @@ struct EmployeeList: View {
                         
                     }
                     .navigationTitle("Employee List")
+                    .navigationDestination(for: Employee.self) { employee in
+                        EmployeeDetails(employee: employee)
+                    }
                     .background(Color.blue)
                     .padding(10)
                     .cornerRadius(20)

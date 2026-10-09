@@ -15,18 +15,17 @@ struct EmployeeListItem: View {
     }
     
     var body: some View {
-        
-        HStack {
-            GridRow {
-                Text("\(employee.firstName)")
-                Text("\(employee.lastName)")
-                Text("\(employee.department)")
+        NavigationLink(destination: EmployeeDetails(employee: employee)) {
+            HStack {
+                GridRow {
+                    Text("\(employee.firstName)")
+                    Text("\(employee.lastName)")
+                    Text("\(employee.department)")
+                }
+                .frame(maxWidth: .infinity, maxHeight: 50)
+                .foregroundStyle(Color.blue)
+                .padding(5)
             }
-            .onTapGesture {}
-            .frame(maxWidth: .infinity, maxHeight: 50)
-            .foregroundStyle(Color.blue)
-            .padding(5)
-            
         }
         .border(Color.black, width: 1)
         .background {
@@ -39,6 +38,6 @@ struct EmployeeListItem: View {
             }
             .padding(5)
         }
-
+        
     }
 }

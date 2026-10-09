@@ -7,6 +7,7 @@
 
 import Foundation
 
+@Observable
 class Employee: Identifiable, Hashable, Codable {
     let id: Int
     var firstName: String
