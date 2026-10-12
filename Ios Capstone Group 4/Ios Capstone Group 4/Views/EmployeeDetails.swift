@@ -12,9 +12,10 @@ struct EmployeeDetails: View {
     
     var body: some View {
         @Bindable var empBinding = employee
-        VStack {
+        VStack(spacing: 0) {
             Text("Employee Details")
-                .font(.largeTitle)
+                .font(.title)
+                .padding(10)
             HStack {
                 Spacer()
                 VStack {
@@ -45,17 +46,20 @@ struct EmployeeDetails: View {
                         .padding(20)
                         .textFieldStyle(.roundedBorder)
                 }
-                .padding(2)
                 .background(Color.blue)
+                .cornerRadius(20)
+                .padding(.bottom, 10)
                 .frame(maxWidth: .infinity)
+                
                 Spacer()
             }
-            .padding(10)
-            .frame(maxWidth: .infinity)
 
         }
-        .padding(.top, 20)
         .background(Color.cyan)
+        .cornerRadius(20)
+        .padding(10)
+        .frame(maxWidth: .infinity)
+        
     }
     
 }

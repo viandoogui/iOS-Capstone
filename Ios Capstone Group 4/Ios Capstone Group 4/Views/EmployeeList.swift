@@ -57,18 +57,14 @@ struct EmployeeList: View {
                         
                     }
                     .navigationTitle("Employee List")
+                    .toolbarTitleDisplayMode(.inline)
                     .navigationDestination(for: Employee.self) { employee in
                         EmployeeDetails(employee: employee)
                     }
                     .background(Color.blue)
-                    .padding(10)
                     .cornerRadius(20)
+                    .padding(10)
                     .toolbar {
-                        ToolbarItem(placement: .topBarLeading) {
-                            Button( action: {} ) {
-                                Image(systemName: "arrowshape.turn.up.backward.fill")
-                            }
-                        }
                         ToolbarSpacer()
                         ToolbarItem() {
                             Button( action: {} ) {
@@ -81,6 +77,7 @@ struct EmployeeList: View {
                     Spacer()
                 }
                 .background(Color.cyan)
+                .cornerRadius(20)
                 .padding(10)
                 
             }
