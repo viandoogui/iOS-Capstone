@@ -12,7 +12,7 @@ import CoreData
 struct Ios_Capstone_Group_4App: App {
     let persistenceController = PersistenceController.shared
     @StateObject var authStatus = AuthStatus()
-    
+    let urlBase = "https://api.bootcampcentral.com/api"
     var body: some Scene {
         WindowGroup {
             if authStatus.isLoggedIn {
@@ -23,7 +23,7 @@ struct Ios_Capstone_Group_4App: App {
             else {
 //                LoginView()
 //                    .environmentObject(authStatus)
-                EmployeeList(repository: MockEmployeeRepository())
+                EmployeeList(repository: RemoteEmployeeRepository(urlBase: urlBase, authStatus: authStatus))
             }
            
         }
