@@ -115,8 +115,8 @@ extension EmployeeList {
             didSet {
                 matchingEmployees = employees.filter { employee in
                     filter == "" ||
-                    "\(employee.firstName.lowercased()) \(employee.lastName.lowercased())"
-                        .contains(filter.lowercased())
+                    ("\(employee.firstName.lowercased()) \(employee.lastName.lowercased())"
+                        .contains(filter.lowercased()) && filter != " ")
                 }
                 
             }
