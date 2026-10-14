@@ -196,7 +196,7 @@ extension ProductListView {
         
         var filter:String="" {
             didSet{ //react to when changes have been made to this
-               //put artists in matching artists if theres no filter or if the filter matches.
+               //put products in matching products if theres no filter or if the filter matches.
                 matchingProduct = products.filter{ product in
                     filter == "" || product.name.lowercased().contains(filter.lowercased())
                 }
