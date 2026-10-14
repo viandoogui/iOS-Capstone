@@ -14,6 +14,6 @@ protocol RepositoryProtocol<Item> {
     func insert(_ item: Item) async throws -> Item
     func update(_ item: Item) async throws
     func delete(_ item: Item) async throws
-    
+
     
 }
