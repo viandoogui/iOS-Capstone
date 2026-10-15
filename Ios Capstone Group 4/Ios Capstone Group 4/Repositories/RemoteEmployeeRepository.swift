@@ -21,6 +21,8 @@ class RemoteEmployeeRepository: RepositoryProtocol <Employee> {
         let (data, _) = try await URLSession.shared.data(from: url)
         
         do {
+            // this was necessary because the date format would cause a decodingError
+            // the compiler was expecting a double and got the date as a string.
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
             formatter.locale = Locale(identifier: "en_US_POSIX")
