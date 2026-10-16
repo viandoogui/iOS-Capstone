@@ -7,9 +7,9 @@
 import Foundation
 
 func ApplyDateSettings(_ formatter: DateFormatter) {
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = .current
+    formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+    formatter.locale = Locale(identifier: "en_US_POSIX")
+    formatter.timeZone = .current
 }
 
 func ConfigureNewDecoder(_ formatter: DateFormatter) -> JSONDecoder{

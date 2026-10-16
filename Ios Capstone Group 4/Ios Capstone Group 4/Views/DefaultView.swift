@@ -10,13 +10,10 @@ struct DefaultView: View {
     @EnvironmentObject var authStatus: AuthStatus
     @Environment(\.dismiss) private var dismiss
     
+    
     var body: some View {
         VStack {
             Text("Hello, World!")
-            
-            NavigationLink(destination: OrderListView()) {
-                Text("Order History")
-            }
             
             Button("Log Out"){
                 authStatus.updateLoginStatus(success: false)

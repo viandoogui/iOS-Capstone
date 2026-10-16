@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct OrderListView: View {
+    @State private var viewModel: ViewModel
     
-    @State private var viewModel: ViewModel = ViewModel()
+    init(repository: any RepositoryProtocol<Order>) {
+        viewModel = ViewModel(repository: repository)
+    }
     
     var body: some View {
         
@@ -118,13 +121,16 @@ extension OrderListView {
         }
         
         var errorMessage = ""
+        private let repo: any RepositoryProtocol<Order>
         
-        var mockRepo = MockOrderRepository()
+        init(repository: any RepositoryProtocol<Order>) {
+            self.repo = repository
+        }
         
         func loadOrders() async {
             
             do {
-                let loadedOrders = try await mockRepo.getAll()
+                let loadedOrders = try await repo.getAll()
                 allOrders = loadedOrders
                 
                 var uniqueOrders: [Order] = []
