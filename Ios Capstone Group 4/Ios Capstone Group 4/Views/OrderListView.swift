@@ -54,20 +54,17 @@ struct OrderListView: View {
                             NavigationLink(
                                 destination: OrderDetails(
                                     orderNumber: order.orderNumber,
-                                    orders: viewModel.orders
+                                    orders: viewModel.allOrders
                                 )
                             ) {
                                 
                                 HStack {
                                     
-                                    Text("\(order.orderNumber)")
-                                        .frame(width: 80)
+                                    Text("\(order.orderNumber)").frame(width: 80)
                                     
                                     Divider()
                                     
-                                    Text(order.storeName)
-                                    
-                                        .frame(maxWidth: .infinity)
+                                    Text(order.storeName).frame(maxWidth: .infinity)
                                     
                                     Divider()
                                     
@@ -108,6 +105,7 @@ extension OrderListView {
     class ViewModel {
         
         var orders: [Order] = []
+        var allOrders: [Order] = []
         var matchingOrders: [Order] = []
         var filter: String = "" {
             didSet {
@@ -127,6 +125,7 @@ extension OrderListView {
             
             do {
                 let loadedOrders = try await mockRepo.getAll()
+                allOrders = loadedOrders
                 
                 var uniqueOrders: [Order] = []
                 
