@@ -47,6 +47,14 @@ struct EmployeeList: View {
                         }
                         .padding(10)
                         
+                        HStack {
+                            TextField("Search Department...", text: $viewModel.departmentFilter)
+                                .padding(5)
+                                .background(Color.white)
+                                .cornerRadius(5)
+                        }
+                        .padding(.horizontal, 10)
+                        
                         ScrollView {                        Grid(horizontalSpacing: 0, verticalSpacing: 0){
                             
                             HStack {
@@ -132,11 +140,20 @@ extension EmployeeList {
             }
         }
         
+        var departmentFilter: String = "" {
+            didSet {
+                refilterEmployees()
+            }
+        }
+
+        
         func refilterEmployees() {
             matchingEmployees = employees.filter { employee in
-                filter == "" ||
+                (filter == "" ||
                 ("\(employee.firstName.lowercased()) \(employee.lastName.lowercased())"
-                    .contains(filter.lowercased()) && filter != " ")
+                    .contains(filter.lowercased()) && filter != " "))
+                && (departmentFilter == "" || employee.department.lowercased().contains( departmentFilter.lowercased())
+                )
             }
         }
         
