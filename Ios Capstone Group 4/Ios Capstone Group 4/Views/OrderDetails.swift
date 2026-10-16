@@ -39,6 +39,7 @@ struct OrderDetails: View {
                 
                 Text("Order #: \(firstOrder.orderNumber)")
                 Text("Store: \(firstOrder.storeName)")
+                Text("Date: \(firstOrder.orderDate.formatted(date: .numeric, time: .omitted))")
                 
                 VStack {
                     
