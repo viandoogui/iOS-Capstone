@@ -15,6 +15,8 @@ class RemoteEmployeeRepository: RepositoryProtocol <Employee> {
         self.urlBase = urlBase
     }
     
+    
+    
     func getAll() async throws -> [Employee] {
         let urlString = "\(urlBase)/Employee"
         let url = URL(string: urlString)!
@@ -22,13 +24,9 @@ class RemoteEmployeeRepository: RepositoryProtocol <Employee> {
         
         do {
             let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-            formatter.locale = Locale(identifier: "en_US_POSIX")
-            formatter.timeZone = .current
-
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .formatted(formatter)
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            ApplyDateSettings(formatter)
+            let decoder = ConfigureNewDecoder(formatter)
+            
             return try decoder.decode([Employee].self, from: data)
         } catch {
             print(error)
