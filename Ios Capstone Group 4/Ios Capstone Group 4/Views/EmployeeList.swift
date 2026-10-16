@@ -28,13 +28,16 @@ struct EmployeeList: View {
                             Spacer()
                             Menu {
                                 Button("None") {
+                                    viewModel.clearSort()
                                     viewModel.refilterEmployees()
                                 }
                                 Button("A - Z"){
-                                    viewModel.sortAZ()
+                                    viewModel.sortByAZ()
+                                    viewModel.selectedSort()
                                 }
                                 Button("Z - A"){
-                                    viewModel.sortZA()
+                                    viewModel.sortByZA()
+                                    viewModel.selectedSort()
                                 }
                             }
                             label: {
@@ -155,6 +158,8 @@ extension EmployeeList {
                 && (departmentFilter == "" || employee.department.lowercased().contains( departmentFilter.lowercased())
                 )
             }
+            
+            selectedSort()
         }
         
         var matchingEmployees: [Employee] = []
@@ -171,12 +176,18 @@ extension EmployeeList {
             
         }
         
-        func sortAZ() {
-            matchingEmployees = matchingEmployees.sorted(by: {$0.firstName < $1.firstName})
+        var selectedSort: () -> Void = {}
+        
+        func clearSort() {
+            selectedSort = {}
         }
         
-        func sortZA() {
-            matchingEmployees = matchingEmployees.sorted(by: {$0.firstName > $1.firstName})
+        func sortByAZ() {
+            selectedSort = { self.matchingEmployees = self.matchingEmployees.sorted(by: {$0.firstName < $1.firstName}) }
+        }
+        
+        func sortByZA() {
+            selectedSort = { self.matchingEmployees = self.matchingEmployees.sorted(by: {$0.firstName > $1.firstName}) }
         }
         
     }
