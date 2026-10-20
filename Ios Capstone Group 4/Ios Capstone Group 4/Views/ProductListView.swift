@@ -8,157 +8,142 @@
 import SwiftUI
 
 struct ProductListView: View {
-    @State private var viewModel:ViewModel = ViewModel()
+    //@State private var viewModel:ViewModel = ViewModel()
     //@Environment(\.MockProductRepository) private var repo
     @State var productName:String = ""
+    
+    @State private var viewModel:ViewModel
+    init(repository: any RepositoryProtocol<Product>) {
+        viewModel = ViewModel(repository:repository)
+    }
+    
     var body: some View {
 
-        VStack{
-            VStack(){
-                HStack(){
-                    Text("Back button")
-                        .padding(12)
-                    Spacer()
-                    Text("Home Button")
-                        .padding(12)
-                }
-                Text("Product Catalog!")
-                    .font(Font.largeTitle)
-                
+        NavigationStack{
                 VStack(){
-                    HStack(){
-                        TextField("Search Products...", text: $viewModel.filter)
-                            .textFieldStyle(.roundedBorder)
-                            .padding(20)
-                        
-                        Spacer()
-                        
-                        Menu {
-                            Button("Remove Filters") {
-                                viewModel.filter = ""
-                            }
-                            
-//                            Button("In Stock Only (MAYBE)") {
-//                                // Apply filter logic
-//                            }
-                            
-                            Button("A - Z") {
-                                viewModel.sortAZ()
-                            }
-
-                            Divider()
-                            
-                            Button("Price: Low to High") {
-                                viewModel.LowToHigh()
-                            }
-                            
-                            
-                            Button("Price: High to Low") {
-                                viewModel.HighToLow()
-                            }
-                        } label: {
-                            
-                                Text("Filter")
-                                .padding(18)
-                                .foregroundColor(.black)
-                                .background(Color.white)
-                                .cornerRadius(20)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .stroke(Color.black, lineWidth: 1)
-                                )
-                        }
-                        .padding(12)
-                        
-                        
-                    }
+//                   HStack(){
+//                        //Text("Back button")
+//                        //  .padding(12)
+//                        Spacer()
+//                        Text("Home Button")
+//                            .padding(12)
+//                    }
+                
+                    Text("Product Catalog!")
+                        .font(Font.largeTitle)
+                    
                     VStack(){
-                        
-                        VStack(){
-                            HStack(){
-                                Text("Product Number")
-                                    .frame(width: 80, alignment: .center) // Fixed width for column 1
-                                    .padding(4)
-
-                                Text("Name")
-                                    .frame(maxWidth: .infinity, alignment: .center) // Fills middle space
-                                    .padding(4)
-
-                                Text("Price")
-                                    .frame(width: 90, alignment: .center) // Fixed width for column 3
-                                    .padding(4)
-
+                        HStack(){
+                            TextField("Search Products...", text: $viewModel.filter)
+                                .textFieldStyle(.roundedBorder)
+                                .padding(20)
+                            
+                            Spacer()
+                            
+                            Menu {
+                                Button("Remove Filters") {
+                                    viewModel.filter = ""
+                                    viewModel.currentSort = .none
+                                    viewModel.matchingProduct = viewModel.products
+                                }
+                                
+                                //                            Button("In Stock Only (MAYBE)") {
+                                //                                // Apply filter logic
+                                //                            }
+                                
+                                Button("A - Z") {
+                                    viewModel.sortAZ()
+                                }
+                                
+                                Button("Z - A"){
+                                    viewModel.sortZA()
+                                }
+                                Divider()
+                                Button("Price: Low to High") {
+                                    viewModel.LowToHigh()
+                                }
+                                Button("Price: High to Low") {
+                                    viewModel.HighToLow()
+                                }
+                            } label: {
+                                
+                                Text("Filter")
+                                    .padding(18)
+                                    .foregroundColor(.black)
+                                    .background(Color.white)
+                                    .cornerRadius(20)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .stroke(Color.black, lineWidth: 1)
+                                    )
                             }
-                            //this is the place where you create the cards for the products
-                            //each hstack is an entry gathered from the repo
-                            NavigationStack{
-                                ScrollView{
-                                        ForEach(viewModel.matchingProduct){product in
-                                            NavigationLink(value:product){
-                                                HStack{
-                                                    Text("\(product.id)")
-                                                        .frame(width: 60, alignment: .center)
-                                                    
-                                                    Divider()
-                                                    
-                                                    Text("\(product.name)")
-                                                        .frame(maxWidth: .infinity, alignment: .center)
-                                                        .lineLimit(2)
-                                                    
-                                                    Divider()
-                                                    
-                                                    Text("\(String(format:"%.2f", product.listPrice))")
-                                                        .frame(width: 90, alignment: .center)
-                                                    
-                                                }
-                                                .frame(maxWidth: .infinity) //ensure horizontal center
-                                                .background(Color.white)
-                                                .padding(8)
-                                                .border(Color.black, width: 1)
-                                            }
-                                            .padding(8)
-                                        }
-                                            //.navigationTitle("Products")
-                                            .navigationDestination(for: Product.self) { selectedItem in
-                                                ProductDetails(product: selectedItem) // Ensure 'productDetails' is a View (e.g., ProductDetailsView)
+                            .padding(12)
+                            
+                            
+                        }
+                        VStack(){
+                            
+                            VStack(){
+                                HStack(){
+                                    Text("Product Number")
+                                        .frame(width: 80, alignment: .center) // Fixed width for column 1
+                                       // .padding(4)
+                                    
+                                    Text("Name")
+                                        .frame(maxWidth: .infinity, alignment: .center) // Fills middle space
+                                        //.padding(4)
+                                    
+                                    Text("Price")
+                                        .frame(width: 90, alignment: .center) // Fixed width for column 3
+                                        //.padding(4)
+                                    
+                                }
+                                
+                                
+                                NavigationStack{
+                                    ScrollView(.vertical){
+                                        LazyVStack{
+                                            ForEach(viewModel.matchingProduct){product in
+                                                
+                                                ProductListRow(product: product) //each individual product row
 
                                             }
+                                            
+                                           
+
+                                        }
+                                    }
+                            }
+                        }
+                            .task{
+                                if(viewModel.products.isEmpty){
+                                    await viewModel.loadProducts()
                                     
                                 }
                             }
-                            
-                        }
-                        .task{
-                            await viewModel.loadProducts()
-                            
-
-                        }
                         .frame(maxWidth: .infinity) //ensure horizontal center
                         .background(Color.white)
-                        .padding(10)
-
-                        
-                    }
-                }
+                        .padding(8)
+                            
+                    }//nav stack
+                }//vstack
                 .background(Color.blue)
                 .cornerRadius(20)
-                .padding(10)
+                .padding(8)
                 .frame(maxWidth: .infinity) //ensure horizontal center
-
-            }
-            .padding(.top, 20)
-            .background(Color.cyan)
-            .cornerRadius(20)
-            .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
+                    
+        }//vstack with title
+        .background(Color.cyan)
             
-            
-        Spacer()
-            
-        }
-        .frame(maxWidth: .infinity) //ensure horizontal center
-        .padding(10)
     }
-}
+            .frame(maxWidth: .infinity)
+            .padding(10)
+            .background(Color.cyan)
+
+
+    }//body
+
+}//end
 
 
 
@@ -167,38 +152,49 @@ extension ProductListView {
     
     @Observable
     class ViewModel{
-        var products: [Product] = []{
-            didSet{
-                filter = ""
-                selectedProduct = nil
-            }
+        
+        enum sortOptions{
+            case none,az,za,priceLowToHigh,priceHighToLow
         }
+        var currentSort = sortOptions.none
+        
         var errormsg = ""
 
         var selectedProduct: Product? = nil
 
         
-        var mockRepo = MockProductRepository()
+        //var mockRepo = MockProductRepository()
+        private let repository: any RepositoryProtocol<Product>
+        init(repository:any RepositoryProtocol<Product>){
+            self.repository = repository
+            print("init")
+        }
+        
+        var products: [Product] = []{
+            didSet{
+                filter = ""
+                selectedProduct = nil
+                //matchingProduct = products
+            }
+        }
+            
         
         func loadProducts()async{
-//            async{
-//                            guard let mockRepo = mockRepo else {
-//                                errormsg = "no repository"
-//                                return}
-            
             do{
-                products = try await mockRepo.getAll()
+                products = try await repository.getAll()
+                matchingProduct = products
+                //print(products)
             }catch{
-                errormsg = "error loading products"
+                errormsg = "error loading products: \(error)"
+                print(errormsg)
             }
         }
         
-        
-        var filter:String="" {
+         var filter:String="" {
             didSet{ //react to when changes have been made to this
                //put products in matching products if theres no filter or if the filter matches.
                 matchingProduct = products.filter{ product in
-                    filter == "" || product.name.lowercased().contains(filter.lowercased())
+                    filter.isEmpty || product.name.lowercased().contains(filter.lowercased())
                 }
                 
             }
@@ -220,17 +216,31 @@ extension ProductListView {
         //maybe return to this or put in in inv screen if we have one
 //        }
         
+        
+        //MARK: NEED PERSISTANCE FOR THESE
         func sortAZ(){
+            currentSort = .az
             matchingProduct = matchingProduct.sorted(by: { $0.name < $1.name })
         }
         
+        func sortZA(){
+            currentSort = .za
+            matchingProduct = matchingProduct.sorted(by: { $0.name > $1.name })
+        }
+        
         func HighToLow(){
-            matchingProduct = matchingProduct.sorted(by: { $0.id < $1.id })
+            currentSort = .priceHighToLow
+            matchingProduct = matchingProduct.sorted(by: { $0.listPrice > $1.listPrice })
         }
         
         func LowToHigh(){
-            matchingProduct = matchingProduct.sorted(by: { $0.id > $1.id })
+            currentSort = .priceLowToHigh
+            matchingProduct = matchingProduct.sorted(by: { $0.listPrice > $1.listPrice })
         }
+        
+        
+        
+       
         
         
     }
