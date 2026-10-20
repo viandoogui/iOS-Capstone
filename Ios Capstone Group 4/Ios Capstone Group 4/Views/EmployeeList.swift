@@ -80,7 +80,7 @@ struct EmployeeList: View {
                         }
                         }
                         .background(Color.white)
-                        .padding(20)
+                        .padding(15)
                         
                     }
                     .navigationTitle("Employee List")
@@ -105,7 +105,7 @@ struct EmployeeList: View {
                 }
                 .background(Color.cyan)
                 .cornerRadius(20)
-                .padding(10)
+                .padding(0)
                 
             }
             .frame(alignment: .top)
