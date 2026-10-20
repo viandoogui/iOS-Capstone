@@ -21,12 +21,15 @@ struct Ios_Capstone_Group_4App: App {
                     .environmentObject(authStatus)
             }
             else {
-//                LoginView()
-//                    .environmentObject(authStatus)
-                EmployeeList(repository: RemoteEmployeeRepository(urlBase: urlBase, authStatus: authStatus))
+                //  LoginView()
+                //    .environmentObject(authStatus)
+               // ProductListView(repository:RemoteProductRepository(urlBase: urlBase, authStatus:authStatus))
+
+              //  EmployeeList(repository: RemoteEmployeeRepository(urlBase: urlBase, authStatus: authStatus))
                 //OrderListView(repository: RemoteOrderRepository(urlBase: urlBase, authStatus: authStatus))
             }
            
         }
     }
 }
+
