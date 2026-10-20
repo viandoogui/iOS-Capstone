@@ -33,6 +33,7 @@ struct OrderListView: View {
                     }
                     .padding(12)
                     .background(Color.white)
+                    .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
                     .cornerRadius(20)
                 }
                 
@@ -81,6 +82,7 @@ struct OrderListView: View {
                                 }
                                 .padding(8)
                                 .border(Color.black, width: 1)
+                                .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
                             }
                         }
                     }

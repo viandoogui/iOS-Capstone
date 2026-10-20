@@ -44,7 +44,8 @@ struct EmployeeList: View {
                                 Text("Sort By...")
                                     .padding(12)
                                     .background(Color.white, in: Capsule())
-                                
+                                    .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
+
                             }
                             
                         }
