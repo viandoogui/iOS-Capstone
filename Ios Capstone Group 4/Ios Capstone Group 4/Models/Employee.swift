@@ -7,6 +7,7 @@
 
 import Foundation
 
+@Observable
 class Employee: Identifiable, Hashable, Codable {
     let id: Int
     var firstName: String
@@ -26,6 +27,18 @@ class Employee: Identifiable, Hashable, Codable {
         self.department = department
         self.hireDate = hireDate
         self.jobTitle = jobTitle
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case id = "employeeId"
+        case _firstName = "firstName"
+        case _lastName = "lastName"
+        case _title = "title"
+        case _shift = "shift"
+        case _department = "department"
+        case _hireDate = "hireDate"
+        case _jobTitle = "jobTitle"
+        
     }
     
     static func == (lhs: Employee, rhs: Employee) -> Bool {

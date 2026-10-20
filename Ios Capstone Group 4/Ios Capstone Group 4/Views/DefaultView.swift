@@ -10,10 +10,14 @@ struct DefaultView: View {
     @EnvironmentObject var authStatus: AuthStatus
     @Environment(\.dismiss) private var dismiss
     
+    
     var body: some View {
-        Text("Hello, World!")
-        Button("Log Out"){
-            authStatus.updateLoginStatus(success: false)
+        VStack {
+            Text("Hello, World!")
+            
+            Button("Log Out"){
+                authStatus.updateLoginStatus(success: false)
+            }
         }
         
         //Button to take you to product view

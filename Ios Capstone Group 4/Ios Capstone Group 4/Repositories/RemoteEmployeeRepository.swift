@@ -15,16 +15,23 @@ class RemoteEmployeeRepository: RepositoryProtocol <Employee> {
         self.urlBase = urlBase
     }
     
+    
+    
     func getAll() async throws -> [Employee] {
         let urlString = "\(urlBase)/Employee"
         let url = URL(string: urlString)!
         let (data, _) = try await URLSession.shared.data(from: url)
         
         do {
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            // this was necessary because the date format would cause a decodingError
+            // the compiler was expecting a double and got the date as a string.
+            let formatter = DateFormatter()
+            ApplyDateSettings(formatter)
+            let decoder = ConfigureNewDecoder(formatter)
+            
             return try decoder.decode([Employee].self, from: data)
         } catch {
+            print(error)
             throw NetworkError.decodingFailed(underlying: error)
         }
     }
@@ -35,8 +42,10 @@ class RemoteEmployeeRepository: RepositoryProtocol <Employee> {
         let (data, _) = try await URLSession.shared.data(from: url)
         
         do {
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            let formatter = DateFormatter()
+            ApplyDateSettings(formatter)
+            
+            let decoder = ConfigureNewDecoder(formatter)
             return try decoder.decode(Employee.self, from: data)
         } catch {
             throw NetworkError.decodingFailed(underlying: error)

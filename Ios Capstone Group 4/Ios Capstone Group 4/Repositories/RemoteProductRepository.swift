@@ -21,8 +21,10 @@ class RemoteProductRepository: RepositoryProtocol <Product> {
         let (data, _) = try await URLSession.shared.data(from: url)
         
         do {
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            let formatter = DateFormatter()
+            ApplyDateSettings(formatter)
+            
+            let decoder = ConfigureNewDecoder(formatter)
             return try decoder.decode([Product].self, from: data)
         } catch {
             throw NetworkError.decodingFailed(underlying: error)
@@ -35,8 +37,10 @@ class RemoteProductRepository: RepositoryProtocol <Product> {
         let (data, _) = try await URLSession.shared.data(from: url)
         
         do {
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            let formatter = DateFormatter()
+            ApplyDateSettings(formatter)
+            
+            let decoder = ConfigureNewDecoder(formatter)
             return try decoder.decode(Product.self, from: data)
         } catch {
             throw NetworkError.decodingFailed(underlying: error)
