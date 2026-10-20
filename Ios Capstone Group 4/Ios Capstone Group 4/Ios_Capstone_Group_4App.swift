@@ -11,21 +11,11 @@ import CoreData
 @main
 struct Ios_Capstone_Group_4App: App {
     let persistenceController = PersistenceController.shared
-    @StateObject var authStatus = AuthStatus()
-    let urlBase = "https://api.bootcampcentral.com/api"
+
     var body: some Scene {
         WindowGroup {
-            if authStatus.isLoggedIn {
-                ContentView()
-                    .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                    .environmentObject(authStatus)
-            }
-            else {
-//                LoginView()
-//                    .environmentObject(authStatus)
-                EmployeeList(repository: RemoteEmployeeRepository(urlBase: urlBase, authStatus: authStatus))
-            }
-           
+            ContentView()
+                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
 }
