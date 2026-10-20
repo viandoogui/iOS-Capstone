@@ -26,11 +26,37 @@ struct EmployeeList: View {
                                 .background(Color.white)
                                 .cornerRadius(5)
                             Spacer()
-                            Button("Filter") {}
-                                .padding(12)
-                                .background(Color.white, in: Capsule())
+                            Menu {
+                                Button("None") {
+                                    viewModel.clearSort()
+                                    viewModel.refilterEmployees()
+                                }
+                                Button("A - Z"){
+                                    viewModel.sortByAZ()
+                                    viewModel.selectedSort()
+                                }
+                                Button("Z - A"){
+                                    viewModel.sortByZA()
+                                    viewModel.selectedSort()
+                                }
+                            }
+                            label: {
+                                Text("Sort By...")
+                                    .padding(12)
+                                    .background(Color.white, in: Capsule())
+                                
+                            }
+                            
                         }
                         .padding(10)
+                        
+                        HStack {
+                            TextField("Search Department...", text: $viewModel.departmentFilter)
+                                .padding(5)
+                                .background(Color.white)
+                                .cornerRadius(5)
+                        }
+                        .padding(.horizontal, 10)
                         
                         ScrollView {                        Grid(horizontalSpacing: 0, verticalSpacing: 0){
                             
@@ -113,13 +139,27 @@ extension EmployeeList {
         
         var filter: String = "" {
             didSet {
-                matchingEmployees = employees.filter { employee in
-                    filter == "" ||
-                    "\(employee.firstName.lowercased()) \(employee.lastName.lowercased())"
-                        .contains(filter.lowercased())
-                }
-                
+                refilterEmployees()
             }
+        }
+        
+        var departmentFilter: String = "" {
+            didSet {
+                refilterEmployees()
+            }
+        }
+
+        
+        func refilterEmployees() {
+            matchingEmployees = employees.filter { employee in
+                (filter == "" ||
+                ("\(employee.firstName.lowercased()) \(employee.lastName.lowercased())"
+                    .contains(filter.lowercased()) && filter != " "))
+                && (departmentFilter == "" || employee.department.lowercased().contains( departmentFilter.lowercased())
+                )
+            }
+            
+            selectedSort()
         }
         
         var matchingEmployees: [Employee] = []
@@ -134,6 +174,20 @@ extension EmployeeList {
                 errorMessage = "\(error)"
             }
             
+        }
+        
+        var selectedSort: () -> Void = {}
+        
+        func clearSort() {
+            selectedSort = {}
+        }
+        
+        func sortByAZ() {
+            selectedSort = { self.matchingEmployees = self.matchingEmployees.sorted(by: {$0.firstName < $1.firstName}) }
+        }
+        
+        func sortByZA() {
+            selectedSort = { self.matchingEmployees = self.matchingEmployees.sorted(by: {$0.firstName > $1.firstName}) }
         }
         
     }

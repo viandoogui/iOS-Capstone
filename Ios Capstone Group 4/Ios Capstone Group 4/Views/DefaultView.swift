@@ -21,5 +21,12 @@ struct DefaultView: View {
                 authStatus.updateLoginStatus(success: false)
             }
         }
+        
+        //Button to take you to product view
+//        NavigationLink(destination: ProductListView()){
+//            Text("Product List")
+//        }
+        
+        
     }
 }
