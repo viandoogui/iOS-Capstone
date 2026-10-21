@@ -11,7 +11,7 @@ internal import Combine
 class AuthStatus: ObservableObject {
     private let authKey = "userAccessToken"
     private let refreshKey = "userRefreshToken"
-    
+ 	   
     init() {
         let auth = SecureTokenManager.shared.getToken(key: authKey)
         let refresh = SecureTokenManager.shared.getToken(key: refreshKey)

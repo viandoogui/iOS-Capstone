@@ -10,7 +10,7 @@ struct LoginView : View{
     @EnvironmentObject var authStatus: AuthStatus
     
     @State private var viewModel = ViewModel()
-
+    @State private var username: String = ""
     
     var body: some View {
         VStack {

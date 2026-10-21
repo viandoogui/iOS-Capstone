@@ -9,11 +9,13 @@ import SwiftUI
 struct DefaultView: View {
     @EnvironmentObject var authStatus: AuthStatus
     @Environment(\.dismiss) private var dismiss
-    
+    let userName: String = ""
     
     var body: some View {
         VStack {
-            Text("Hello, World!")
+            NavigationLink(destination: LoginView()) {
+                Text("Log In")
+            }
             
             Button("Log Out"){
                 authStatus.updateLoginStatus(success: false)
