@@ -34,12 +34,38 @@ struct OrderDetails: View {
             
             Text("Order Details")
                 .font(.largeTitle)
-            
+            Spacer()
             if let firstOrder = matchingOrders.first {
                 
-                Text("Order #: \(firstOrder.orderNumber)")
-                Text("Store: \(firstOrder.storeName)")
-                Text("Date: \(firstOrder.orderDate.formatted(date: .numeric, time: .omitted))")
+                VStack {
+                    HStack {
+                        Text("Order #: \(firstOrder.orderNumber)")
+                        Text(
+                            String(
+                                format: "Total: $%.2f",
+                                total
+                            )
+                        )
+                    }
+                    .foregroundStyle(Color.white)
+                    .font(.headline)
+                    .padding(.horizontal, 10)
+                    .padding(.top, 5)
+
+                    HStack {
+                        Text("Store: \(firstOrder.storeName)")
+                        Text("Date: \(firstOrder.orderDate.formatted(date: .numeric, time: .omitted))")
+                    }
+                    .foregroundStyle(Color.white)
+                    .font(.headline)
+                    .padding(.horizontal, 10)
+                    .padding(.bottom, 5)
+
+                }
+                .background(Color.blue)
+                .cornerRadius(10)
+                
+                
                 
                 VStack {
                     ScrollView {
@@ -62,13 +88,8 @@ struct OrderDetails: View {
                         }
                     }
 
-                    Text(
-                        String(
-                            format: "Total: $%.2f",
-                            total
-                        )
-                    )
-                    .padding()
+                    
+                   
                 }
                 .background(Color.white)
                 .padding(10)
@@ -77,10 +98,10 @@ struct OrderDetails: View {
                 
                 Text("Order not found")
             }
-            
-            Spacer()
+        
         }
-        .padding(.top, 20)
         .background(Color.cyan)
+        
+        
     }
 }
