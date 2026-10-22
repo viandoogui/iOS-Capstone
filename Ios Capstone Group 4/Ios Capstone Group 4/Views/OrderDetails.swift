@@ -42,47 +42,26 @@ struct OrderDetails: View {
                 Text("Date: \(firstOrder.orderDate.formatted(date: .numeric, time: .omitted))")
                 
                 VStack {
-                    
-                    HStack {
-                        Text("Product")
-                            .frame(maxWidth: .infinity)
-                        
-                        Text("Qty")
-                            .frame(width: 50)
-                        
-                        Text("Price")
-                            .frame(width: 80)
-                    }
-                    .padding(5)
-                    
                     ScrollView {
-                        
                         ForEach(matchingOrders) { order in
-                            
-                            HStack {
+                            VStack(alignment: .leading, spacing: 8) {
                                 Text(order.productName)
-                                    .frame(maxWidth: .infinity)
-                                
-                                Divider()
-                                
-                                Text("\(order.orderQty)")
-                                    .frame(width: 50)
-                                
-                                Divider()
-                                
+
+                                Text("Quantity: \(order.orderQty)")
+
                                 Text(
                                     String(
-                                        format: "$%.2f",
+                                        format: "Unit Price: $%.2f",
                                         order.unitPrice
                                     )
                                 )
-                                .frame(width: 80)
                             }
-                            .padding(8)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(10)
                             .border(Color.black, width: 1)
                         }
                     }
-                    
+
                     Text(
                         String(
                             format: "Total: $%.2f",
