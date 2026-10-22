@@ -63,8 +63,10 @@ struct OrderListView: View {
                             }
                         }
                     }
+                    .frame(maxWidth: .infinity)
                     .background(Color.white)
                     .padding(10)
+                    
                 }
 
                 .background(Color.blue)
