@@ -20,13 +20,14 @@ struct OrderListView: View {
             
             Text("Order History")
                 .font(.largeTitle)
+                .padding(5)
             
             VStack {
                 
                 HStack {
                     TextField("Search Orders...", text: $viewModel.filter)
                         .textFieldStyle(.roundedBorder)
-                        .padding(20)
+                      
                     
                     Button("Filter") {
                         
@@ -36,6 +37,7 @@ struct OrderListView: View {
                     .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
                     .cornerRadius(20)
                 }
+                .padding(.horizontal, 20)
                 
                 
                 VStack {
@@ -69,7 +71,8 @@ struct OrderListView: View {
                 .cornerRadius(20)
                 .padding(10)
                 
-                Spacer()
+                
+                
             }
             .padding(.top, 20)
             .background(Color.cyan)
@@ -130,3 +133,8 @@ extension OrderListView {
         }
     }
 }
+
+#Preview {
+    OrderListView(repository: MockOrderRepository())
+}
+
