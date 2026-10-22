@@ -59,6 +59,10 @@ struct OrderListView: View {
                             }
                         }
                     }
+                    .refreshable {
+                        viewModel.filter = ""
+                        await viewModel.loadOrders()
+                    }
                     .background(Color.white)
                     .padding(10)
                 }
