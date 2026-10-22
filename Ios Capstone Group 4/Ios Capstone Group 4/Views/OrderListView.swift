@@ -37,50 +37,25 @@ struct OrderListView: View {
                     .cornerRadius(20)
                 }
                 
+                
                 VStack {
-                    
-                    HStack {
-                        Text("Order #")
-                            .frame(width: 80)
-                        
-                        Text("Store")
-                            .frame(maxWidth: .infinity)
-                        
-                        Text("Date")
-                            .frame(width: 90)
-                    }
-                    .padding(5)
-                    
                     ScrollView {
-                        
                         ForEach(viewModel.matchingOrders) { order in
-                            
                             NavigationLink(
                                 destination: OrderDetails(
                                     orderNumber: order.orderNumber,
                                     orders: viewModel.allOrders
                                 )
                             ) {
-                                
-                                HStack {
-                                    
-                                    Text("\(order.orderNumber)").frame(width: 80)
-                                    
-                                    Divider()
-                                    
-                                    Text(order.storeName).frame(maxWidth: .infinity)
-                                    
-                                    Divider()
-                                    
-                                    Text(
-                                        order.orderDate.formatted(
-                                            date: .numeric,
-                                            time: .omitted
-                                        )
-                                    )
-                                    .frame(width: 90)
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("Order #: \(order.orderNumber)")
+
+                                    Text("Store: \(order.storeName)")
+
+                                    Text("Date: \(order.orderDate.formatted(date: .numeric, time: .omitted))")
                                 }
-                                .padding(8)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(10)
                                 .border(Color.black, width: 1)
                                 .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
                             }
@@ -89,6 +64,7 @@ struct OrderListView: View {
                     .background(Color.white)
                     .padding(10)
                 }
+
                 .background(Color.blue)
                 .cornerRadius(20)
                 .padding(10)
