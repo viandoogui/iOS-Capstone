@@ -91,15 +91,7 @@ struct EmployeeList: View {
                     .background(Color.blue)
                     .cornerRadius(20)
                     .padding(10)
-                    .toolbar {
-                        ToolbarSpacer()
-                        ToolbarItem() {
-                            Button( action: {} ) {
-                                Image(systemName: "house")
-                            }
-                        }
-                        
-                    }
+                    
                     
                     Spacer()
                 }

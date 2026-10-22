@@ -17,10 +17,7 @@ struct OrderListView: View {
     var body: some View {
         
         VStack {
-            
-            Text("Order History")
-                .font(.largeTitle)
-                .padding(5)
+    
             
             VStack {
                 
@@ -72,6 +69,7 @@ struct OrderListView: View {
                 .background(Color.blue)
                 .cornerRadius(20)
                 .padding(10)
+                .navigationTitle("Order History")
                 
                 
                 
