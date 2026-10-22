@@ -38,28 +38,41 @@ struct OrderDetails: View {
             if let firstOrder = matchingOrders.first {
                 
                 VStack {
-                    HStack {
-                        Text("Order #: \(firstOrder.orderNumber)")
-                        Text(
-                            String(
-                                format: "Total: $%.2f",
-                                total
+                    
+                    ViewThatFits(in: [.horizontal, .vertical]) {
+                        HStack {
+                            Text("Order #: \(firstOrder.orderNumber)")
+                            Text(
+                                String(
+                                    format: "Total: $%.2f",
+                                    total
+                                )
                             )
-                        )
+                            Text("Store: \(firstOrder.storeName)")
+                            Text("Date: \(firstOrder.orderDate.formatted(date: .numeric, time: .omitted))")
+                        }
+                        
+                        VStack {
+                            HStack {
+                                Text("Order #: \(firstOrder.orderNumber)")
+                                Text(
+                                    String(
+                                        format: "Total: $%.2f",
+                                        total
+                                    )
+                                )
+                            }
+                            HStack {
+                                Text("Store: \(firstOrder.storeName)")
+                                Text("Date: \(firstOrder.orderDate.formatted(date: .numeric, time: .omitted))")
+                            }
+                        }
                     }
+                    
+                    
                     .foregroundStyle(Color.white)
                     .font(.headline)
-                    .padding(.horizontal, 10)
-                    .padding(.top, 5)
-
-                    HStack {
-                        Text("Store: \(firstOrder.storeName)")
-                        Text("Date: \(firstOrder.orderDate.formatted(date: .numeric, time: .omitted))")
-                    }
-                    .foregroundStyle(Color.white)
-                    .font(.headline)
-                    .padding(.horizontal, 10)
-                    .padding(.bottom, 5)
+                    .padding(5)
 
                 }
                 .background(Color.blue)
