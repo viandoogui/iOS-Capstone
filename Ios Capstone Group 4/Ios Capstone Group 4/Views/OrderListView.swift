@@ -21,6 +21,21 @@ struct OrderListView: View {
             Text("Order History")
                 .font(.largeTitle)
             
+            if viewModel.isLoading {
+                ProgressView("Loading orders...")
+            }
+
+            if !viewModel.errorMessage.isEmpty {
+                Text(viewModel.errorMessage)
+                    .foregroundColor(.red)
+
+                Button("Try Again") {
+                    Task {
+                        await viewModel.loadOrders()
+                    }
+                }
+            }
+
             VStack {
                 
                 HStack {
@@ -36,41 +51,48 @@ struct OrderListView: View {
                     .cornerRadius(20)
                 }
                 
-                
-                VStack {
-                    ScrollView {
-                        ForEach(viewModel.matchingOrders) { order in
-                            NavigationLink(
-                                destination: OrderDetails(
-                                    orderNumber: order.orderNumber,
-                                    orders: viewModel.allOrders
-                                )
-                            ) {
-                                VStack(alignment: .leading, spacing: 8) {
-                                    Text("Order #: \(order.orderNumber)")
+                if viewModel.errorMessage.isEmpty {
+                    VStack {
+                        ScrollView {
+                            if viewModel.matchingOrders.isEmpty &&
+                                viewModel.errorMessage.isEmpty &&
+                                !viewModel.isLoading {
+                                Text(viewModel.filter.isEmpty ? "No orders available." : "No matching orders found.")
+                                    .foregroundColor(.black)
+                                    .padding()
+                            }
+                            ForEach(viewModel.matchingOrders) { order in
+                                NavigationLink(
+                                    destination: OrderDetails(
+                                        orderNumber: order.orderNumber,
+                                        orders: viewModel.allOrders
+                                    )
+                                ) {
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        Text("Order #: \(order.orderNumber)")
 
-                                    Text("Store: \(order.storeName)")
+                                        Text("Store: \(order.storeName)")
 
-                                    Text("Date: \(order.orderDate.formatted(date: .numeric, time: .omitted))")
+                                        Text("Date: \(order.orderDate.formatted(date: .numeric, time: .omitted))")
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(10)
+                                    .border(Color.black, width: 1)
                                 }
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(10)
-                                .border(Color.black, width: 1)
                             }
                         }
+                        .refreshable {
+                            viewModel.filter = ""
+                            await viewModel.loadOrders()
+                        }
+                        .background(Color.white)
+                        .padding(10)
                     }
-                    .refreshable {
-                        viewModel.filter = ""
-                        await viewModel.loadOrders()
-                    }
-                    .background(Color.white)
+
+                    .background(Color.blue)
+                    .cornerRadius(20)
                     .padding(10)
                 }
-
-                .background(Color.blue)
-                .cornerRadius(20)
-                .padding(10)
-                
                 Spacer()
             }
             .padding(.top, 20)
@@ -101,14 +123,19 @@ extension OrderListView {
         }
         
         var errorMessage = ""
+        var isLoading = true
+
         private let repo: any RepositoryProtocol<Order>
-        
+
         init(repository: any RepositoryProtocol<Order>) {
             self.repo = repository
         }
-        
+
         func loadOrders() async {
             
+            isLoading = true
+            errorMessage = ""
+
             do {
                 let loadedOrders = try await repo.getAll()
                 allOrders = loadedOrders
@@ -126,8 +153,11 @@ extension OrderListView {
                 orders = uniqueOrders
                 matchingOrders = uniqueOrders
                 
+                isLoading = false
+
             } catch {
-                errorMessage = "Error loading orders"
+                errorMessage = "Couldn't load orders. Please try again."
+                isLoading = false
             }
         }
     }
