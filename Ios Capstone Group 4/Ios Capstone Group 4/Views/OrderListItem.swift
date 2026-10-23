@@ -34,10 +34,6 @@ struct OrderListItem: View {
             .padding(10)
             .border(Color.black, width: 1)
         }
-
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(10)
-        .border(Color.black, width: 1)
         .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
     }
 }

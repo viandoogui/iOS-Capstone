@@ -15,25 +15,24 @@ struct OrderListView: View {
     }
     
     var body: some View {
-        
-        VStack {
-    
-            if viewModel.isLoading {
-                ProgressView("Loading orders...")
-            }
+            
+            VStack {
+                
+                if viewModel.isLoading {
+                    ProgressView("Loading orders...")
+                }
 
-            if !viewModel.errorMessage.isEmpty {
-                Text(viewModel.errorMessage)
-                    .foregroundColor(.red)
+                if !viewModel.errorMessage.isEmpty {
+                    Text(viewModel.errorMessage)
+                        .foregroundColor(.red)
 
-                Button("Try Again") {
-                    Task {
-                        await viewModel.loadOrders()
+                    Button("Try Again") {
+                        Task {
+                            await viewModel.loadOrders()
+                        }
                     }
                 }
-            }
 
-            VStack {
                 
                 HStack {
                     TextField("Search Orders...", text: $viewModel.filter)
@@ -71,7 +70,6 @@ struct OrderListView: View {
                                 await viewModel.loadOrders()
                             }
                             .background(Color.white)
-                            .padding(10)
                         }
                         .frame(maxWidth: .infinity)
                         .background(Color.white)
@@ -91,7 +89,7 @@ struct OrderListView: View {
             .task {
                 await viewModel.loadOrders()
             }
-        }
+        
     }
 }
 
