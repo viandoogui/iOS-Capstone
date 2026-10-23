@@ -15,7 +15,7 @@ struct ProductDetails:View{
         
         
         
-        VStack{
+        ScrollView {
             VStack(){
 //                HStack(){
 //                    Text("Home Button")

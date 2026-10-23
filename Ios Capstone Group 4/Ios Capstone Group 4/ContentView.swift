@@ -67,6 +67,18 @@ struct ContentView: View {
                         
                 }
             }
+            .toolbar {
+               
+                ToolbarItem() {
+                    Button( action: {
+                        current = ""
+                    } ) {
+                        Image(systemName: "house")
+                    }
+                }
+                
+            }
+            .toolbarVisibility(current == "" ? .hidden : .visible, for: .navigationBar)
         }
         
     }
