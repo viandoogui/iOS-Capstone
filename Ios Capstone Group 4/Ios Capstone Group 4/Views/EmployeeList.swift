@@ -79,6 +79,9 @@ struct EmployeeList: View {
                             
                         }
                         }
+                        .refreshable {
+                            await viewModel.loadEmployees()
+                        }
                         .background(Color.white)
                         .padding(15)
                         
