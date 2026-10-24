@@ -32,7 +32,7 @@ struct LoginView : View{
                         return
                     }
                     
-                    authStatus.updateLoginStatus(success: resp.success, authToken: resp.accessToken, refreshToken: resp.refreshToken)
+                    authStatus.updateLoginStatus(response: resp)
                 }
             }
             .buttonStyle(.borderedProminent)

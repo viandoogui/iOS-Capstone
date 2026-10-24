@@ -27,11 +27,9 @@ class AuthStatus: ObservableObject {
         return SecureTokenManager.shared.getToken(key: refreshKey)
     }
     
-    func updateLoginStatus(success: Bool,
-                           authToken: String? = "",
-                           refreshToken: String? = "") {
+    func updateLoginStatus(response: LoginResponseModel) {
         withAnimation {
-            isLoggedIn = success
+            isLoggedIn = response.success
         }
         
         let storage = SecureTokenManager.shared
@@ -42,10 +40,20 @@ class AuthStatus: ObservableObject {
             storage.deleteToken(key: authKey)
         }
         
+        // if there is a refresh token, save the token. if not, delte the token.
         if let refresh = refreshToken, !refresh.isEmpty {
             let _ = storage.saveToken(refresh, key: refreshKey)
         } else {
             storage.deleteToken(key: refreshKey)
         }
+    }
+    
+    func logOut() {
+        let storage = SecureTokenManager.shared
+        
+        storage.deleteToken(key: authKey)
+        storage.deleteToken(key: refreshKey)
+        
+        isLoggedIn = false
     }
 }

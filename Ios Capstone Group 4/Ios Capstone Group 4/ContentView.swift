@@ -19,7 +19,7 @@ struct ContentView: View {
                 default:
                     VStack{
                         Button("Log out") {
-                            authStatus.updateLoginStatus(success: false)
+                            authStatus.logOut()
                         }.buttonStyle(.borderedProminent)
                             .tint(.gray)
                             .frame(maxWidth: .infinity, alignment: .trailing)
