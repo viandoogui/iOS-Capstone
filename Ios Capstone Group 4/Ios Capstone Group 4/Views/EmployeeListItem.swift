@@ -23,7 +23,7 @@ struct EmployeeListItem: View {
                     Text("\(employee.department)")
                 }
                 .frame(maxWidth: .infinity, maxHeight: 50)
-                .foregroundStyle(Color.blue)
+                .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
                 .padding(5)
             }
         }

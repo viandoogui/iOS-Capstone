@@ -15,92 +15,81 @@ struct OrderListView: View {
     }
     
     var body: some View {
-        
-        VStack {
             
-            Text("Order History")
-                .font(.largeTitle)
-            
-            if viewModel.isLoading {
-                ProgressView("Loading orders...")
-            }
+            VStack {
+                
+                if viewModel.isLoading {
+                    ProgressView("Loading orders...")
+                }
 
-            if !viewModel.errorMessage.isEmpty {
-                Text(viewModel.errorMessage)
-                    .foregroundColor(.red)
+                if !viewModel.errorMessage.isEmpty {
+                    Text(viewModel.errorMessage)
+                        .foregroundColor(.red)
 
-                Button("Try Again") {
-                    Task {
-                        await viewModel.loadOrders()
+                    Button("Try Again") {
+                        Task {
+                            await viewModel.loadOrders()
+                        }
                     }
                 }
-            }
 
-            VStack {
                 
                 HStack {
                     TextField("Search Orders...", text: $viewModel.filter)
                         .textFieldStyle(.roundedBorder)
-                        .padding(20)
+                      
                     
                     Button("Filter") {
                         
                     }
                     .padding(12)
                     .background(Color.white)
+                    .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
                     .cornerRadius(20)
                 }
+                .padding(.horizontal, 20)
                 
-                if viewModel.errorMessage.isEmpty {
-                    VStack {
-                        ScrollView {
-                            if viewModel.matchingOrders.isEmpty &&
-                                viewModel.errorMessage.isEmpty &&
-                                !viewModel.isLoading {
-                                Text(viewModel.filter.isEmpty ? "No orders available." : "No matching orders found.")
-                                    .foregroundColor(.black)
-                                    .padding()
-                            }
-                            ForEach(viewModel.matchingOrders) { order in
-                                NavigationLink(
-                                    destination: OrderDetails(
-                                        orderNumber: order.orderNumber,
-                                        orders: viewModel.allOrders
-                                    )
-                                ) {
-                                    VStack(alignment: .leading, spacing: 8) {
-                                        Text("Order #: \(order.orderNumber)")
+                VStack {
+                    if viewModel.errorMessage.isEmpty {
+                        VStack {
+                            ScrollView {
+                                if viewModel.matchingOrders.isEmpty &&
+                                    viewModel.errorMessage.isEmpty &&
+                                    !viewModel.isLoading {
+                                    Text(viewModel.filter.isEmpty ? "No orders available." : "No matching orders found.")
+                                        .foregroundColor(.black)
+                                        .padding()
+                                }
+                                ForEach(viewModel.matchingOrders) { order in
+                                    OrderListItem(order: order, allOrders: viewModel.allOrders)
 
-                                        Text("Store: \(order.storeName)")
-
-                                        Text("Date: \(order.orderDate.formatted(date: .numeric, time: .omitted))")
-                                    }
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(10)
-                                    .border(Color.black, width: 1)
                                 }
                             }
+                            .refreshable {
+                                viewModel.filter = ""
+                                await viewModel.loadOrders()
+                            }
+                            .background(Color.white)
                         }
-                        .refreshable {
-                            viewModel.filter = ""
-                            await viewModel.loadOrders()
-                        }
+                        .frame(maxWidth: .infinity)
                         .background(Color.white)
                         .padding(10)
+                        
                     }
-
-                    .background(Color.blue)
-                    .cornerRadius(20)
-                    .padding(10)
+                    
                 }
-                Spacer()
+                .background(Color.blue)
+                .cornerRadius(20)
+                .padding(10)
+                .navigationTitle("Order History")
+                
             }
             .padding(.top, 20)
             .background(Color.cyan)
             .task {
                 await viewModel.loadOrders()
             }
-        }
+        
     }
 }
 
@@ -162,3 +151,8 @@ extension OrderListView {
         }
     }
 }
+
+#Preview {
+    OrderListView(repository: MockOrderRepository())
+}
+

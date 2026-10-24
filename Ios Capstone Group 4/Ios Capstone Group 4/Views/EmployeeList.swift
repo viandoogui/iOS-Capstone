@@ -44,7 +44,8 @@ struct EmployeeList: View {
                                 Text("Sort By...")
                                     .padding(12)
                                     .background(Color.white, in: Capsule())
-                                
+                                    .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
+
                             }
                             
                         }
@@ -82,7 +83,7 @@ struct EmployeeList: View {
                             await viewModel.loadEmployees()
                         }
                         .background(Color.white)
-                        .padding(20)
+                        .padding(15)
                         
                     }
                     .navigationTitle("Employee List")
@@ -93,21 +94,13 @@ struct EmployeeList: View {
                     .background(Color.blue)
                     .cornerRadius(20)
                     .padding(10)
-                    .toolbar {
-                        ToolbarSpacer()
-                        ToolbarItem() {
-                            Button( action: {} ) {
-                                Image(systemName: "house")
-                            }
-                        }
-                        
-                    }
+                    
                     
                     Spacer()
                 }
                 .background(Color.cyan)
                 .cornerRadius(20)
-                .padding(10)
+                .padding(0)
                 
             }
             .frame(alignment: .top)
