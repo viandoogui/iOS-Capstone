@@ -18,7 +18,7 @@ struct DefaultView: View {
             }
             
             Button("Log Out"){
-                authStatus.updateLoginStatus(success: false)
+                authStatus.logOut()
             }
         }
         
