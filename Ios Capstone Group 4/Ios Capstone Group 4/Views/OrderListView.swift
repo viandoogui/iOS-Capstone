@@ -38,14 +38,27 @@ struct OrderListView: View {
                     TextField("Search Orders...", text: $viewModel.filter)
                         .textFieldStyle(.roundedBorder)
                       
-                    
-                    Button("Filter") {
-                        
+                    Menu {
+                        Button("None") {
+                            viewModel.clearSort()
+                            viewModel.refilterOrders()
+                        }
+
+                        Button("A - Z") {
+                            viewModel.sortByAZ()
+                            viewModel.selectedSort()
+                        }
+
+                        Button("Z - A") {
+                            viewModel.sortByZA()
+                            viewModel.selectedSort()
+                        }
+                    } label: {
+                        Text("Sort By...")
+                            .padding(12)
+                            .background(Color.white, in: Capsule())
+                            .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
                     }
-                    .padding(12)
-                    .background(Color.white)
-                    .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
-                    .cornerRadius(20)
                 }
                 .padding(.horizontal, 20)
                 
@@ -94,7 +107,7 @@ struct OrderListView: View {
 }
 
 extension OrderListView {
-    
+
     @Observable
     class ViewModel {
         
@@ -103,11 +116,39 @@ extension OrderListView {
         var matchingOrders: [Order] = []
         var filter: String = "" {
             didSet {
-                matchingOrders = orders.filter { order in
-                    filter == "" ||
-                    order.storeName.lowercased().contains(filter.lowercased()) ||
-                    String(order.orderNumber).contains(filter)
-                }
+                refilterOrders()
+            }
+        }
+
+        var selectedSort: () -> Void = {}
+
+        func refilterOrders() {
+            matchingOrders = orders.filter { order in
+                filter == "" ||
+                order.storeName.lowercased().contains(filter.lowercased()) ||
+                String(order.orderNumber).contains(filter)
+            }
+
+            selectedSort()
+        }
+
+        func clearSort() {
+            selectedSort = {}
+        }
+
+        func sortByAZ() {
+            selectedSort = {
+                self.matchingOrders = self.matchingOrders.sorted(by: {
+                    $0.storeName < $1.storeName
+                })
+            }
+        }
+
+        func sortByZA() {
+            selectedSort = {
+                self.matchingOrders = self.matchingOrders.sorted(by: {
+                    $0.storeName > $1.storeName
+                })
             }
         }
         
@@ -140,7 +181,7 @@ extension OrderListView {
                 }
                 
                 orders = uniqueOrders
-                matchingOrders = uniqueOrders
+                refilterOrders()
                 
                 isLoading = false
 
