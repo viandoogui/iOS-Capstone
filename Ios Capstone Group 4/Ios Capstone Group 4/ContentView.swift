@@ -7,6 +7,7 @@ struct ContentView: View {
     let username: String
     
     var body: some View {
+        
         NavigationStack {
             VStack {
                 switch current {
@@ -20,10 +21,11 @@ struct ContentView: View {
                     OrderListView(repository: RemoteOrderRepository(urlBase: urlBase, authStatus: authStatus))
                         .accessibilityIdentifier("boardView")
                 default:
-                    VStack{
+                    VStack (spacing: 40) {
                         Button("Log out") {
                             authStatus.logOut()
                         }.buttonStyle(.borderedProminent)
+                            .font(.title3)
                             .tint(.gray)
                             .frame(maxWidth: .infinity, alignment: .trailing)
                             .padding(.top, 15)
@@ -31,51 +33,56 @@ struct ContentView: View {
                         .accessibilityIdentifier("logoutButton")
                         
                         VStack (){
-                            Text("Welcome Back,")
+                            Text("Welcome Back\(username == "" ? "!" : ", \(username)!")")
                                 .foregroundStyle(.white)
-                                .padding(10)
-                            Text(username)
-                                .foregroundStyle(.white)
+                                .font(.title)
                                 .padding(10)
                         }
-                            .frame(maxWidth: .infinity).background(Color.blue)
+                            .frame(maxWidth: .infinity)
+                            .background(Color.blue)
+                            .cornerRadius(20)
                             .padding(10)
-                            .cornerRadius(30)
+                            
                         
-                        Spacer()
-                        VStack (spacing: 20){
+                        VStack (spacing: 40){
                             Button("Operational Dashboard") {
                                 
                             }.buttonStyle(.borderedProminent)
                                 .tint(.gray)
+                                .font(.title)
+                                .padding(.top, 20)
                             Button("Employee Directory") {
                                 current = "employee"
                             }.buttonStyle(.borderedProminent)
                                 .tint(.gray)
+                                .font(.title)
                             Button("Product List") {
                                 current = "product"
                             }.buttonStyle(.borderedProminent)
                                 .tint(.gray)
+                                .font(.title)
                             .accessibilityIdentifier("employeeViewButton")
                             Button("Order Review") {
                                 current = "order"
                             }.buttonStyle(.borderedProminent)
                                 .tint(.gray)
+                                .font(.title)
                             Button("Inventory Management") {
                                 
                             }.buttonStyle(.borderedProminent)
                                 .tint(.gray)
-                                
+                                .font(.title)
+                                .padding(.bottom, 20)
+
                             .accessibilityIdentifier("orderViewButton")
                             
-                        }.frame(maxWidth: .infinity).background(Color.blue)
-                            .padding(10)
+                        }
+                        .frame(maxWidth: .infinity)
+                            .background(Color.blue)
                             .cornerRadius(30)
-                            .padding(.horizontal, 15).frame(maxWidth: .infinity).background(Color.blue)
                             .padding(10)
-                            .cornerRadius(30)
-                    }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                                }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                         .background(Color.cyan)
                         .cornerRadius(20)
                         
