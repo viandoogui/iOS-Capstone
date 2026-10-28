@@ -13,6 +13,9 @@ struct ContentView: View {
                 case "employee":
                     EmployeeList(repository: RemoteEmployeeRepository(urlBase: urlBase, authStatus: authStatus))
                         .accessibilityIdentifier("employeeView")
+                case "product":
+                    ProductListView(repository: RemoteProductRepository(urlBase: urlBase, authStatus: authStatus))
+                        .accessibilityIdentifier("productView")
                 case "order":
                     OrderListView(repository: RemoteOrderRepository(urlBase: urlBase, authStatus: authStatus))
                         .accessibilityIdentifier("boardView")
@@ -41,13 +44,25 @@ struct ContentView: View {
                         
                         Spacer()
                         VStack (spacing: 20){
+                            Button("Operational Dashboard") {
+                                
+                            }.buttonStyle(.borderedProminent)
+                                .tint(.gray)
                             Button("Employee Directory") {
                                 current = "employee"
+                            }.buttonStyle(.borderedProminent)
+                                .tint(.gray)
+                            Button("Product List") {
+                                current = "product"
                             }.buttonStyle(.borderedProminent)
                                 .tint(.gray)
                             .accessibilityIdentifier("employeeViewButton")
                             Button("Order Review") {
                                 current = "order"
+                            }.buttonStyle(.borderedProminent)
+                                .tint(.gray)
+                            Button("Inventory Management") {
+                                
                             }.buttonStyle(.borderedProminent)
                                 .tint(.gray)
                                 
