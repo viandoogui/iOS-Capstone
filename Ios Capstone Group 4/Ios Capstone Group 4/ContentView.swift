@@ -46,8 +46,8 @@ struct ContentView: View {
                                 .padding(10)
                                 
                             
-                            VStack (spacing: 10){
-                                HStack {
+                            Grid(horizontalSpacing: 40, verticalSpacing: 20) {
+                                GridRow {
                                     Button("Operational Dashboard") {
                                         
                                     }.buttonStyle(.borderedProminent)
@@ -59,9 +59,8 @@ struct ContentView: View {
                                         .tint(.gray)
                                         .font(.title)
                                 }
-                                .padding(.top, 10)
-                                
-                                HStack {
+                                .padding(.top, 15)
+                                GridRow {
                                     Button("Product List") {
                                         current = "product"
                                     }.buttonStyle(.borderedProminent)
@@ -74,23 +73,23 @@ struct ContentView: View {
                                         .tint(.gray)
                                         .font(.title)
                                 }
-                                
-                                
-                                Button("Inventory Management") {
-                                    
-                                }.buttonStyle(.borderedProminent)
-                                    .tint(.gray)
-                                    .font(.title)
-                                    .padding(.bottom, 10)
+                                GridRow {
+                                    Button("Inventory Management") {
+                                        
+                                    }.buttonStyle(.borderedProminent)
+                                        .tint(.gray)
+                                        .font(.title)
+                                    .accessibilityIdentifier("orderViewButton")
+                                }
+                                .padding(.bottom, 15)
 
-                                .accessibilityIdentifier("orderViewButton")
-                                
                             }
                             .frame(maxWidth: .infinity)
                                 .background(Color.blue)
                                 .cornerRadius(30)
                                 .padding(10)
-                                                    }
+                            
+                                                }
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                             .background(Color.cyan)
                             .cornerRadius(20)
