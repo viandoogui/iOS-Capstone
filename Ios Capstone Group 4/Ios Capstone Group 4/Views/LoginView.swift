@@ -13,44 +13,88 @@ struct LoginView : View{
     @State private var username: String = ""
     
     var body: some View {
+        
         VStack {
-            Text("Login")
+            
+            Text("AdventureWorks Internal Services")
                 .font(Font.largeTitle.bold())
+                .padding(10)
             
-            TextField("Username", text: $viewModel.credentials.username)
-            SecureField("Password", text: $viewModel.credentials.password)
-            
-            if viewModel.isBusy {
-                ProgressView()
-            }
-            
-            Button("Log in") {
-                Task {
-                    let response = await viewModel.login()
-                    guard let resp = response else {
-                        viewModel.errorMessage = "resp is null, cannot log in"
-                        return
+                
+            VStack(spacing: 10) {
+                    
+                    VStack(spacing: 0) {
+                        Text("Username")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.bottom, 10)
+                        TextField("Username", text: $viewModel.credentials.username)
+                            .background(Color.white)
+                            .cornerRadius(5)
+                    }
+                    .padding(10)
+                    
+                    VStack(spacing: 0) {
+                        Text("Password")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.bottom, 10)
+                        SecureField("Password", text: $viewModel.credentials.password)
+                            .background(Color.white)
+                            .cornerRadius(5)
+                    }
+                    .padding(10)
+                    
+                    if viewModel.isBusy {
+                        ProgressView()
                     }
                     
-                    authStatus.updateLoginStatus(response: resp)
+                    Button("Log in") {
+                        Task {
+                            let response = await viewModel.login()
+                            guard let resp = response else {
+                                viewModel.errorMessage = "resp is null, cannot log in"
+                                return
+                            }
+                            
+                            authStatus.updateLoginStatus(response: resp)
+                        }
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .background(Color.white, in: Capsule())
+                    .padding(.bottom, 10)
+                    .disabled(viewModel.loginDisabled)
+                    
+                    if !viewModel.errorMessage.isEmpty {
+                        Text(viewModel.errorMessage)
+                            .foregroundColor(Color.red)
+                            .padding(.bottom, 10)
+
+                    }
+                    
                 }
-            }
-            .buttonStyle(.borderedProminent)
-            .disabled(viewModel.loginDisabled)
-            
-            if !viewModel.errorMessage.isEmpty {
-                Text(viewModel.errorMessage)
-                    .foregroundColor(Color.red)
-            }
-            
-            Spacer()
+                .background(Color(red: 0.0, green: 0.35, blue: 0.6))
+                .cornerRadius(10)
+                .padding(20)
+                .autocapitalization(.none)
+                .disabled(viewModel.isBusy)
+
+        
             
         }
-        .padding(20)
-        .autocapitalization(.none)
-        .disabled(viewModel.isBusy)
+        .background(Color.cyan)
+        .cornerRadius(10)
+        .frame(maxHeight: .infinity)
+        
+        
+        
+                
     }
-}
+        
+    
+        }
 
 extension LoginView {
     
@@ -84,4 +128,8 @@ extension LoginView {
         }
         
     }
+}
+
+#Preview {
+    LoginView()
 }

@@ -2,67 +2,166 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var authStatus: AuthStatus
+    @Environment(\.verticalSizeClass) var sizeClass
     @State private var current: String = ""
     let urlBase: String
     let username: String
     
     var body: some View {
+        
         NavigationStack {
             VStack {
                 switch current {
                 case "employee":
                     EmployeeList(repository: RemoteEmployeeRepository(urlBase: urlBase, authStatus: authStatus))
                         .accessibilityIdentifier("employeeView")
+                case "product":
+                    ProductListView(repository: RemoteProductRepository(urlBase: urlBase, authStatus: authStatus))
+                        .accessibilityIdentifier("productView")
                 case "order":
                     OrderListView(repository: RemoteOrderRepository(urlBase: urlBase, authStatus: authStatus))
                         .accessibilityIdentifier("boardView")
                 default:
-                    VStack{
-                        Button("Log out") {
-                            authStatus.logOut()
-                        }.buttonStyle(.borderedProminent)
-                            .tint(.gray)
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                            .padding(.top, 15)
-                            .padding(.trailing, 15)
-                        .accessibilityIdentifier("logoutButton")
-                        
-                        VStack (){
-                            Text("Welcome Back,")
-                                .foregroundStyle(.white)
-                                .padding(10)
-                            Text(username)
-                                .foregroundStyle(.white)
-                                .padding(10)
-                        }
-                            .frame(maxWidth: .infinity).background(Color.blue)
-                            .padding(10)
-                            .cornerRadius(30)
-                        
-                        Spacer()
-                        VStack (spacing: 20){
-                            Button("Employee Directory") {
-                                current = "employee"
+                    if(sizeClass == .compact) {
+                        VStack (spacing: 20) {
+                            Button("Log out") {
+                                authStatus.logOut()
                             }.buttonStyle(.borderedProminent)
+                                .font(.title3)
                                 .tint(.gray)
-                            .accessibilityIdentifier("employeeViewButton")
-                            Button("Order Review") {
-                                current = "order"
-                            }.buttonStyle(.borderedProminent)
-                                .tint(.gray)
-                                
-                            .accessibilityIdentifier("orderViewButton")
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                .padding(.top, 15)
+                                .padding(.trailing, 15)
+                            .accessibilityIdentifier("logoutButton")
                             
-                        }.frame(maxWidth: .infinity).background(Color.blue)
-                            .padding(10)
-                            .cornerRadius(30)
-                            .padding(.horizontal, 15).frame(maxWidth: .infinity).background(Color.blue)
-                            .padding(10)
-                            .cornerRadius(30)
+                            VStack (){
+                                Text("Welcome Back\(username == "" ? "!" : ", \(username)!")")
+                                    .foregroundStyle(.white)
+                                    .font(.title)
+                                    .padding(10)
+                            }
+                                .frame(maxWidth: .infinity)
+                                .background(Color.blue)
+                                .cornerRadius(20)
+                                .padding(10)
+                                
+                            
+                            Grid(horizontalSpacing: 40, verticalSpacing: 20) {
+                                GridRow {
+                                    Button("Operational Dashboard") {
+                                        
+                                    }.buttonStyle(.borderedProminent)
+                                        .tint(.gray)
+                                        .font(.title)
+                                    Button("Employee Directory") {
+                                        current = "employee"
+                                    }.buttonStyle(.borderedProminent)
+                                        .tint(.gray)
+                                        .font(.title)
+                                }
+                                .padding(.top, 15)
+                                GridRow {
+                                    Button("Product List") {
+                                        current = "product"
+                                    }.buttonStyle(.borderedProminent)
+                                        .tint(.gray)
+                                        .font(.title)
+                                    .accessibilityIdentifier("employeeViewButton")
+                                    Button("Order Review") {
+                                        current = "order"
+                                    }.buttonStyle(.borderedProminent)
+                                        .tint(.gray)
+                                        .font(.title)
+                                }
+                                GridRow {
+                                    Button("Inventory Management") {
+                                        
+                                    }.buttonStyle(.borderedProminent)
+                                        .tint(.gray)
+                                        .font(.title)
+                                    .accessibilityIdentifier("orderViewButton")
+                                }
+                                .padding(.bottom, 15)
+
+                            }
+                            .frame(maxWidth: .infinity)
+                                .background(Color.blue)
+                                .cornerRadius(30)
+                                .padding(10)
+                            
+                                                }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                            .background(Color.cyan)
+                            .cornerRadius(20)
                     }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(Color.cyan)
-                        .cornerRadius(20)
+                    else {
+                        VStack (spacing: 40) {
+                            Button("Log out") {
+                                authStatus.logOut()
+                            }.buttonStyle(.borderedProminent)
+                                .font(.title3)
+                                .tint(.gray)
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                .padding(.top, 15)
+                                .padding(.trailing, 15)
+                            .accessibilityIdentifier("logoutButton")
+                            
+                            VStack (){
+                                Text("Welcome Back\(username == "" ? "!" : ", \(username)!")")
+                                    .foregroundStyle(.white)
+                                    .font(.title)
+                                    .padding(10)
+                            }
+                                .frame(maxWidth: .infinity)
+                                .background(Color.blue)
+                                .cornerRadius(20)
+                                .padding(10)
+                                
+                            
+                            VStack (spacing: 40){
+                                Button("Operational Dashboard") {
+                                    
+                                }.buttonStyle(.borderedProminent)
+                                    .tint(.gray)
+                                    .font(.title)
+                                    .padding(.top, 20)
+                                Button("Employee Directory") {
+                                    current = "employee"
+                                }.buttonStyle(.borderedProminent)
+                                    .tint(.gray)
+                                    .font(.title)
+                                Button("Product List") {
+                                    current = "product"
+                                }.buttonStyle(.borderedProminent)
+                                    .tint(.gray)
+                                    .font(.title)
+                                .accessibilityIdentifier("employeeViewButton")
+                                Button("Order Review") {
+                                    current = "order"
+                                }.buttonStyle(.borderedProminent)
+                                    .tint(.gray)
+                                    .font(.title)
+                                Button("Inventory Management") {
+                                    
+                                }.buttonStyle(.borderedProminent)
+                                    .tint(.gray)
+                                    .font(.title)
+                                    .padding(.bottom, 20)
+
+                                .accessibilityIdentifier("orderViewButton")
+                                
+                            }
+                            .frame(maxWidth: .infinity)
+                                .background(Color.blue)
+                                .cornerRadius(30)
+                                .padding(10)
+                                                    }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                            .background(Color.cyan)
+                            .cornerRadius(20)
+                    }
+                    
+                    
                         
                         
                 }
