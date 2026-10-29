@@ -4,9 +4,10 @@
 //
 //  Created by user303000 on 10/1/26.
 //
-
+import Foundation
 class Inventory: Identifiable, Hashable, Codable {
-    
+    //var id = UUID()
+
     let productId: Int
     let productName: String
     let productNumber: String
@@ -38,6 +39,6 @@ class Inventory: Identifiable, Hashable, Codable {
     }
     
     func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
+        hasher.combine(productId)
     }
 }

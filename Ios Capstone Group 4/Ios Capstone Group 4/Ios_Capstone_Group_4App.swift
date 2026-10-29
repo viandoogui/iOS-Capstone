@@ -23,10 +23,11 @@ struct Ios_Capstone_Group_4App: App {
             else {
                 //  LoginView()
                 //    .environmentObject(authStatus)
-               // ProductListView(repository:RemoteProductRepository(urlBase: urlBase, authStatus:authStatus))
+                //ProductListView(repository:RemoteProductRepository(urlBase: urlBase, authStatus:authStatus))
 
               //  EmployeeList(repository: RemoteEmployeeRepository(urlBase: urlBase, authStatus: authStatus))
                 //OrderListView(repository: RemoteOrderRepository(urlBase: urlBase, authStatus: authStatus))
+                InventoryListView(repository: RemoteInventoryRepository(urlBase: urlBase, authStatus: authStatus))
             }
            
         }
