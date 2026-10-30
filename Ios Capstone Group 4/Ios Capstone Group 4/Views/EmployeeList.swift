@@ -25,26 +25,32 @@ struct EmployeeList: View {
                                 .padding(5)
                                 .background(Color.white)
                                 .cornerRadius(5)
+                                .accessibilityLabel("Employee full name search")
                             Spacer()
                             Menu {
                                 Button("None") {
                                     viewModel.clearSort()
                                     viewModel.refilterEmployees()
                                 }
+                                .accessibilityLabel("No employee sorting")
                                 Button("A - Z"){
                                     viewModel.sortByAZ()
                                     viewModel.selectedSort()
                                 }
+                                .accessibilityLabel("Sort employee names from A to Z")
                                 Button("Z - A"){
                                     viewModel.sortByZA()
                                     viewModel.selectedSort()
                                 }
+                                .accessibilityLabel("Sort employee names from Z to A")
                             }
                             label: {
                                 Text("Sort By...")
                                     .padding(12)
                                     .background(Color.white, in: Capsule())
                                     .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
+                                    .accessibilityLabel("Employee full name sorting")
+                                    .accessibilityHint("Options to sort employee full names by alphabetical order")
 
                             }
                             
@@ -56,6 +62,8 @@ struct EmployeeList: View {
                                 .padding(5)
                                 .background(Color.white)
                                 .cornerRadius(5)
+                                .accessibilityLabel("Employee department search")
+                                .accessibilityHint("Find employees by their department's name")
                         }
                         .padding(.horizontal, 10)
                         
@@ -67,6 +75,7 @@ struct EmployeeList: View {
                                     Text("Last Name")
                                     Text("Department")
                                 }
+                                .accessibilityLabel("Employee fields: first name, last name, and department")
                                 .frame(maxWidth: .infinity)
                             }
                             .padding(5)

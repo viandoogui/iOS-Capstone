@@ -28,6 +28,7 @@ struct EmployeeDetails: View {
                                 .padding(.bottom, 5)
                             TextField("First Name", text: $empBinding.firstName)
                                 .textFieldStyle(.roundedBorder)
+                                .accessibilityLabel("Employee's first name entry")
                         }
                         .padding(.top, 20)
                         .padding(.horizontal, 20)
@@ -40,6 +41,7 @@ struct EmployeeDetails: View {
                                 .padding(.bottom, 5)
                             TextField("Last Name", text: $empBinding.lastName)
                                 .textFieldStyle(.roundedBorder)
+                                .accessibilityLabel("Employee's last name entry")
                         }
                         .padding(.horizontal, 20)
                         
@@ -54,6 +56,7 @@ struct EmployeeDetails: View {
                                 set: { $empBinding.title.wrappedValue = $0 }
                             ))
                             .textFieldStyle(.roundedBorder)
+                            .accessibilityLabel("Employee's title entry")
                         }
                         .padding(.horizontal, 20)
                         
@@ -65,6 +68,7 @@ struct EmployeeDetails: View {
                                 .padding(.bottom, 5)
                             TextField("Shift", text: $empBinding.shift)
                                 .textFieldStyle(.roundedBorder)
+                                .accessibilityLabel("Employee's shift entry")
                         }
                         .padding(.horizontal, 20)
 
@@ -76,6 +80,7 @@ struct EmployeeDetails: View {
                                 .padding(.bottom, 5)
                             TextField("Department", text: $empBinding.department)
                                 .textFieldStyle(.roundedBorder)
+                                .accessibilityLabel("Employee's department entry")
                         }
                         .padding(.horizontal, 20)
                         
@@ -91,6 +96,7 @@ struct EmployeeDetails: View {
                             }
                             .foregroundStyle(Color.white)
                             .font(.headline)
+                            .accessibilityLabel("Employee hire date of \(employee.hireDate.formatted(date: .complete, time: .shortened))")
                         }
                         .padding(.horizontal, 20)
                         
@@ -102,6 +108,7 @@ struct EmployeeDetails: View {
                                 .padding(.bottom, 5)
                             TextField("Job Title", text: $empBinding.jobTitle)
                                 .textFieldStyle(.roundedBorder)
+                                .accessibilityLabel("Employee's job title entry")
                         }
                         .padding(.horizontal, 20)
                         .padding(.bottom, 20)
