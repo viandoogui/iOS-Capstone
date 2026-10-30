@@ -59,4 +59,48 @@ class AuthService {
         
     }
     
+    func refresh(refreshKey: RefreshRequest) async throws -> LoginResponseModel{
+        let urlString = "https://api.bootcampcentral.com/api/Login/refresh"
+        
+        guard let url = URL(string: urlString) else {
+            throw NetworkError.invalidURL
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let encoder = JSONEncoder()
+        do {
+            request.httpBody = try encoder.encode(refreshKey)
+        }
+        catch {
+            throw NetworkError.encodingFailed(underlying: error)
+        }
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let http = response as? HTTPURLResponse else {
+            throw NetworkError.badResponse(statusCode: -1)
+        }
+        
+        guard (200...299).contains(http.statusCode) else {
+            if http.statusCode == 401 {
+                throw NetworkError.unauthorized
+            }
+            throw NetworkError.badResponse(statusCode: http.statusCode)
+        }
+        
+        do {
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            decoder.useStringDecoderForDate()
+            
+            return try decoder.decode(LoginResponseModel.self, from: data)
+        }
+        catch {
+            throw NetworkError.decodingFailed(underlying: error)
+        }
+    }
+    
 }
