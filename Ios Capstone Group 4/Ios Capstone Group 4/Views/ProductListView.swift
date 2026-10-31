@@ -37,11 +37,12 @@ struct ProductListView: View {
                             TextField("Search Products...", text: $viewModel.filter)
                                 .textFieldStyle(.roundedBorder)
                                 .padding(20)
+                                .accessibilityLabel("Search for Products by name")
                             
                             Spacer()
                             
                             Menu {
-                                Button("Remove Filters") {
+                                Button("No Sort") {
                                     viewModel.filter = ""
                                     viewModel.currentSort = .none
                                     viewModel.matchingProduct = viewModel.products
@@ -54,20 +55,24 @@ struct ProductListView: View {
                                 Button("A - Z") {
                                     viewModel.sortAZ()
                                 }
+                                .accessibilityLabel("Sort product names from A to Z")
                                 
                                 Button("Z - A"){
                                     viewModel.sortZA()
                                 }
+                                .accessibilityLabel("Sort product names from Z to A")
                                 Divider()
                                 Button("Price: Low to High") {
                                     viewModel.LowToHigh()
                                 }
+                                .accessibilityLabel("Sort product prices from lowest to highest")
                                 Button("Price: High to Low") {
                                     viewModel.HighToLow()
                                 }
+                                .accessibilityLabel("Sort product prices from highest to lowest")
                             } label: {
                                 
-                                Text("Filter")
+                                Text("Sort By...")
                                     .padding(18)
                                     .foregroundColor(.black)
                                     .background(Color.white)
@@ -76,6 +81,7 @@ struct ProductListView: View {
                                         RoundedRectangle(cornerRadius: 20)
                                             .stroke(Color.black, lineWidth: 1)
                                     )
+                                    .accessibilityLabel("Options to sort the products")
                             }
                             .padding(12)
                             

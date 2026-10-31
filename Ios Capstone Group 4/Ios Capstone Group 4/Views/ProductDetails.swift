@@ -58,34 +58,68 @@ struct ProductDetails:View{
                                 
                                 VStack(){
                                     
-                                    Text("ID:")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    HStack {
+                                        VStack {
+                                            Text("ID:")
+                                                .font(.caption)
+                                                .foregroundColor(.gray)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
 
-                                        
-                                    Text("\(product.id)")
-                                         .font(.body)
+                                            Text("\(product.id)")
+                                                 .font(.body)
+                                                 
+                                        }
+                                        Text(" ")
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                         .accessibilityElement(children: .ignore)
+                                         .accessibilityLabel("Product id of \(product.id)")
+                                    
                                         Divider()
-                                    Text("Product Number:")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    
+                                    HStack {
+                                        VStack {
+                                            Text("Product Number:")
+                                                .font(.caption)
+                                                .foregroundColor(.gray)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
 
-                                    Text("\(product.productNumber)")
-                                        .font(.body)
+                                            Text("\(product.productNumber)")
+                                                .font(.body)
+                                                 
+                                        }
+                                        Text(" ")
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                         .accessibilityElement(children: .ignore)
+                                         .accessibilityLabel("Product number of \(product.id)")
+                                    
+                                    Divider()
+                                    
+                                    HStack {
+                                        VStack {
+                                            Text("Price:")
+                                                .font(.caption)
+                                                .foregroundColor(.gray)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+
+                                            Text("$\(String(format:"%.2f", product.listPrice))")
+                                                .font(.body)
+                                                
+                                                 
+                                        }
+                                        Text(" ")
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                         .accessibilityElement(children: .ignore)
+                                         .accessibilityLabel("Product price of $\(String(format:"%.2f", product.listPrice))")
+
+                                    
                                    
 //                                    Text("\n Inventory: N/A")
 //                                        .font(.caption)
 //                                        .foregroundColor(.gray)
-                                    Divider()
-                                    Text("Price:")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-
-                                    Text("$\(String(format:"%.2f", product.listPrice))")
-                                        .font(.body)
+                                    
 
                                 }
                                 .padding(12)
@@ -97,39 +131,73 @@ struct ProductDetails:View{
                             
                             if let summary = product.summary{
                                 Divider()
-                                Text("Summary:")
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(8)
-                                Text("\(summary)")
-                                    .padding(8)
+                                
+                                HStack {
+                                    VStack {
+                                        Text("Summary:")
+                                            .font(.caption)
+                                            .foregroundColor(.gray)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding(8)
+
+                                        Text("\(summary)")
+                                            .padding(8)
+                                                                                         
+                                    }
+                                    Text(" ")
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                     .accessibilityElement(children: .ignore)
+                                     .accessibilityLabel("Product summary of \(summary)")
+                                
                             }
                             
                             if let color = product.color{
                                 Divider()
 
-                                Text("Color:" )
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(8)
-                                Text("\(color)")
-                                    .padding(8)
-                                
+                                HStack {
+                                    VStack {
+                                        Text("Color:" )
+                                            .font(.caption)
+                                            .foregroundColor(.gray)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding(8)
 
+                                        Text("\(color)")
+                                            .padding(8)
+                                            
+                                                                                         
+                                    }
+                                    Text(" ")
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                     .accessibilityElement(children: .ignore)
+                                     .accessibilityLabel("Product color of \(color)")
 
                             }
                             
                             Divider()
 
-                            Text("warranty:")
-                                .font(.caption)
-                                .foregroundColor(.gray)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(8)
-                            Text("\(product.warranty ?? "none")")
-                                .padding(8)
+                            HStack {
+                                VStack {
+                                    Text("warranty:")
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(8)
+
+                                    Text("\(product.warranty ?? "none")")
+                                        .padding(8)
+                                                                                     
+                                }
+                                Text(" ")
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                                 .accessibilityElement(children: .ignore)
+                                 .accessibilityLabel("Product warranty of \(product.warranty ?? "none")")
+                            
+                            
+                            
 
 
 
