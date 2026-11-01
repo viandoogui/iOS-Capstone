@@ -11,7 +11,6 @@ struct EmployeeDetails: View {
     var employee: Employee
     
     var body: some View {
-        @Bindable var empBinding = employee
         ScrollView {
             VStack(spacing: 0) {
                 Text("Employee Details")
@@ -19,99 +18,47 @@ struct EmployeeDetails: View {
                     .padding(10)
                 HStack {
                     Spacer()
-                    VStack(spacing: 20) {
-                        VStack(spacing: 0) {
-                            Text("First Name:")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.bottom, 5)
-                            TextField("First Name", text: $empBinding.firstName)
-                                .textFieldStyle(.roundedBorder)
-                                .accessibilityLabel("Employee's first name entry")
-                        }
-                        .padding(.top, 20)
-                        .padding(.horizontal, 20)
+                    
+                    VStack {
                         
                         VStack(spacing: 0) {
-                            Text("Last Name:")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.bottom, 5)
-                            TextField("Last Name", text: $empBinding.lastName)
-                                .textFieldStyle(.roundedBorder)
-                                .accessibilityLabel("Employee's last name entry")
+                            AccessibilityDetailItem("First Name:", employee.firstName, "Employee's first name is \(employee.firstName)")
+                                .padding(10)
+                            
+                            Divider()
+                            
+                            AccessibilityDetailItem("Last Name:", employee.lastName, "Employee's last name is \(employee.lastName)")
+                                .padding(10)
+                            
+                            Divider()
+                            
+                            AccessibilityDetailItem("Title:", employee.title ?? "none", "Employee's title is \(employee.title ?? "none")")
+                                .padding(10)
+                            
+                            Divider()
+                            
+                            AccessibilityDetailItem("Shift:", employee.shift, "Employee's shift is \(employee.shift)")
+                                .padding(10)
+                            
+                            Divider()
+                            
+                            AccessibilityDetailItem("Department:", employee.department, "Employee's department is \(employee.department)")
+                                .padding(10)
+                            
+                            Divider()
+                            
+                            AccessibilityDetailItem("Date/Time of Hire:", employee.hireDate.formatted(), "Employee's date and time of hire is \(employee.hireDate.formatted())")
+                                .padding(10)
+                            
+                            Divider()
+                            
+                            AccessibilityDetailItem("Job Title:", employee.jobTitle, "Employee's job title is \(employee.jobTitle)")
+                                .padding(10)
+                            
                         }
-                        .padding(.horizontal, 20)
-                        
-                        VStack(spacing: 0) {
-                            Text("Title:")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.bottom, 5)
-                            TextField("Title", text: Binding<String>(
-                                get: { $empBinding.title.wrappedValue ?? "" },
-                                set: { $empBinding.title.wrappedValue = $0 }
-                            ))
-                            .textFieldStyle(.roundedBorder)
-                            .accessibilityLabel("Employee's title entry")
-                        }
-                        .padding(.horizontal, 20)
-                        
-                        VStack(spacing: 0) {
-                            Text("Shift:")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.bottom, 5)
-                            TextField("Shift", text: $empBinding.shift)
-                                .textFieldStyle(.roundedBorder)
-                                .accessibilityLabel("Employee's shift entry")
-                        }
-                        .padding(.horizontal, 20)
-
-                        VStack(spacing: 0) {
-                            Text("Department:")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.bottom, 5)
-                            TextField("Department", text: $empBinding.department)
-                                .textFieldStyle(.roundedBorder)
-                                .accessibilityLabel("Employee's department entry")
-                        }
-                        .padding(.horizontal, 20)
-                        
-                        VStack(spacing: 0) {
-                            Text("Date/Time of Hire:")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.bottom, 5)
-                            HStack {
-                                Text(employee.hireDate.formatted())
-                                Spacer()
-                            }
-                            .foregroundStyle(Color.white)
-                            .font(.headline)
-                            .accessibilityLabel("Employee hire date of \(employee.hireDate.formatted(date: .complete, time: .shortened))")
-                        }
-                        .padding(.horizontal, 20)
-                        
-                        VStack(spacing: 0) {
-                            Text("Job Title:")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.bottom, 5)
-                            TextField("Job Title", text: $empBinding.jobTitle)
-                                .textFieldStyle(.roundedBorder)
-                                .accessibilityLabel("Employee's job title entry")
-                        }
-                        .padding(.horizontal, 20)
-                        .padding(.bottom, 20)
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        .padding(10)
                         
                     }
                     .background(Color.blue)

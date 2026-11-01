@@ -84,7 +84,7 @@ struct ProductDetails:View{
                             if let summary = product.summary{
                                 Divider()
                                 
-                                AccessibilityDetailItem("Summary:", summary, "Product summary of \(product.summary)")
+                                AccessibilityDetailItem("Summary:", summary, "Product summary of \(product.summary ?? "none")")
                                     .padding(8)
                             }
                             
