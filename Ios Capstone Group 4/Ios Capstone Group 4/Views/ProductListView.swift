@@ -31,6 +31,24 @@ struct ProductListView: View {
                 
                     Text("Product Catalog!")
                         .font(Font.largeTitle)
+                    if viewModel.isLoading {
+                        ProgressView("Loading products...")
+                            .padding()
+                    }
+
+                    if !viewModel.errormsg.isEmpty {
+                        Text(viewModel.errormsg)
+                            .foregroundColor(.black)
+
+                        Button("Try Again") {
+                            Task {
+                                await viewModel.loadProducts()
+                            }
+                        }
+                        .padding(12)
+                        .background(Color.white, in: Capsule())
+                        .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
+                    }
                     
                     VStack(){
                         HStack(){
@@ -159,6 +177,7 @@ extension ProductListView {
         var currentSort = sortOptions.none
         
         var errormsg = ""
+        var isLoading = true
 
         var selectedProduct: Product? = nil
 
@@ -180,13 +199,19 @@ extension ProductListView {
             
         
         func loadProducts()async{
+
+            isLoading = true
+            errormsg = ""
+
             do{
                 products = try await repository.getAll()
                 matchingProduct = products
+                isLoading = false
                 //print(products)
-            }catch{
-                errormsg = "error loading products: \(error)"
-                print(errormsg)
+            } catch {
+                errormsg = "Couldn't load products. Please try again."
+                isLoading = false
+                //print(errormsg)
             }
         }
         
