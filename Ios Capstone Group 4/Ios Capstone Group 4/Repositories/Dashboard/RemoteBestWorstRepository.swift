@@ -7,7 +7,7 @@
 
 import Foundation
 
-class RemoteBestWorstRepository: RepositoryProtocol <DashboardProduct> {
+class RemoteBestWorstRepository: RepositoryProtocol <BestWorstProduct> {
     
     private let urlBase: String
     
@@ -15,7 +15,7 @@ class RemoteBestWorstRepository: RepositoryProtocol <DashboardProduct> {
         self.urlBase = urlBase
     }
     
-    func getAll() async throws -> [DashboardProduct] {
+    func getAll() async throws -> [BestWorstProduct] {
         let urlString = "\(urlBase)/api/Dashboard/best-worst"
         let url = URL(string: urlString)!
         let (data, _) = try await URLSession.shared.data(from: url)
@@ -27,14 +27,14 @@ class RemoteBestWorstRepository: RepositoryProtocol <DashboardProduct> {
             ApplyDateSettings(formatter)
             let decoder = ConfigureNewDecoder(formatter)
             
-            return try decoder.decode([DashboardProduct].self, from: data)
+            return try decoder.decode([BestWorstProduct].self, from: data)
         } catch {
             print(error)
             throw NetworkError.decodingFailed(underlying: error)
         }
     }
     
-    func getById(_ id: Int) async throws -> DashboardProduct? {
+    func getById(_ id: Int) async throws -> BestWorstProduct? {
         let bestAndWorst = try await getAll()
         
         return bestAndWorst.first(where: {$0.id == id})

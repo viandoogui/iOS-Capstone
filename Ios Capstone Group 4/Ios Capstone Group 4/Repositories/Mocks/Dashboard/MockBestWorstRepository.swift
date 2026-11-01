@@ -6,19 +6,19 @@
 //
 import Foundation
 
-class MockBestWorstRepository: RepositoryProtocol<DashboardProduct>{
+class MockBestWorstRepository: RepositoryProtocol<BestWorstProduct>{
     
-    func getAll() async throws -> [DashboardProduct] {
+    func getAll() async throws -> [BestWorstProduct] {
         bestAndWorstProducts
     }
     
-    func getById(_ id: Int) async throws -> DashboardProduct? {
+    func getById(_ id: Int) async throws -> BestWorstProduct? {
         bestAndWorstProducts.first(where: { $0.id == id})
     }
     
-    private var bestAndWorstProducts: [DashboardProduct] = [
-        DashboardProduct(productId: 1, productName: "Best Performing Product", unitsSold: 53, unitsInStock: 401),
-        DashboardProduct(productId: 2, productName: "Worst Performing Product", unitsSold: 1, unitsInStock: 313)
+    private var bestAndWorstProducts: [BestWorstProduct] = [
+        BestWorstProduct(productId: 1, productName: "Best Performing Product", unitsSold: 53, unitsInStock: 401),
+        BestWorstProduct(productId: 2, productName: "Worst Performing Product", unitsSold: 1, unitsInStock: 313)
         ]
 }
 
