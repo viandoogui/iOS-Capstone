@@ -15,8 +15,6 @@ class RemoteEmployeeRepository: RepositoryProtocol <Employee> {
         self.urlBase = urlBase
     }
     
-    
-    
     func getAll() async throws -> [Employee] {
         let urlString = "\(urlBase)/Employee"
         let url = URL(string: urlString)!
