@@ -20,70 +20,87 @@ struct EmployeeList: View {
             NavigationStack {
                 VStack {
                     VStack {
-                        HStack {
-                            TextField("Search Full Name...", text: $viewModel.filter)
-                                .padding(5)
-                                .background(Color.white)
-                                .cornerRadius(5)
-                            Spacer()
-                            Menu {
-                                Button("None") {
-                                    viewModel.clearSort()
-                                    viewModel.refilterEmployees()
-                                }
-                                Button("A - Z"){
-                                    viewModel.sortByAZ()
-                                    viewModel.selectedSort()
-                                }
-                                Button("Z - A"){
-                                    viewModel.sortByZA()
-                                    viewModel.selectedSort()
-                                }
-                            }
-                            label: {
-                                Text("Sort By...")
-                                    .padding(12)
-                                    .background(Color.white, in: Capsule())
-                                    .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
+                        if viewModel.isLoading {
+                            ProgressView("Loading employees...")
+                        }
 
+                        if !viewModel.errorMessage.isEmpty {
+                            Text(viewModel.errorMessage)
+                                .foregroundColor(.white)
+
+                            Button("Try Again") {
+                                Task {
+                                    await viewModel.loadEmployees()
+                                }
                             }
-                            
-                        }
-                        .padding(10)
-                        
-                        HStack {
-                            TextField("Search Department...", text: $viewModel.departmentFilter)
-                                .padding(5)
-                                .background(Color.white)
-                                .cornerRadius(5)
-                        }
-                        .padding(.horizontal, 10)
-                        
-                        ScrollView {                        Grid(horizontalSpacing: 0, verticalSpacing: 0){
+
+                            .padding(12)
+                            .background(Color.white, in: Capsule())
+                            .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
+                        } else {
+
+                            HStack {
+                                TextField("Search Full Name...", text: $viewModel.filter)
+                                    .padding(5)
+                                    .background(Color.white)
+                                    .cornerRadius(5)
+                                Spacer()
+                                Menu {
+                                    Button("None") {
+                                        viewModel.clearSort()
+                                        viewModel.refilterEmployees()
+                                    }
+                                    Button("A - Z"){
+                                        viewModel.sortByAZ()
+                                        viewModel.selectedSort()
+                                    }
+                                    Button("Z - A"){
+                                        viewModel.sortByZA()
+                                        viewModel.selectedSort()
+                                    }
+                                }
+                                label: {
+                                    Text("Sort By...")
+                                        .padding(12)
+                                        .background(Color.white, in: Capsule())
+                                        .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
+                                }
+                            }
+                            .padding(10)
                             
                             HStack {
-                                GridRow {
-                                    Text("First Name")
-                                    Text("Last Name")
-                                    Text("Department")
+                                TextField("Search Department...", text: $viewModel.departmentFilter)
+                                    .padding(5)
+                                    .background(Color.white)
+                                    .cornerRadius(5)
+                            }
+                            .padding(.horizontal, 10)
+                            
+                            ScrollView { Grid(horizontalSpacing: 0, verticalSpacing: 0){
+                                HStack {
+                                    GridRow {
+                                        Text("First Name")
+                                        Text("Last Name")
+                                        Text("Department")
+                                    }
+                                    .frame(maxWidth: .infinity)
                                 }
-                                .frame(maxWidth: .infinity)
-                            }
-                            .padding(5)
-                            
-                            ForEach(viewModel.matchingEmployees) { employee in
+                                .padding(5)
+
+                                ForEach(viewModel.matchingEmployees) { employee in
+
+                                    EmployeeListItem(employee: employee)
+                                        .padding(10)
+                                }
                                 
-                                EmployeeListItem(employee: employee)
-                                    .padding(10)
                             }
-                            
+                            }
+                            .refreshable {
+                                await viewModel.loadEmployees()
+                            }
+                            .background(Color.white)
+                            .padding(15)
                         }
-                        }
-                        .refreshable {
-                            await viewModel.loadEmployees()
-                        }
-                        .background(Color.white)
-                        .padding(15)
                         
                     }
                     .navigationTitle("Employee List")
@@ -125,6 +142,7 @@ extension EmployeeList {
         }
         
         var errorMessage: String = ""
+        var isLoading = true
         
         var employees: [Employee] = [] {
             didSet {
@@ -163,13 +181,18 @@ extension EmployeeList {
         var selectedEmployee: Employee? = nil
         
         func loadEmployees() async {
+
+            isLoading = true
+            errorMessage = ""
+
             do {
                 employees = try await repository.getAll()
+                isLoading = false
+
+            } catch {
+                errorMessage = "Couldn't load employees. Please try again."
+                isLoading = false
             }
-            catch {
-                errorMessage = "\(error)"
-            }
-            
         }
         
         var selectedSort: () -> Void = {}
