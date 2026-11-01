@@ -59,7 +59,7 @@ struct LoginView : View{
                                 return
                             }
                             
-                            authStatus.updateLoginStatus(response: resp)
+                            await authStatus.updateLoginStatus(response: resp)
                         }
                     }
                     .buttonStyle(.borderedProminent)
