@@ -19,7 +19,7 @@ struct EmployeeList: View {
         VStack {
             NavigationStack {
                 VStack {
-                    VStack {
+                    VStack(spacing: 0) {
                         HStack {
                             TextField("Search Full Name...", text: $viewModel.filter)
                                 .padding(5)
@@ -51,7 +51,7 @@ struct EmployeeList: View {
                                     .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
                                     .accessibilityLabel("Employee full name sorting")
                                     .accessibilityHint("Options to sort employee full names by alphabetical order")
-
+                                
                             }
                             
                         }
@@ -67,7 +67,7 @@ struct EmployeeList: View {
                         }
                         .padding(.horizontal, 10)
                         
-                        ScrollView {                        Grid(horizontalSpacing: 0, verticalSpacing: 0){
+                        Grid(horizontalSpacing: 0, verticalSpacing: 0){
                             
                             HStack {
                                 GridRow {
@@ -75,18 +75,21 @@ struct EmployeeList: View {
                                     Text("Last Name")
                                     Text("Department")
                                 }
-                                .accessibilityLabel("Employee fields: first name, last name, and department")
                                 .frame(maxWidth: .infinity)
                             }
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel("Employee fields: first name, last name, and department")
                             .padding(5)
                             
-                            ForEach(viewModel.matchingEmployees) { employee in
+                            ScrollView {
                                 
-                                EmployeeListItem(employee: employee)
-                                    .padding(10)
+                                ForEach(viewModel.matchingEmployees) { employee in
+                                    
+                                    EmployeeListItem(employee: employee)
+                                        .padding(5)
+                                }
+                                
                             }
-                            
-                        }
                         }
                         .refreshable {
                             await viewModel.loadEmployees()
@@ -153,12 +156,11 @@ extension EmployeeList {
                 refilterEmployees()
             }
         }
-
         
         func refilterEmployees() {
             matchingEmployees = employees.filter { employee in
                 (filter == "" ||
-                ("\(employee.firstName.lowercased()) \(employee.lastName.lowercased())"
+                 ("\(employee.firstName.lowercased()) \(employee.lastName.lowercased())"
                     .contains(filter.lowercased()) && filter != " "))
                 && (departmentFilter == "" || employee.department.lowercased().contains( departmentFilter.lowercased())
                 )
