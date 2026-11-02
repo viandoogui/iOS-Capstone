@@ -39,6 +39,7 @@ struct EmployeeListItem: View {
             }
             .padding(5)
         }
+        .accessibilityElement(children: .ignore)
         .accessibilityLabel("Employee \(employee.firstName) \(employee.lastName) in the \(employee.department) department")
         
     }
