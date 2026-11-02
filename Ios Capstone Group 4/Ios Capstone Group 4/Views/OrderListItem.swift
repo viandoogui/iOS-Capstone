@@ -33,6 +33,8 @@ struct OrderListItem: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(10)
             .border(Color.black, width: 1)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Order number \(order.orderNumber) at store \(order.storeName) on \(order.orderDate.formatted(date: .numeric, time: .omitted))")
         }
         .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
     }

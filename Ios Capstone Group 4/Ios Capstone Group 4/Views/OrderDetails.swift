@@ -68,6 +68,8 @@ struct OrderDetails: View {
                             }
                         }
                     }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("Order number \(firstOrder.orderNumber) at store \(firstOrder.storeName) with a total of \(String(format: "$%.2f", total)) on \(firstOrder.orderDate.formatted(date: .long, time: .omitted))")
                     
                     
                     .foregroundStyle(Color.white)
@@ -98,6 +100,8 @@ struct OrderDetails: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(10)
                             .border(Color.black, width: 1)
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel("Product \(order.productName) of quantity \(order.orderQty) with a unit price of \(String(format: "$%.2f", order.unitPrice))")
                         }
                     }
 
