@@ -8,7 +8,7 @@
 import Foundation
 import Security
 
-final class SecureTokenManager {
+final class SecureTokenManager : TokenStorageProtocol {
     static let shared = SecureTokenManager()
     
     private init() {}

@@ -34,6 +34,7 @@ struct ProductListRow:View {
             }
             .frame(maxWidth: .infinity) //ensure horizontal center
             .background(Color.white)
+            .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
             .padding(8)
             .border(Color.black, width: 1)
         }

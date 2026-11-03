@@ -34,62 +34,75 @@ struct OrderDetails: View {
             
             Text("Order Details")
                 .font(.largeTitle)
-            
+            Spacer()
             if let firstOrder = matchingOrders.first {
-                
-                Text("Order #: \(firstOrder.orderNumber)")
-                Text("Store: \(firstOrder.storeName)")
-                Text("Date: \(firstOrder.orderDate.formatted(date: .numeric, time: .omitted))")
                 
                 VStack {
                     
-                    HStack {
-                        Text("Product")
-                            .frame(maxWidth: .infinity)
+                    ViewThatFits(in: [.horizontal, .vertical]) {
+                        HStack {
+                            Text("Order #: \(firstOrder.orderNumber)")
+                            Text(
+                                String(
+                                    format: "Total: $%.2f",
+                                    total
+                                )
+                            )
+                            Text("Store: \(firstOrder.storeName)")
+                            Text("Date: \(firstOrder.orderDate.formatted(date: .numeric, time: .omitted))")
+                        }
                         
-                        Text("Qty")
-                            .frame(width: 50)
-                        
-                        Text("Price")
-                            .frame(width: 80)
-                    }
-                    .padding(5)
-                    
-                    ScrollView {
-                        
-                        ForEach(matchingOrders) { order in
-                            
+                        VStack {
                             HStack {
-                                Text(order.productName)
-                                    .frame(maxWidth: .infinity)
-                                
-                                Divider()
-                                
-                                Text("\(order.orderQty)")
-                                    .frame(width: 50)
-                                
-                                Divider()
-                                
+                                Text("Order #: \(firstOrder.orderNumber)")
                                 Text(
                                     String(
-                                        format: "$%.2f",
-                                        order.unitPrice
+                                        format: "Total: $%.2f",
+                                        total
                                     )
                                 )
-                                .frame(width: 80)
                             }
-                            .padding(8)
-                            .border(Color.black, width: 1)
+                            HStack {
+                                Text("Store: \(firstOrder.storeName)")
+                                Text("Date: \(firstOrder.orderDate.formatted(date: .numeric, time: .omitted))")
+                            }
                         }
                     }
                     
-                    Text(
-                        String(
-                            format: "Total: $%.2f",
-                            total
-                        )
-                    )
-                    .padding()
+                    
+                    .foregroundStyle(Color.white)
+                    .font(.headline)
+                    .padding(5)
+
+                }
+                .background(Color.blue)
+                .cornerRadius(10)
+                
+                
+                
+                VStack {
+                    ScrollView {
+                        ForEach(matchingOrders) { order in
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text(order.productName)
+
+                                Text("Quantity: \(order.orderQty)")
+
+                                Text(
+                                    String(
+                                        format: "Unit Price: $%.2f",
+                                        order.unitPrice
+                                    )
+                                )
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(10)
+                            .border(Color.black, width: 1)
+                        }
+                    }
+
+                    
+                   
                 }
                 .background(Color.white)
                 .padding(10)
@@ -98,10 +111,10 @@ struct OrderDetails: View {
                 
                 Text("Order not found")
             }
-            
-            Spacer()
+        
         }
-        .padding(.top, 20)
         .background(Color.cyan)
+        
+        
     }
 }

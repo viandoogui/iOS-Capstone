@@ -15,95 +15,99 @@ struct OrderListView: View {
     }
     
     var body: some View {
-        
-        VStack {
-            
-            Text("Order History")
-                .font(.largeTitle)
             
             VStack {
+                
+                if viewModel.isLoading {
+                    ProgressView("Loading orders...")
+                }
+
+                if !viewModel.errorMessage.isEmpty {
+                    Text(viewModel.errorMessage)
+                        .foregroundColor(.red)
+
+                    Button("Try Again") {
+                        Task {
+                            await viewModel.loadOrders()
+                        }
+                    }
+                }
+
                 
                 HStack {
                     TextField("Search Orders...", text: $viewModel.filter)
                         .textFieldStyle(.roundedBorder)
-                        .padding(20)
-                    
-                    Button("Filter") {
-                        
+                      
+                    Menu {
+                        Button("None") {
+                            viewModel.clearSort()
+                            viewModel.refilterOrders()
+                        }
+
+                        Button("A - Z") {
+                            viewModel.sortByAZ()
+                            viewModel.selectedSort()
+                        }
+
+                        Button("Z - A") {
+                            viewModel.sortByZA()
+                            viewModel.selectedSort()
+                        }
+                    } label: {
+                        Text("Sort By...")
+                            .padding(12)
+                            .background(Color.white, in: Capsule())
+                            .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
                     }
-                    .padding(12)
-                    .background(Color.white)
-                    .cornerRadius(20)
                 }
+                .padding(.horizontal, 20)
                 
                 VStack {
-                    
-                    HStack {
-                        Text("Order #")
-                            .frame(width: 80)
-                        
-                        Text("Store")
-                            .frame(maxWidth: .infinity)
-                        
-                        Text("Date")
-                            .frame(width: 90)
-                    }
-                    .padding(5)
-                    
-                    ScrollView {
-                        
-                        ForEach(viewModel.matchingOrders) { order in
-                            
-                            NavigationLink(
-                                destination: OrderDetails(
-                                    orderNumber: order.orderNumber,
-                                    orders: viewModel.allOrders
-                                )
-                            ) {
-                                
-                                HStack {
-                                    
-                                    Text("\(order.orderNumber)").frame(width: 80)
-                                    
-                                    Divider()
-                                    
-                                    Text(order.storeName).frame(maxWidth: .infinity)
-                                    
-                                    Divider()
-                                    
-                                    Text(
-                                        order.orderDate.formatted(
-                                            date: .numeric,
-                                            time: .omitted
-                                        )
-                                    )
-                                    .frame(width: 90)
+                    if viewModel.errorMessage.isEmpty {
+                        VStack {
+                            ScrollView {
+                                if viewModel.matchingOrders.isEmpty &&
+                                    viewModel.errorMessage.isEmpty &&
+                                    !viewModel.isLoading {
+                                    Text(viewModel.filter.isEmpty ? "No orders available." : "No matching orders found.")
+                                        .foregroundColor(.black)
+                                        .padding()
                                 }
-                                .padding(8)
-                                .border(Color.black, width: 1)
+                                ForEach(viewModel.matchingOrders) { order in
+                                    OrderListItem(order: order, allOrders: viewModel.allOrders)
+
+                                }
                             }
+                            .refreshable {
+                                viewModel.filter = ""
+                                await viewModel.loadOrders()
+                            }
+                            .background(Color.white)
                         }
+                        .frame(maxWidth: .infinity)
+                        .background(Color.white)
+                        .padding(10)
+                        
                     }
-                    .background(Color.white)
-                    .padding(10)
+                    
                 }
                 .background(Color.blue)
                 .cornerRadius(20)
                 .padding(10)
+                .navigationTitle("Order History")
                 
-                Spacer()
             }
             .padding(.top, 20)
             .background(Color.cyan)
             .task {
                 await viewModel.loadOrders()
             }
-        }
+        
     }
 }
 
 extension OrderListView {
-    
+
     @Observable
     class ViewModel {
         
@@ -112,23 +116,56 @@ extension OrderListView {
         var matchingOrders: [Order] = []
         var filter: String = "" {
             didSet {
-                matchingOrders = orders.filter { order in
-                    filter == "" ||
-                    order.storeName.lowercased().contains(filter.lowercased()) ||
-                    String(order.orderNumber).contains(filter)
-                }
+                refilterOrders()
+            }
+        }
+
+        var selectedSort: () -> Void = {}
+
+        func refilterOrders() {
+            matchingOrders = orders.filter { order in
+                filter == "" ||
+                order.storeName.lowercased().contains(filter.lowercased()) ||
+                String(order.orderNumber).contains(filter)
+            }
+
+            selectedSort()
+        }
+
+        func clearSort() {
+            selectedSort = {}
+        }
+
+        func sortByAZ() {
+            selectedSort = {
+                self.matchingOrders = self.matchingOrders.sorted(by: {
+                    $0.storeName < $1.storeName
+                })
+            }
+        }
+
+        func sortByZA() {
+            selectedSort = {
+                self.matchingOrders = self.matchingOrders.sorted(by: {
+                    $0.storeName > $1.storeName
+                })
             }
         }
         
         var errorMessage = ""
+        var isLoading = true
+
         private let repo: any RepositoryProtocol<Order>
-        
+
         init(repository: any RepositoryProtocol<Order>) {
             self.repo = repository
         }
-        
+
         func loadOrders() async {
             
+            isLoading = true
+            errorMessage = ""
+
             do {
                 let loadedOrders = try await repo.getAll()
                 allOrders = loadedOrders
@@ -144,11 +181,19 @@ extension OrderListView {
                 }
                 
                 orders = uniqueOrders
-                matchingOrders = uniqueOrders
+                refilterOrders()
                 
+                isLoading = false
+
             } catch {
-                errorMessage = "Error loading orders"
+                errorMessage = "Couldn't load orders. Please try again."
+                isLoading = false
             }
         }
     }
 }
+
+#Preview {
+    OrderListView(repository: MockOrderRepository())
+}
+

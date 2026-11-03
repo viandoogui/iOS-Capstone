@@ -11,41 +11,77 @@ internal import Combine
 class AuthStatus: ObservableObject {
     private let authKey = "userAccessToken"
     private let refreshKey = "userRefreshToken"
+    private let refreshLengthSeconds = 604800 // 7 days * 24 hours * 60 minutes * 60 seconds
+    private let storage: TokenStorageProtocol
     
-    init() {
-        let auth = SecureTokenManager.shared.getToken(key: authKey)
-        let refresh = SecureTokenManager.shared.getToken(key: refreshKey)
+    init(storage: TokenStorageProtocol = SecureTokenManager.shared) {
+        self.storage = storage
         
+        let auth = storage.getToken(key: authKey)
+        let refresh = storage.getToken(key: refreshKey)
+        
+        // remove this later, demo code
         self.isLoggedIn = auth != nil && refresh != nil
     }
     
     @Published private(set) var isLoggedIn = false
     var authToken: String? {
-        return SecureTokenManager.shared.getToken(key: authKey)
+        return storage.getToken(key: authKey)
     }
     var refreshToken: String? {
-        return SecureTokenManager.shared.getToken(key: refreshKey)
+        return storage.getToken(key: refreshKey)
     }
     
-    func updateLoginStatus(success: Bool,
-                           authToken: String? = "",
-                           refreshToken: String? = "") {
+    func updateLoginStatus(response: LoginResponseModel)async {
         withAnimation {
-            isLoggedIn = success
+            isLoggedIn = response.success
         }
         
-        let storage = SecureTokenManager.shared
-        
-        if let auth = authToken, !auth.isEmpty {
-            let _ = storage.saveToken(auth, key: authKey)
-        } else {
-            storage.deleteToken(key: authKey)
+        guard let auth = response.accessToken, !auth.isEmpty else {
+            logOut()
+            return
         }
         
-        if let refresh = refreshToken, !refresh.isEmpty {
-            let _ = storage.saveToken(refresh, key: refreshKey)
-        } else {
-            storage.deleteToken(key: refreshKey)
+        guard let refresh = response.refreshToken, !refresh.isEmpty else {
+            logOut()
+            return
         }
+        
+        guard let accessExpiry = response.accessExpiry, let refreshExpiry = response.refreshExpiry else {
+            logOut()
+            return
+        }
+        
+        guard Date() < refreshExpiry else {
+            logOut()
+            return
+        }
+        
+        // GOAL: If the access token is expired and the refresh token is valid, use the refresh token to call the api
+        // and set a new response.
+        if (Date() > accessExpiry) {
+            // check to see if the refresh expiry is valid
+            // if valid, get a new token.
+            do {
+                let refreshRequest = RefreshRequest(refreshToken: refreshKey)
+                let newResponse = try await AuthService.shared.refresh(refreshKey: refreshRequest)
+                await updateLoginStatus(response: newResponse)
+            } catch {
+                print("Token Refresh Failed: \(error.localizedDescription)")
+                logOut()
+                return
+            }
+        }
+        
+        let _ = storage.saveToken(auth, key: authKey)
+        let _ = storage.saveToken(refresh, key: refreshKey)
+    }
+    
+    func logOut() {
+        
+        storage.deleteToken(key: authKey)
+        storage.deleteToken(key: refreshKey)
+        
+        isLoggedIn = false
     }
 }
