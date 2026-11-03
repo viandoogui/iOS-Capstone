@@ -20,7 +20,8 @@ struct EmployeeList: View {
             NavigationStack {
                 VStack {
                     VStack(spacing: 0) {
-                        HStack {
+                        
+                            HStack {
                             TextField("Search Full Name...", text: $viewModel.filter)
                                 .padding(5)
                                 .background(Color.white)
@@ -56,46 +57,68 @@ struct EmployeeList: View {
                             
                         }
                         .padding(10)
-                        
-                        HStack {
-                            TextField("Search Department...", text: $viewModel.departmentFilter)
-                                .padding(5)
-                                .background(Color.white)
-                                .cornerRadius(5)
-                                .accessibilityLabel("Employee department search")
-                                .accessibilityHint("Find employees by their department's name")
-                        }
-                        .padding(.horizontal, 10)
-                        
-                        Grid(horizontalSpacing: 0, verticalSpacing: 0){
                             
                             HStack {
-                                GridRow {
-                                    Text("First Name")
-                                    Text("Last Name")
-                                    Text("Department")
-                                }
-                                .frame(maxWidth: .infinity)
+                                TextField("Search Department...", text: $viewModel.departmentFilter)
+                                    .padding(5)
+                                    .background(Color.white)
+                                    .cornerRadius(5)
+                                    .accessibilityLabel("Employee department search")
+                                    .accessibilityHint("Find employees by their department's name")
                             }
-                            .accessibilityElement(children: .ignore)
-                            .accessibilityLabel("Employee fields: first name, last name, and department")
-                            .padding(5)
+                            .padding(.horizontal, 10)
                             
-                            ScrollView {
+                            Grid(horizontalSpacing: 0, verticalSpacing: 0){
                                 
-                                ForEach(viewModel.matchingEmployees) { employee in
+                                HStack {
+                                    GridRow {
+                                        Text("First Name")
+                                        Text("Last Name")
+                                        Text("Department")
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                }
+                                .accessibilityElement(children: .ignore)
+                                .accessibilityLabel("Employee fields: first name, last name, and department")
+                                .padding(5)
+                                
+                                if viewModel.isLoading {
+                                    ProgressView("Loading employees...")
+                                }
+                                
+                                if !viewModel.errorMessage.isEmpty {
+                                    Text(viewModel.errorMessage)
+                                        .foregroundColor(.white)
                                     
-                                    EmployeeListItem(employee: employee)
-                                        .padding(5)
+                                    Button("Try Again") {
+                                        Task {
+                                            await viewModel.loadEmployees()
+                                        }
+                                    }
+                                    
+                                    .padding(12)
+                                    .background(Color.white, in: Capsule())
+                                    .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
+                                } else {
+                                    
+                                    ScrollView {
+                                        
+                                        ForEach(viewModel.matchingEmployees) { employee in
+                                            
+                                            EmployeeListItem(employee: employee)
+                                                .padding(5)
+                                        }
+                                        
+                                    }
                                 }
                                 
                             }
-                        }
-                        .refreshable {
-                            await viewModel.loadEmployees()
-                        }
-                        .background(Color.white)
-                        .padding(15)
+                            .refreshable {
+                                await viewModel.loadEmployees()
+                            }
+                            .background(Color.white)
+                            .padding(15)
+                        
                         
                     }
                     .navigationTitle("Employee List")
@@ -132,11 +155,12 @@ extension EmployeeList {
     class ViewModel {
         private let repository: any RepositoryProtocol<Employee>
         
+        var errorMessage: String = ""
+        var isLoading = true
+        
         init(repository: any RepositoryProtocol<Employee>) {
             self.repository = repository
         }
-        
-        var errorMessage: String = ""
         
         var employees: [Employee] = [] {
             didSet {
@@ -174,13 +198,17 @@ extension EmployeeList {
         var selectedEmployee: Employee? = nil
         
         func loadEmployees() async {
+            isLoading = true
+            errorMessage = ""
+            
             do {
                 employees = try await repository.getAll()
+                isLoading = false
+                
+            } catch {
+                errorMessage = "Couldn't load employees. Please try again."
+                isLoading = false
             }
-            catch {
-                errorMessage = "\(error)"
-            }
-            
         }
         
         var selectedSort: () -> Void = {}
