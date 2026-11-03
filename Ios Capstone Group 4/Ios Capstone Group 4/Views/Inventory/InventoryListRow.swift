@@ -10,9 +10,11 @@ struct InventoryListRow:View {
     
         var inv:[InventoryUniqueItem]
         var grouped:[[InventoryUniqueItem]]
-    init(inv:[InventoryUniqueItem],grouped:[[InventoryUniqueItem]]) {
+        var repo: any RepositoryProtocol<Inventory>
+    init(inv:[InventoryUniqueItem],grouped:[[InventoryUniqueItem]], repo: any RepositoryProtocol<Inventory>) {
             self.inv = inv
         self.grouped = grouped
+        self.repo = repo
         }
     
     var body: some View {
@@ -20,9 +22,8 @@ struct InventoryListRow:View {
         DisclosureGroup{
             VStack(spacing: 4) {
                 ForEach(inv, id:\.self){item in
-                    NavigationLink(destination:InventoryDetails(inventoryUnique:item,grouped:grouped)){
+                    NavigationLink(destination:InventoryDetails(inventoryUnique:item,grouped:grouped, repo:repo)){
                         HStack{
-                            // Text("id: \(item.inventory.productId)")
                             Spacer()
                             
                             Text("Location: \(item.inventory.locationName)")
@@ -40,7 +41,6 @@ struct InventoryListRow:View {
                             
                         }
                         .border(Color.black, width: 0.5)
-                        //.padding(4)
                         
                     }
                     
@@ -48,7 +48,6 @@ struct InventoryListRow:View {
                 
             }
             .background(Color.gray.opacity(0.1))
-           // .padding(.leading,24)
 
         }label:{
             
@@ -65,13 +64,10 @@ struct InventoryListRow:View {
 
         }
         .border(Color.black, width: 1)
-        //.padding(4)
 
         
     }
-    //.frame(maxWidth: .infinity) //ensure horizontal center
-    //.background(Color.white)
-    //.padding(10)
+   
     
     
 }

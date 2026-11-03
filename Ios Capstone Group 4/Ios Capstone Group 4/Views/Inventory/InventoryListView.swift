@@ -8,26 +8,20 @@
 import SwiftUI
 
 struct InventoryListView: View {
-    //@State private var viewModel:ViewModel = ViewModel()
-    //@Environment(\.MockProductRepository) private var repo
+    
     @State var InventoryName:String = ""
     
     @State private var viewModel:ViewModel
+    var repo: any RepositoryProtocol<Inventory>
     init(repository: any RepositoryProtocol<Inventory>) {
         viewModel = ViewModel(repository:repository)
+        repo = repository
     }
     
     var body: some View {
 
         NavigationStack{
                 VStack(){
-//                   HStack(){
-//                        //Text("Back button")
-//                        //  .padding(12)
-//                        Spacer()
-//                        Text("Home Button")
-//                            .padding(12)
-//                    }
                 
                     Text("Inventory Catalog!")
                         .font(Font.largeTitle)
@@ -39,7 +33,6 @@ struct InventoryListView: View {
                                 .padding(20)
                             
                             Spacer()
-                            //MARK: need to add filters
                             Menu {
                                 Button("Remove Filters") {
                                     viewModel.filter = ""
@@ -81,16 +74,13 @@ struct InventoryListView: View {
                             VStack(){
                                 HStack(){
                                     Text("Product Number")
-                                        .frame(width: 80, alignment: .center) // Fixed width for column 1
-                                       // .padding(4)
+                                        .frame(width: 80, alignment: .center)
                                     
                                     Text("Name")
-                                        .frame(maxWidth: .infinity, alignment: .center) // Fills middle space
-                                        //.padding(4)
+                                        .frame(maxWidth: .infinity, alignment: .center)
                                     
                                     Text("Locations")
-                                        .frame(width: 90, alignment: .center) // Fixed width for column 3
-                                        //.padding(4)
+                                        .frame(width: 90, alignment: .center)
                                     
                                 }
                                 
@@ -101,13 +91,17 @@ struct InventoryListView: View {
 
                                             ForEach(viewModel.groupedArray, id: \.self){(inv: [InventoryUniqueItem]) in
                                                 
-                                                InventoryListRow(inv:inv,grouped:viewModel.groupedArray)
+                                                InventoryListRow(inv:inv,grouped:viewModel.groupedArray, repo:repo)
                                                 
                                                 
                                             }
 
                                         }
                                         .padding(8)
+                                    }
+                                    .refreshable{
+                                        viewModel.filter = ""
+                                        await viewModel.loadInventory()
                                     }
                             
                         }
@@ -117,16 +111,16 @@ struct InventoryListView: View {
 
                                 }
                             }
-                        .frame(maxWidth: .infinity) //ensure horizontal center
-                        .background(Color.white)
+                            .background(Color.white)
+                        .frame(maxWidth: .infinity)
                         .padding(8)
                             
-                    }//nav stack
-                }//vstack
+                    }
+                }
                 .background(Color.blue)
                 .cornerRadius(20)
                 .padding(8)
-                .frame(maxWidth: .infinity) //ensure horizontal center
+                .frame(maxWidth: .infinity)
                     
         }//vstack with title
         .background(Color.cyan)
@@ -235,34 +229,7 @@ extension InventoryListView {
             }
         }
 
-        
-//        func printinv(inv:[InventoryUniqueItem]){
-//            for item in inv{
-//                print(item.inventory.productId)
-//               // print(item.inventory.productName)
-//                //print(item.inventory.locationName)
-//                //print(item.inventory.quantity)
-//                print("-----")
-//                
-//            }
-//        }
-        
-//        func printinvGrouped(inv:[[InventoryUniqueItem]]){
-//            for items in inv {
-//                    // Grab the ID from the first item in the group
-//                    if let firstItem = items.first {
-//                        print("Inventory ID: \(firstItem.inventory.id)")
-//                    }
-//                    
-//                    for item in items {
-//                        print("  - Product ID: \(item.inventory.productId)")
-//                        print("  - Product Name: \(item.inventory.productName)")
-//                    }
-//                    print("-------------------")
-//                }
-//        }
-        
-
+  
         
         
         //MARK: HELPERS FOR FILTERS

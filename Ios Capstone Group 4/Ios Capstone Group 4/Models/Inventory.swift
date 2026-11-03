@@ -17,7 +17,7 @@ class Inventory: Identifiable, Hashable, Codable {
     let locationName: String
     let shelf: String
     let bin: Int
-    let quantity: Int
+    var quantity: Int
     
     var id: Int { productId }
     
