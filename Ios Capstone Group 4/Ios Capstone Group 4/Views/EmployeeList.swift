@@ -95,10 +95,10 @@ struct EmployeeList: View {
                                             await viewModel.loadEmployees()
                                         }
                                     }
-                                    
+                                    .buttonStyle(.bordered)
                                     .padding(12)
-                                    .background(Color.white, in: Capsule())
                                     .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
+                                    .accessibilityLabel("Try to load the employee list again")
                                 } else {
                                     
                                     ScrollView {
