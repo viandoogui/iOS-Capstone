@@ -37,27 +37,33 @@ struct OrderListView: View {
                 HStack {
                     TextField("Search Orders...", text: $viewModel.filter)
                         .textFieldStyle(.roundedBorder)
+                        .accessibilityLabel("Search for orders by order ID or store name")
                       
                     Menu {
                         Button("None") {
                             viewModel.clearSort()
                             viewModel.refilterOrders()
                         }
+                        .accessibilityLabel("No employee sorting")
 
                         Button("A - Z") {
                             viewModel.sortByAZ()
                             viewModel.selectedSort()
                         }
+                        .accessibilityLabel("Sort store names from A to Z")
 
                         Button("Z - A") {
                             viewModel.sortByZA()
                             viewModel.selectedSort()
                         }
+                        .accessibilityLabel("Sort store names from Z to A")
                     } label: {
                         Text("Sort By...")
                             .padding(12)
                             .background(Color.white, in: Capsule())
                             .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
+                            .accessibilityLabel("Store name sorting")
+                            .accessibilityHint("Options to sort store names by alphabetical order")
                     }
                 }
                 .padding(.horizontal, 20)

@@ -37,6 +37,8 @@ struct ProductListRow:View {
             .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
             .padding(8)
             .border(Color.black, width: 1)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Product number \(product.id), Product name is \(product.name), Price is $\(String(format:"%.2f", product.listPrice))")
         }
         .padding(8)
         

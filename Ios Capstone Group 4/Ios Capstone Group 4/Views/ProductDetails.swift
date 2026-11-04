@@ -58,93 +58,52 @@ struct ProductDetails:View{
                                 
                                 VStack(){
                                     
-                                    Text("ID:")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-
-                                        
-                                    Text("\(product.id)")
-                                         .font(.body)
-                                        Divider()
-                                    Text("Product Number:")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-
-                                    Text("\(product.productNumber)")
-                                        .font(.body)
-                                   
+                                    AccessibilityDetailItem("ID:", String(product.id), "Product id of \(String(product.id))")
+                                        .padding(8)
+                                    
+                                    Divider()
+                                    
+                                    AccessibilityDetailItem("Product Number:", product.productNumber, "Product number of \(product.productNumber)")
+                                        .padding(8)
+                                    
+                                    Divider()
+                                    
+                                    let priceString: String = "$\(String(format:"%.2f", product.listPrice))"
+                                    AccessibilityDetailItem("Price:", priceString, "Product price of \(priceString)")
+                                        .padding(8)
+                                    
 //                                    Text("\n Inventory: N/A")
 //                                        .font(.caption)
 //                                        .foregroundColor(.gray)
-                                    Divider()
-                                    Text("Price:")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-
-                                    Text("$\(String(format:"%.2f", product.listPrice))")
-                                        .font(.body)
-
+                                    
                                 }
-                                .padding(12)
+                                
 
                             }
-                            
-                            
-                            
                             
                             if let summary = product.summary{
                                 Divider()
-                                Text("Summary:")
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(8)
-                                Text("\(summary)")
+                                
+                                AccessibilityDetailItem("Summary:", summary, "Product summary of \(product.summary ?? "none")")
                                     .padding(8)
                             }
                             
-                            if let color = product.color{
+                            if let color = product.color {
                                 Divider()
 
-                                Text("Color:" )
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                AccessibilityDetailItem("Color:", color, "Product color of \(color)")
                                     .padding(8)
-                                Text("\(color)")
-                                    .padding(8)
-                                
-
-
                             }
                             
                             Divider()
 
-                            Text("warranty:")
-                                .font(.caption)
-                                .foregroundColor(.gray)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(8)
-                            Text("\(product.warranty ?? "none")")
-                                .padding(8)
-
-
-
-                            
-                            
-                            
-                            
-                       
-                            
-
+                            let warranty: String = product.warranty ?? "none"
+                            AccessibilityDetailItem("Warranty:", warranty, "Product warranty of \(warranty)")
+                                .padding(12)
                         }
                         .frame(maxWidth: .infinity) //ensure horizontal center
                         .background(Color.white)
                         .padding(10)
-
                         
                     }
                 }

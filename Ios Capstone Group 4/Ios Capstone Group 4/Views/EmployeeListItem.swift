@@ -26,6 +26,7 @@ struct EmployeeListItem: View {
                 .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
                 .padding(5)
             }
+            
         }
         .border(Color.black, width: 1)
         .background {
@@ -38,6 +39,8 @@ struct EmployeeListItem: View {
             }
             .padding(5)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Employee \(employee.firstName) \(employee.lastName) in the \(employee.department) department")
         
     }
 }

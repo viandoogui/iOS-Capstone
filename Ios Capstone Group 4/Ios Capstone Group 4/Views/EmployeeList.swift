@@ -19,64 +19,57 @@ struct EmployeeList: View {
         VStack {
             NavigationStack {
                 VStack {
-                    VStack {
-                        if viewModel.isLoading {
-                            ProgressView("Loading employees...")
-                        }
-
-                        if !viewModel.errorMessage.isEmpty {
-                            Text(viewModel.errorMessage)
-                                .foregroundColor(.white)
-
-                            Button("Try Again") {
-                                Task {
-                                    await viewModel.loadEmployees()
-                                }
-                            }
-
-                            .padding(12)
-                            .background(Color.white, in: Capsule())
-                            .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
-                        } else {
-
+                    VStack(spacing: 0) {
+                        
                             HStack {
-                                TextField("Search Full Name...", text: $viewModel.filter)
-                                    .padding(5)
-                                    .background(Color.white)
-                                    .cornerRadius(5)
-                                Spacer()
-                                Menu {
-                                    Button("None") {
-                                        viewModel.clearSort()
-                                        viewModel.refilterEmployees()
-                                    }
-                                    Button("A - Z"){
-                                        viewModel.sortByAZ()
-                                        viewModel.selectedSort()
-                                    }
-                                    Button("Z - A"){
-                                        viewModel.sortByZA()
-                                        viewModel.selectedSort()
-                                    }
+                            TextField("Search Full Name...", text: $viewModel.filter)
+                                .padding(5)
+                                .background(Color.white)
+                                .cornerRadius(5)
+                                .accessibilityLabel("Employee full name search")
+                            Spacer()
+                            Menu {
+                                Button("None") {
+                                    viewModel.clearSort()
+                                    viewModel.refilterEmployees()
                                 }
-                                label: {
-                                    Text("Sort By...")
-                                        .padding(12)
-                                        .background(Color.white, in: Capsule())
-                                        .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
+                                .accessibilityLabel("No employee sorting")
+                                Button("A - Z"){
+                                    viewModel.sortByAZ()
+                                    viewModel.selectedSort()
                                 }
+                                .accessibilityLabel("Sort employee names from A to Z")
+                                Button("Z - A"){
+                                    viewModel.sortByZA()
+                                    viewModel.selectedSort()
+                                }
+                                .accessibilityLabel("Sort employee names from Z to A")
                             }
-                            .padding(10)
+                            label: {
+                                Text("Sort By...")
+                                    .padding(12)
+                                    .background(Color.white, in: Capsule())
+                                    .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
+                                    .accessibilityLabel("Employee full name sorting")
+                                    .accessibilityHint("Options to sort employee full names by alphabetical order")
+                                
+                            }
+                            
+                        }
+                        .padding(10)
                             
                             HStack {
                                 TextField("Search Department...", text: $viewModel.departmentFilter)
                                     .padding(5)
                                     .background(Color.white)
                                     .cornerRadius(5)
+                                    .accessibilityLabel("Employee department search")
+                                    .accessibilityHint("Find employees by their department's name")
                             }
                             .padding(.horizontal, 10)
                             
-                            ScrollView { Grid(horizontalSpacing: 0, verticalSpacing: 0){
+                            Grid(horizontalSpacing: 0, verticalSpacing: 0){
+                                
                                 HStack {
                                     GridRow {
                                         Text("First Name")
@@ -85,22 +78,47 @@ struct EmployeeList: View {
                                     }
                                     .frame(maxWidth: .infinity)
                                 }
+                                .accessibilityElement(children: .ignore)
+                                .accessibilityLabel("Employee fields: first name, last name, and department")
                                 .padding(5)
-
-                                ForEach(viewModel.matchingEmployees) { employee in
-
-                                    EmployeeListItem(employee: employee)
-                                        .padding(10)
+                                
+                                if viewModel.isLoading {
+                                    ProgressView("Loading employees...")
                                 }
                                 
-                            }
+                                if !viewModel.errorMessage.isEmpty {
+                                    Text(viewModel.errorMessage)
+                                        .foregroundColor(.white)
+                                    
+                                    Button("Try Again") {
+                                        Task {
+                                            await viewModel.loadEmployees()
+                                        }
+                                    }
+                                    .buttonStyle(.bordered)
+                                    .padding(12)
+                                    .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
+                                    .accessibilityLabel("Try to load the employee list again")
+                                } else {
+                                    
+                                    ScrollView {
+                                        
+                                        ForEach(viewModel.matchingEmployees) { employee in
+                                            
+                                            EmployeeListItem(employee: employee)
+                                                .padding(5)
+                                        }
+                                        
+                                    }
+                                }
+                                
                             }
                             .refreshable {
                                 await viewModel.loadEmployees()
                             }
                             .background(Color.white)
                             .padding(15)
-                        }
+                        
                         
                     }
                     .navigationTitle("Employee List")
@@ -137,12 +155,12 @@ extension EmployeeList {
     class ViewModel {
         private let repository: any RepositoryProtocol<Employee>
         
+        var errorMessage: String = ""
+        var isLoading = true
+        
         init(repository: any RepositoryProtocol<Employee>) {
             self.repository = repository
         }
-        
-        var errorMessage: String = ""
-        var isLoading = true
         
         var employees: [Employee] = [] {
             didSet {
@@ -162,12 +180,11 @@ extension EmployeeList {
                 refilterEmployees()
             }
         }
-
         
         func refilterEmployees() {
             matchingEmployees = employees.filter { employee in
                 (filter == "" ||
-                ("\(employee.firstName.lowercased()) \(employee.lastName.lowercased())"
+                 ("\(employee.firstName.lowercased()) \(employee.lastName.lowercased())"
                     .contains(filter.lowercased()) && filter != " "))
                 && (departmentFilter == "" || employee.department.lowercased().contains( departmentFilter.lowercased())
                 )
@@ -181,14 +198,13 @@ extension EmployeeList {
         var selectedEmployee: Employee? = nil
         
         func loadEmployees() async {
-
             isLoading = true
             errorMessage = ""
-
+            
             do {
                 employees = try await repository.getAll()
                 isLoading = false
-
+                
             } catch {
                 errorMessage = "Couldn't load employees. Please try again."
                 isLoading = false
