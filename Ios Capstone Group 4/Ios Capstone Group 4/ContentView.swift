@@ -21,6 +21,9 @@ struct ContentView: View {
                 case "order":
                     OrderListView(repository: RemoteOrderRepository(urlBase: urlBase, authStatus: authStatus))
                         .accessibilityIdentifier("boardView")
+                case "inventory":
+                    InventoryListView(repository: RemoteInventoryRepository(urlBase: urlBase, authStatus: authStatus))
+                        .accessibilityIdentifier("inventoryView")
                 default:
                     if(sizeClass == .compact) {
                         VStack (spacing: 20) {
@@ -75,11 +78,11 @@ struct ContentView: View {
                                 }
                                 GridRow {
                                     Button("Inventory Management") {
-                                        
+                                        current = "inventory"
                                     }.buttonStyle(.borderedProminent)
                                         .tint(.gray)
                                         .font(.title)
-                                    .accessibilityIdentifier("orderViewButton")
+                                    .accessibilityIdentifier("inventoryViewButton")
                                 }
                                 .padding(.bottom, 15)
 
@@ -141,14 +144,15 @@ struct ContentView: View {
                                 }.buttonStyle(.borderedProminent)
                                     .tint(.gray)
                                     .font(.title)
+                                    .accessibilityIdentifier("orderViewButton")
                                 Button("Inventory Management") {
-                                    
+                                    current = "inventory"
                                 }.buttonStyle(.borderedProminent)
                                     .tint(.gray)
                                     .font(.title)
                                     .padding(.bottom, 20)
 
-                                .accessibilityIdentifier("orderViewButton")
+                                .accessibilityIdentifier("inventoryViewButton")
                                 
                             }
                             .frame(maxWidth: .infinity)
