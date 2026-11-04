@@ -31,24 +31,6 @@ struct ProductListView: View {
                 
                     Text("Product Catalog!")
                         .font(Font.largeTitle)
-                    if viewModel.isLoading {
-                        ProgressView("Loading products...")
-                            .padding()
-                    }
-
-                    if !viewModel.errormsg.isEmpty {
-                        Text(viewModel.errormsg)
-                            .foregroundColor(.black)
-
-                        Button("Try Again") {
-                            Task {
-                                await viewModel.loadProducts()
-                            }
-                        }
-                        .padding(12)
-                        .background(Color.white, in: Capsule())
-                        .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
-                    }
                     
                     VStack(){
                         HStack(){
@@ -120,11 +102,31 @@ struct ProductListView: View {
                                     Text("Price")
                                         .frame(width: 90, alignment: .center) // Fixed width for column 3
                                         //.padding(4)
-                                    
                                 }
-                                
+                                .accessibilityElement(children: .ignore)
+                                .accessibilityLabel("Product fields: product number, name, and price")
                                 
                                 NavigationStack{
+                                    
+                                    if viewModel.isLoading {
+                                        ProgressView("Loading products...")
+                                            .padding()
+                                    }
+
+                                    if !viewModel.errormsg.isEmpty {
+                                        Text(viewModel.errormsg)
+                                            .foregroundColor(.black)
+
+                                        Button("Try Again") {
+                                            Task {
+                                                await viewModel.loadProducts()
+                                            }
+                                        }
+                                        .padding(12)
+                                        .background(Color.white, in: Capsule())
+                                        .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
+                                    }
+                                    
                                     ScrollView(.vertical){
                                         LazyVStack{
                                             ForEach(viewModel.matchingProduct){product in
@@ -132,7 +134,6 @@ struct ProductListView: View {
                                                 ProductListRow(product: product) //each individual product row
 
                                             }
-                                            
                                            
 
                                         }
