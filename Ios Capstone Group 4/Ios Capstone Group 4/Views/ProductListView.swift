@@ -199,7 +199,6 @@ extension ProductListView {
             didSet{
                 filter = ""
                 selectedProduct = nil
-                //matchingProduct = products
             }
         }
             
@@ -242,13 +241,7 @@ extension ProductListView {
         
         
         
-        //filter helper functions
-//        func inStock()->[Product]{
-        //maybe return to this or put in in inv screen if we have one
-//        }
-        
-        
-        //MARK: NEED PERSISTANCE FOR THESE
+        //MARK: helpers for filters
         func sortAZ(){
             currentSort = .az
             matchingProduct = matchingProduct.sorted(by: { $0.name < $1.name })

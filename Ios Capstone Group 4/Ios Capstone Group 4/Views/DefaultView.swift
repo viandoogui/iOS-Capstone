@@ -9,6 +9,7 @@ import SwiftUI
 struct DefaultView: View {
     @EnvironmentObject var authStatus: AuthStatus
     @Environment(\.dismiss) private var dismiss
+
     let userName: String = ""
     
     var body: some View {
@@ -22,10 +23,7 @@ struct DefaultView: View {
             }
         }
         
-        //Button to take you to product view
-//        NavigationLink(destination: ProductListView()){
-//            Text("Product List")
-//        }
+       
         
         
     }
