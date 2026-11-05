@@ -29,10 +29,9 @@ struct ProductListView: View {
 //                            .padding(12)
 //                    }
                 
-                    Text("Product Catalog!")
-                        .font(Font.largeTitle)
                     
-                    VStack(){
+                    
+                    VStack(spacing: 0){
                         HStack(){
                             TextField("Search Products...", text: $viewModel.filter)
                                 .textFieldStyle(.roundedBorder)
@@ -151,6 +150,7 @@ struct ProductListView: View {
                         .padding(8)
                             
                     }//nav stack
+                        .navigationTitle("Product List")
                 }//vstack
                 .background(Color.blue)
                 .cornerRadius(20)
