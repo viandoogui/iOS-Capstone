@@ -16,7 +16,7 @@ class RemoteBestWorstRepository: RepositoryProtocol <BestWorstProduct> {
     }
     
     func getAll() async throws -> [BestWorstProduct] {
-        let urlString = "\(urlBase)/api/Dashboard/best-worst"
+        let urlString = "\(urlBase)/Dashboard/best-worst"
         let url = URL(string: urlString)!
         let (data, _) = try await URLSession.shared.data(from: url)
         

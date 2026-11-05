@@ -16,7 +16,7 @@ class RemoteShiftsRepository: RepositoryProtocol <DashboardEmployee> {
     }
     
     func getAll() async throws -> [DashboardEmployee] {
-        let urlString = "\(urlBase)/api/Dashboard/shifts"
+        let urlString = "\(urlBase)/Dashboard/shifts"
         let url = URL(string: urlString)!
         let (data, _) = try await URLSession.shared.data(from: url)
         

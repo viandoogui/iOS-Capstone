@@ -18,7 +18,7 @@ class MockLowStockRepository: RepositoryProtocol<LowStockProduct>{
     
     private var lowStockProducts: [LowStockProduct] = [
         LowStockProduct(productId: 1, productName: "White Tricycle", stockLevel: 0, reorderPoint: 25),
-        LowStockProduct(productId: 1, productName: "Blue Bicycle", stockLevel: 0, reorderPoint: 435),
+        LowStockProduct(productId: 2, productName: "Blue Bicycle", stockLevel: 0, reorderPoint: 435),
         ]
 }
 
