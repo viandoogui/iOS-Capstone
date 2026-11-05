@@ -193,7 +193,6 @@ extension ProductListView {
         private let repository: any RepositoryProtocol<Product>
         init(repository:any RepositoryProtocol<Product>){
             self.repository = repository
-            print("init")
         }
         
         var products: [Product] = []{
@@ -224,8 +223,14 @@ extension ProductListView {
          var filter:String="" {
             didSet{ //react to when changes have been made to this
                //put products in matching products if theres no filter or if the filter matches.
-                matchingProduct = products.filter{ product in
-                    filter.isEmpty || product.name.lowercased().contains(filter.lowercased())
+                let trimmed = filter.trimmingCharacters(in: .whitespacesAndNewlines)
+                if !filter.isEmpty && trimmed.isEmpty {
+                    matchingProduct = []
+                }else{
+                    
+                    matchingProduct = products.filter{ product in
+                        filter.isEmpty || product.name.lowercased().contains(filter.lowercased())
+                    }
                 }
                 
             }
@@ -244,13 +249,14 @@ extension ProductListView {
         
         //MARK: helpers for filters
         func sortAZ(){
-            currentSort = .az
-            matchingProduct = matchingProduct.sorted(by: { $0.name < $1.name })
+            //            currentSort = .az
+            //            matchingProduct = matchingProduct.sorted(by: { $0.name < $1.name })
+            matchingProduct = matchingProduct.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
         }
         
         func sortZA(){
             currentSort = .za
-            matchingProduct = matchingProduct.sorted(by: { $0.name > $1.name })
+            matchingProduct = matchingProduct.sorted { $0.name.localizedStandardCompare($1.name) == .orderedDescending }
         }
         
         func HighToLow(){
@@ -260,7 +266,7 @@ extension ProductListView {
         
         func LowToHigh(){
             currentSort = .priceLowToHigh
-            matchingProduct = matchingProduct.sorted(by: { $0.listPrice > $1.listPrice })
+            matchingProduct = matchingProduct.sorted(by: { $0.listPrice < $1.listPrice })
         }
         
         

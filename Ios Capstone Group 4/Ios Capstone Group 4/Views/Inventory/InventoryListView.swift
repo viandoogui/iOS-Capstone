@@ -166,7 +166,6 @@ extension InventoryListView {
         private let repository: any RepositoryProtocol<Inventory>
         init(repository:any RepositoryProtocol<Inventory>){
             self.repository = repository
-            print("init")
         }
         
         //base default inventory pulled from remote repo
