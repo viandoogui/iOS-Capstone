@@ -29,6 +29,7 @@ struct InventoryListView: View {
                     VStack(){
                         HStack(){
                             TextField("Search Products...", text: $viewModel.filter)
+                                .accessibilityLabel("Filter inventory products by product name")
                                 .textFieldStyle(.roundedBorder)
                                 .padding(20)
                             
@@ -38,20 +39,25 @@ struct InventoryListView: View {
                                     viewModel.filter = ""
                                     viewModel.currentSort = .none
                                 }
-                                
-                                
+                                .accessibilityLabel("No inventory product sorting")
                                 
                                 Button("A - Z") {
                                     viewModel.sortAZ()
                                 }
+                                .accessibilityLabel("Sort inventory product names from A to Z")
                                 
                                 Button("Z - A"){
                                     viewModel.sortZA()
                                 }
+                                .accessibilityLabel("Sort inventory product names from Z to A")
+
                                 Divider()
+                                
                                 Button("Products with low stock") {
                                     viewModel.lowStock()
                                 }
+                                .accessibilityLabel("Sort inventory products by lowest amount of stock")
+
                                 
                             } label: {
                                 
@@ -65,6 +71,8 @@ struct InventoryListView: View {
                                             .stroke(Color.black, lineWidth: 1)
                                     )
                             }
+                            .accessibilityLabel("Inventory product sorting")
+                            .accessibilityHint("Options to sort inventory products")
                             .padding(12)
                             
                             
@@ -83,6 +91,8 @@ struct InventoryListView: View {
                                         .frame(width: 90, alignment: .center)
                                     
                                 }
+                                .accessibilityElement(children: .ignore)
+                                .accessibilityLabel("Inventory product fields: product number, name, and location")
                                 
                                 
                                

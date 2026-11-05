@@ -57,10 +57,12 @@ struct InventoryDetails:View{
                                 .bold()
                         }
                     }
+                    
                     .padding(8)
                     .font(Font.title3)
 
                 }
+                .accessibilityLabel("Selected location is \(viewModel.inventoryUnique.inventory.locationName). Click 'Locations' to change current location to another location that has this product.")
                 .background(Color.white)
                 .padding(16)
               
@@ -73,44 +75,65 @@ struct InventoryDetails:View{
                             
                             Divider()
                             VStack{
-                                Text("Product Details:")
-                                    .font(Font.title3)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.leading, 6)
-                                Text("Product Id:  \(viewModel.inventoryUnique.inventory.productId)")
-                                    .padding(4)
-                                Text("Product Number:  \(viewModel.inventoryUnique.inventory.productNumber)")
-                                    .padding(4)
+                                HStack {
+                                    VStack {
+                                        Text("Product Details:")
+                                            .font(Font.title3)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding(.leading, 6)
+                                        Text("Product Id:  \(viewModel.inventoryUnique.inventory.productId)")
+                                            .padding(4)
+                                        Text("Product Number:  \(viewModel.inventoryUnique.inventory.productNumber)")
+                                            .padding(4)
+                                    }
+                                    Text(" ")
+                                }
+                                .accessibilityElement()
+                                .accessibilityLabel("Product details: the product has an id of \(viewModel.inventoryUnique.inventory.productId) and product number of \(viewModel.inventoryUnique.inventory.productNumber)")
+                                    
                                 Divider()
-                                Text("Location details:")
-                                    .font(Font.title3)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.leading, 6)
-                                Text("location Id:  \(viewModel.inventoryUnique.inventory.locationId)")
-                                    .padding(4)
                                 
-                                Text("shelf:  \(viewModel.inventoryUnique.inventory.shelf)")
-                                    .padding(4)
+                                HStack {
+                                    VStack {
+                                        Text("Location details:")
+                                            .font(Font.title3)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding(.leading, 6)
+                                        Text("location Id:  \(viewModel.inventoryUnique.inventory.locationId)")
+                                            .padding(4)
+                                        Text("shelf:  \(viewModel.inventoryUnique.inventory.shelf)")
+                                            .padding(4)
+                                        Text("bin:  \(viewModel.inventoryUnique.inventory.bin)")
+                                            .padding(4)
+                                    }
+                                    Text(" ")
+                                }
                                 
-                                Text("bin:  \(viewModel.inventoryUnique.inventory.bin)")
-                                    .padding(4)
+                                .accessibilityElement(children: .ignore)
+                                .accessibilityLabel("Location details: the location id of the product is \(viewModel.inventoryUnique.inventory.locationId) on shelf \(viewModel.inventoryUnique.inventory.shelf) in bin \(viewModel.inventoryUnique.inventory.bin)")
                                 
                                 Divider()
-                                Text("Stock Details:")
-                                    .font(Font.title3)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.leading, 6)
-                                Text("Quantity at location:  \(viewModel.inventoryUnique.inventory.quantity)")
-                                    .padding(4)
                                 
-                            
-                                Text("Reorder Point:  \(viewModel.inventoryUnique.inventory.reorderPoint)")
-                                    .padding(4)
-                                
+                                HStack {
+                                    VStack {
+                                        Text("Stock Details:")
+                                            .font(Font.title3)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding(.leading, 6)
+                                        Text("Quantity at location:  \(viewModel.inventoryUnique.inventory.quantity)")
+                                            .padding(4)
+                                        Text("Reorder Point:  \(viewModel.inventoryUnique.inventory.reorderPoint)")
+                                            .padding(4)
+                                    }
+                                    Text(" ")
+                                }
+                                .accessibilityElement(children: .ignore)
+                                .accessibilityLabel("Stock details: the quantity of the product at the specified location is \(viewModel.inventoryUnique.inventory.quantity) and the reorder point is \(viewModel.inventoryUnique.inventory.reorderPoint)")
                                 
                                 HStack{
                                     VStack{
                                         TextField("Add to current quantity...", text: $viewModel.userText)
+                                            .accessibilityLabel("Enter number to add to current quantity")
                                             .textFieldStyle(.roundedBorder)
                                             .padding(10)
                                         if !viewModel.userText.isEmpty, Int(viewModel.userText) != nil{
@@ -133,6 +156,7 @@ struct InventoryDetails:View{
                                             oldQuantity: viewModel.inventoryUnique.inventory.quantity
                                         )
                                     }
+                                    .accessibilityLabel("Submit entered amount of stock to add to current quantity of \(viewModel.inventoryUnique.inventory.quantity)")
                                     .padding(8)
                                     
                                     
@@ -158,6 +182,7 @@ struct InventoryDetails:View{
                                         )
                                     
                                     }
+                                    .accessibilityLabel("Quick reorder: Reorders the product to the safety count of \(viewModel.inventoryUnique.inventory.safetyStockLevel)")
                                 }
                                 if let error = viewModel.errorMsgQuickReorder{
                                     HStack{

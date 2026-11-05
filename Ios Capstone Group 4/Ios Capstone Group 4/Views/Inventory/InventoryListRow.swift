@@ -43,6 +43,8 @@ struct InventoryListRow:View {
                         .border(Color.black, width: 0.5)
                         
                     }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("\(item.inventory.productName) is available at \(item.inventory.locationName) with quantity \(item.inventory.quantity) and reorder point \(item.inventory.reorderPoint)")
                     
                 }
                 
@@ -50,19 +52,24 @@ struct InventoryListRow:View {
             .background(Color.gray.opacity(0.1))
 
         }label:{
+            HStack {
+                Text("id: \(inv.first?.inventory.productId ?? 1)")
+                    .padding(4)
+
+                Spacer()
+                Text(inv.first?.inventory.productName ?? "group")
+                    .padding(4)
+
+                Spacer()
+                Text("Locations: \(inv.count)")
+                    .padding(4)
+            }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Inventory product number \(inv.first?.inventory.productId ?? 1) with product name \(inv.first?.inventory.productName ?? "group") in \(inv.count) locations")
             
-            Text("id: \(inv.first?.inventory.productId ?? 1)")
-                .padding(4)
-
-            Spacer()
-            Text(inv.first?.inventory.productName ?? "group")
-                .padding(4)
-
-            Spacer()
-            Text("Locations: \(inv.count)")
-                .padding(4)
 
         }
+
         .border(Color.black, width: 1)
 
         
