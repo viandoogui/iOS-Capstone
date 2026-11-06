@@ -29,7 +29,7 @@ struct ProductListRow:View {
                 Divider()
 
                 Text("$\(String(format:"%.2f", product.listPrice))")
-                    .frame(width: 75, alignment: .center)
+                    .frame(alignment: .center)
 
             }
             .frame(maxWidth: .infinity) //ensure horizontal center
