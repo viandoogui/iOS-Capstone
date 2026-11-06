@@ -91,6 +91,8 @@ struct DashboardView: View {
                                         
                                         Text("Sales: $\(sale.totalSales, specifier: "%.2f")")
                                     }
+                                    .accessibilityElement(children: .ignore)
+                                    .accessibilityLabel("On \(sale.salesDate.formatted(date: .numeric, time: .omitted)), sales amounted to $\(sale.totalSales, specifier: "%.2f")")
                                 }
                                 
                                 Divider()
@@ -113,6 +115,7 @@ struct DashboardView: View {
                             } else {
                                 ForEach(productViewModel.products) { product in
                                     Text("\(product.productName): \(product.unitsSold) units sold")
+                                        .accessibilityLabel("\(product.productName) has sold \(product.unitsSold) units")
                                 }
                             }
                             
@@ -136,6 +139,7 @@ struct DashboardView: View {
                                 
                             } else {
                                 Text("Low Stock Products: \(lowStockViewModel.products.count)")
+                                    .accessibilityLabel("There are \(lowStockViewModel.products.count) products with low stock")
                             }
                             
                             NavigationLink("View Low Stock") {
@@ -158,9 +162,11 @@ struct DashboardView: View {
                                 
                             } else {
                                 Text("Employees with Shifts: \(shiftsViewModel.employees.count)")
+                                    .accessibilityLabel("There are \(shiftsViewModel.employees.count) employees with shifts")
                                 
                                 ForEach(shiftsViewModel.employees.prefix(3)) { employee in
                                     Text("\(employee.firstName) \(employee.lastName): \(employee.shift)")
+                                        .accessibilityLabel("Employee \(employee.firstName) \(employee.lastName) has a shift of \(employee.shift)")
                                 }
                             }
                             
