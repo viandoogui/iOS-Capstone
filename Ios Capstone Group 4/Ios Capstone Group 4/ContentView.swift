@@ -12,6 +12,25 @@ struct ContentView: View {
         NavigationStack {
             VStack {
                 switch current {
+                case "dashboard":
+                    DashboardView(
+                        repository: RemoteWeeklySaleRepository(
+                            urlBase: urlBase,
+                            authStatus: authStatus
+                        ),
+                        productRepository: RemoteBestWorstRepository(
+                            urlBase: urlBase,
+                            authStatus: authStatus
+                        ),
+                        lowStockRepository: RemoteLowStockProductsRepository(
+                            urlBase: urlBase,
+                            authStatus: authStatus
+                        ),
+                        shiftsRepository: RemoteShiftsRepository(
+                            urlBase: urlBase,
+                            authStatus: authStatus
+                        )
+                    )
                 case "employee":
                     EmployeeList(repository: RemoteEmployeeRepository(urlBase: urlBase, authStatus: authStatus))
                         .accessibilityIdentifier("employeeView")
@@ -52,7 +71,7 @@ struct ContentView: View {
                             Grid(horizontalSpacing: 40, verticalSpacing: 20) {
                                 GridRow {
                                     Button("Operational Dashboard") {
-                                        
+                                        current = "dashboard"
                                     }.buttonStyle(.borderedProminent)
                                         .tint(.gray)
                                         .font(.title)
@@ -123,7 +142,7 @@ struct ContentView: View {
                             
                             VStack (spacing: 40){
                                 Button("Operational Dashboard") {
-                                    
+                                    current = "dashboard"
                                 }.buttonStyle(.borderedProminent)
                                     .tint(.gray)
                                     .font(.title)

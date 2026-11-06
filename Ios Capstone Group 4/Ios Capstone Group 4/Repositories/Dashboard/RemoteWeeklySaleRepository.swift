@@ -16,7 +16,7 @@ class RemoteWeeklySaleRepository: RepositoryProtocol <WeeklySale> {
     }
     
     func getAll() async throws -> [WeeklySale] {
-        let urlString = "\(urlBase)/api/Dashboard/weekly-sales"
+        let urlString = "\(urlBase)/Dashboard/weekly-sales"
         let url = URL(string: urlString)!
         let (data, _) = try await URLSession.shared.data(from: url)
         

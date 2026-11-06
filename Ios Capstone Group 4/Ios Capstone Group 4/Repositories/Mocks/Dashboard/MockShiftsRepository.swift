@@ -19,7 +19,7 @@ class MockShiftsRepository: RepositoryProtocol<DashboardEmployee>{
     
     private var dashboardEmployees: [DashboardEmployee] = [
         DashboardEmployee(employeeId: 1, firstName: "John", middleName: "Andrew", lastName: "Williams", suffix: nil, shift: "Day"),
-        DashboardEmployee(employeeId: 1, firstName: "Jane", middleName: "Jillian", lastName: "Doe", suffix: "Jr.", shift: "Day"),
-        DashboardEmployee(employeeId: 1, firstName: "Andy", middleName: "Bill", lastName: "Williams", suffix: nil, shift: "Night")
+        DashboardEmployee(employeeId: 2, firstName: "Jane", middleName: "Jillian", lastName: "Doe", suffix: "Jr.", shift: "Day"),
+        DashboardEmployee(employeeId: 3, firstName: "Andy", middleName: "Bill", lastName: "Williams", suffix: nil, shift: "Night")
         ]
 }

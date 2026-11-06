@@ -10,7 +10,7 @@ import Foundation
 struct DashboardEmployee: Codable, Hashable, Identifiable {
     let employeeId: Int
     let firstName: String
-    let middleName: String
+    let middleName: String?
     let lastName: String
     let suffix: String?
     let shift: String
