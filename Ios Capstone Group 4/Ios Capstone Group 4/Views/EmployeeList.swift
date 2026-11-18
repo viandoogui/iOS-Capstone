@@ -122,7 +122,6 @@ struct EmployeeList: View {
                         
                     }
                     .navigationTitle("Employee List")
-                    .toolbarTitleDisplayMode(.inline)
                     .navigationDestination(for: Employee.self) { employee in
                         EmployeeDetails(employee: employee)
                     }
