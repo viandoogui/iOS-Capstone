@@ -32,93 +32,104 @@ struct OrderDetails: View {
         
         VStack {
             
-            Text("Order Details")
-                .font(.largeTitle)
-            Spacer()
-            if let firstOrder = matchingOrders.first {
+            VStack {
                 
                 VStack {
                     
-                    ViewThatFits(in: [.horizontal, .vertical]) {
-                        HStack {
-                            Text("Order #: \(firstOrder.orderNumber)")
-                            Text(
-                                String(
-                                    format: "Total: $%.2f",
-                                    total
-                                )
-                            )
-                            Text("Store: \(firstOrder.storeName)")
-                            Text("Date: \(firstOrder.orderDate.formatted(date: .numeric, time: .omitted))")
-                        }
+                    Text("Order Details")
+                        .font(.largeTitle)
+                    Spacer()
+                    if let firstOrder = matchingOrders.first {
                         
                         VStack {
-                            HStack {
-                                Text("Order #: \(firstOrder.orderNumber)")
-                                Text(
-                                    String(
-                                        format: "Total: $%.2f",
-                                        total
+                            
+                            ViewThatFits(in: [.horizontal, .vertical]) {
+                                HStack {
+                                    Text("Order #: \(firstOrder.orderNumber)")
+                                    Text(
+                                        String(
+                                            format: "Total: $%.2f",
+                                            total
+                                        )
                                     )
-                                )
+                                    Text("Store: \(firstOrder.storeName)")
+                                    Text("Date: \(firstOrder.orderDate.formatted(date: .numeric, time: .omitted))")
+                                }
+                                
+                                VStack {
+                                    HStack {
+                                        Text("Order #: \(firstOrder.orderNumber)")
+                                        Text(
+                                            String(
+                                                format: "Total: $%.2f",
+                                                total
+                                            )
+                                        )
+                                    }
+                                    HStack {
+                                        Text("Store: \(firstOrder.storeName)")
+                                        Text("Date: \(firstOrder.orderDate.formatted(date: .numeric, time: .omitted))")
+                                    }
+                                }
                             }
-                            HStack {
-                                Text("Store: \(firstOrder.storeName)")
-                                Text("Date: \(firstOrder.orderDate.formatted(date: .numeric, time: .omitted))")
-                            }
-                        }
-                    }
-                    .accessibilityElement(children: .ignore)
-                    .accessibilityLabel("Order number \(firstOrder.orderNumber) at store \(firstOrder.storeName) with a total of \(String(format: "$%.2f", total)) on \(firstOrder.orderDate.formatted(date: .long, time: .omitted))")
-                    
-                    
-                    .foregroundStyle(Color.white)
-                    .font(.headline)
-                    .padding(5)
-
-                }
-                .background(Color.blue)
-                .cornerRadius(10)
-                
-                
-                
-                VStack {
-                    ScrollView {
-                        ForEach(matchingOrders) { order in
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text(order.productName)
-
-                                Text("Quantity: \(order.orderQty)")
-
-                                Text(
-                                    String(
-                                        format: "Unit Price: $%.2f",
-                                        order.unitPrice
-                                    )
-                                )
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(10)
-                            .border(Color.black, width: 1)
                             .accessibilityElement(children: .ignore)
-                            .accessibilityLabel("Product \(order.productName) of quantity \(order.orderQty) with a unit price of \(String(format: "$%.2f", order.unitPrice))")
+                            .accessibilityLabel("Order number \(firstOrder.orderNumber) at store \(firstOrder.storeName) with a total of \(String(format: "$%.2f", total)) on \(firstOrder.orderDate.formatted(date: .long, time: .omitted))")
+                            
+                            
+                            .foregroundStyle(Color.white)
+                            .font(.headline)
+                            .padding(5)
+                            
                         }
+                        .background(Color.blue)
+                        .cornerRadius(10)
+                        
+                        
+                        
+                        VStack {
+                            ScrollView {
+                                ForEach(matchingOrders) { order in
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        Text(order.productName)
+                                        
+                                        Text("Quantity: \(order.orderQty)")
+                                        
+                                        Text(
+                                            String(
+                                                format: "Unit Price: $%.2f",
+                                                order.unitPrice
+                                            )
+                                        )
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(10)
+                                    .border(Color.black, width: 1)
+                                    .accessibilityElement(children: .ignore)
+                                    .accessibilityLabel("Product \(order.productName) of quantity \(order.orderQty) with a unit price of \(String(format: "$%.2f", order.unitPrice))")
+                                }
+                            }
+                            
+                            
+                            
+                        }
+                        .background(Color.white)
+                        .padding(10)
+                        
+                    } else {
+                        
+                        Text("Order not found")
                     }
-
                     
-                   
                 }
-                .background(Color.white)
+                .background(Color.cyan)
+                .cornerRadius(20)
                 .padding(10)
-                
-            } else {
-                
-                Text("Order not found")
             }
-        
+            .background(Color.blue)
+            .cornerRadius(20)
+            .padding(10)
         }
-        .background(Color.cyan)
-        
-        
+            
     }
+        
 }

@@ -21,213 +21,218 @@ struct InventoryDetails:View{
         
         
         ScrollView{
-            VStack(){
-
-                Text("\(viewModel.inventoryUnique.inventory.productName)")
-                    .font(Font.largeTitle)
-               
-                VStack{
-                    Text("Selected location: \(viewModel.inventoryUnique.inventory.locationName)")
-                        .padding(8)
-                        .font(Font.title2)
-
-                
-                    let targetId = viewModel.inventoryUnique.inventory.productId
-
-                
-                    HStack{
-                        Text("Select a different location: " )
-                        Menu{
-                            if let location = grouped.first(where: { $0.first?.inventory.productId == targetId }) {
-                                ForEach(location, id: \.id) { item in
-                                    if(item.inventory.locationName != viewModel.inventoryUnique.inventory.locationName){
-                                        
-                                        NavigationLink(destination: InventoryDetails(inventoryUnique:item,grouped:grouped,repo:repo)){
-                                            Text("\(item.inventory.locationName), Quantity: \(item.inventory.quantity)")
-                                                .bold()
+            VStack {
+            VStack {
+                VStack(){
+                    
+                    Text("\(viewModel.inventoryUnique.inventory.productName)")
+                        .font(Font.largeTitle)
+                    VStack {
+                        VStack{
+                            Text("Selected location: \(viewModel.inventoryUnique.inventory.locationName)")
+                                .padding(8)
+                                .font(Font.title2)
+                            
+                            
+                            let targetId = viewModel.inventoryUnique.inventory.productId
+                            
+                            
+                            HStack{
+                                Text("Select a different location: " )
+                                Menu{
+                                    if let location = grouped.first(where: { $0.first?.inventory.productId == targetId }) {
+                                        ForEach(location, id: \.id) { item in
+                                            if(item.inventory.locationName != viewModel.inventoryUnique.inventory.locationName){
+                                                
+                                                NavigationLink(destination: InventoryDetails(inventoryUnique:item,grouped:grouped,repo:repo)){
+                                                    Text("\(item.inventory.locationName), Quantity: \(item.inventory.quantity)")
+                                                        .bold()
+                                                }
+                                                Divider()
+                                            }
                                         }
-                                        Divider()
                                     }
+                                    
+                                }label:{
+                                    Text("Locations")
+                                        .underline()
+                                        .bold()
                                 }
                             }
                             
-                        }label:{
-                            Text("Locations")
-                                .underline()
-                                .bold()
+                            .padding(8)
+                            .font(Font.title3)
+                            
                         }
+                        .accessibilityLabel("Selected location is \(viewModel.inventoryUnique.inventory.locationName). Click 'Locations' to change current location to another location that has this product.")
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        .padding(10)
                     }
+                    .background(Color.blue)
+                    .cornerRadius(20)
                     
-                    .padding(8)
-                    .font(Font.title3)
-
-                }
-                .accessibilityLabel("Selected location is \(viewModel.inventoryUnique.inventory.locationName). Click 'Locations' to change current location to another location that has this product.")
-                .background(Color.white)
-                .padding(16)
-              
-                VStack(){
-
-
                     VStack(){
+                        
                         
                         VStack(){
                             
-                            Divider()
-                            VStack{
-                                HStack {
-                                    VStack {
-                                        Text("Product Details:")
-                                            .font(Font.title3)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding(.leading, 6)
-                                        Text("Product Id:  \(viewModel.inventoryUnique.inventory.productId)")
-                                            .padding(4)
-                                        Text("Product Number:  \(viewModel.inventoryUnique.inventory.productNumber)")
-                                            .padding(4)
+                            VStack(){
+                                
+                                Divider()
+                                VStack{
+                                    HStack {
+                                        VStack {
+                                            Text("Product Details:")
+                                                .font(Font.title3)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .padding(.leading, 6)
+                                            Text("Product Id:  \(viewModel.inventoryUnique.inventory.productId)")
+                                                .padding(4)
+                                            Text("Product Number:  \(viewModel.inventoryUnique.inventory.productNumber)")
+                                                .padding(4)
+                                        }
+                                        Text(" ")
                                     }
-                                    Text(" ")
-                                }
-                                .accessibilityElement()
-                                .accessibilityLabel("Product details: the product has an id of \(viewModel.inventoryUnique.inventory.productId) and product number of \(viewModel.inventoryUnique.inventory.productNumber)")
+                                    .accessibilityElement()
+                                    .accessibilityLabel("Product details: the product has an id of \(viewModel.inventoryUnique.inventory.productId) and product number of \(viewModel.inventoryUnique.inventory.productNumber)")
                                     
-                                Divider()
-                                
-                                HStack {
-                                    VStack {
-                                        Text("Location details:")
-                                            .font(Font.title3)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding(.leading, 6)
-                                        Text("location Id:  \(viewModel.inventoryUnique.inventory.locationId)")
-                                            .padding(4)
-                                        Text("shelf:  \(viewModel.inventoryUnique.inventory.shelf)")
-                                            .padding(4)
-                                        Text("bin:  \(viewModel.inventoryUnique.inventory.bin)")
-                                            .padding(4)
+                                    Divider()
+                                    
+                                    HStack {
+                                        VStack {
+                                            Text("Location details:")
+                                                .font(Font.title3)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .padding(.leading, 6)
+                                            Text("location Id:  \(viewModel.inventoryUnique.inventory.locationId)")
+                                                .padding(4)
+                                            Text("shelf:  \(viewModel.inventoryUnique.inventory.shelf)")
+                                                .padding(4)
+                                            Text("bin:  \(viewModel.inventoryUnique.inventory.bin)")
+                                                .padding(4)
+                                        }
+                                        Text(" ")
                                     }
-                                    Text(" ")
-                                }
-                                
-                                .accessibilityElement(children: .ignore)
-                                .accessibilityLabel("Location details: the location id of the product is \(viewModel.inventoryUnique.inventory.locationId) on shelf \(viewModel.inventoryUnique.inventory.shelf) in bin \(viewModel.inventoryUnique.inventory.bin)")
-                                
-                                Divider()
-                                
-                                HStack {
-                                    VStack {
-                                        Text("Stock Details:")
-                                            .font(Font.title3)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding(.leading, 6)
-                                        Text("Quantity at location:  \(viewModel.inventoryUnique.inventory.quantity)")
-                                            .padding(4)
-                                        Text("Reorder Point:  \(viewModel.inventoryUnique.inventory.reorderPoint)")
-                                            .padding(4)
+                                    
+                                    .accessibilityElement(children: .ignore)
+                                    .accessibilityLabel("Location details: the location id of the product is \(viewModel.inventoryUnique.inventory.locationId) on shelf \(viewModel.inventoryUnique.inventory.shelf) in bin \(viewModel.inventoryUnique.inventory.bin)")
+                                    
+                                    Divider()
+                                    
+                                    HStack {
+                                        VStack {
+                                            Text("Stock Details:")
+                                                .font(Font.title3)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .padding(.leading, 6)
+                                            Text("Quantity at location:  \(viewModel.inventoryUnique.inventory.quantity)")
+                                                .padding(4)
+                                            Text("Reorder Point:  \(viewModel.inventoryUnique.inventory.reorderPoint)")
+                                                .padding(4)
+                                        }
+                                        Text(" ")
                                     }
-                                    Text(" ")
-                                }
-                                .accessibilityElement(children: .ignore)
-                                .accessibilityLabel("Stock details: the quantity of the product at the specified location is \(viewModel.inventoryUnique.inventory.quantity) and the reorder point is \(viewModel.inventoryUnique.inventory.reorderPoint)")
-                                
-                                HStack{
-                                    VStack{
-                                        TextField("Add to current quantity...", text: $viewModel.userText)
-                                            .accessibilityLabel("Enter number to add to current quantity")
-                                            .textFieldStyle(.roundedBorder)
-                                            .padding(10)
-                                        if !viewModel.userText.isEmpty, Int(viewModel.userText) != nil{
-                                            if viewModel.projectedTotal >= 0 {
-                                                Text("Updated total will be: \(viewModel.projectedTotal)")
-                                                    .font(Font.caption)
-                                            } else {
-                                                Text("Resulting quantity cannot be negative")
-                                                    .font(Font.caption)
-                                                    .foregroundColor(.red)
+                                    .accessibilityElement(children: .ignore)
+                                    .accessibilityLabel("Stock details: the quantity of the product at the specified location is \(viewModel.inventoryUnique.inventory.quantity) and the reorder point is \(viewModel.inventoryUnique.inventory.reorderPoint)")
+                                    
+                                    HStack{
+                                        VStack{
+                                            TextField("Add to current quantity...", text: $viewModel.userText)
+                                                .accessibilityLabel("Enter number to add to current quantity")
+                                                .textFieldStyle(.roundedBorder)
+                                                .padding(10)
+                                            if !viewModel.userText.isEmpty, Int(viewModel.userText) != nil{
+                                                if viewModel.projectedTotal >= 0 {
+                                                    Text("Updated total will be: \(viewModel.projectedTotal)")
+                                                        .font(Font.caption)
+                                                } else {
+                                                    Text("Resulting quantity cannot be negative")
+                                                        .font(Font.caption)
+                                                        .foregroundColor(.red)
+                                                }
                                             }
+                                            
                                         }
                                         
-                                    }
-                                    
-                                    Button("Submit"){
-                                        viewModel.updateCounts(
-                                            productId: viewModel.inventoryUnique.inventory.productId,
-                                            locationId: viewModel.inventoryUnique.inventory.locationId,
-                                            oldQuantity: viewModel.inventoryUnique.inventory.quantity
-                                        )
-                                    }
-                                    .accessibilityLabel("Submit entered amount of stock to add to current quantity of \(viewModel.inventoryUnique.inventory.quantity)")
-                                    .padding(8)
-                                    
-                                    
-                                }
-                                
-                                if let error = viewModel.errorMsg{
-                                    HStack{
-                                        Text(error)
-                                            .font(.subheadline)
-                                            .foregroundColor(Color.white)
-                                            .padding(4)
-                                
-                                    }
-                                    .background(Color.red.opacity(0.5))
-
-                                }
-                                HStack{
-                                    Text("Want to order to the safety count? Try: ")
-                                    Button("Quick Reorder"){
-                                        viewModel.quickReorder(
-                                            productId: viewModel.inventoryUnique.inventory.productId,
-                                            locationId: viewModel.inventoryUnique.inventory.locationId,
-                                        )
-                                    
-                                    }
-                                    .accessibilityLabel("Quick reorder: Reorders the product to the safety count of \(viewModel.inventoryUnique.inventory.safetyStockLevel)")
-                                }
-                                if let error = viewModel.errorMsgQuickReorder{
-                                    HStack{
-                                        Text(error)
-                                            .font(.subheadline)
-                                            .foregroundColor(Color.white)
-                                            .padding(4)
+                                        Button("Submit"){
+                                            viewModel.updateCounts(
+                                                productId: viewModel.inventoryUnique.inventory.productId,
+                                                locationId: viewModel.inventoryUnique.inventory.locationId,
+                                                oldQuantity: viewModel.inventoryUnique.inventory.quantity
+                                            )
+                                        }
+                                        .accessibilityLabel("Submit entered amount of stock to add to current quantity of \(viewModel.inventoryUnique.inventory.quantity)")
+                                        .padding(8)
+                                        
                                         
                                     }
-                                    .background(Color.red.opacity(0.5))
+                                    
+                                    if let error = viewModel.errorMsg{
+                                        HStack{
+                                            Text(error)
+                                                .font(.subheadline)
+                                                .foregroundColor(Color.white)
+                                                .padding(4)
+                                            
+                                        }
+                                        .background(Color.red.opacity(0.5))
+                                        
+                                    }
+                                    HStack{
+                                        Text("Want to order to the safety count? Try: ")
+                                        Button("Quick Reorder"){
+                                            viewModel.quickReorder(
+                                                productId: viewModel.inventoryUnique.inventory.productId,
+                                                locationId: viewModel.inventoryUnique.inventory.locationId,
+                                            )
+                                            
+                                        }
+                                        .accessibilityLabel("Quick reorder: Reorders the product to the safety count of \(viewModel.inventoryUnique.inventory.safetyStockLevel)")
+                                    }
+                                    if let error = viewModel.errorMsgQuickReorder{
+                                        HStack{
+                                            Text(error)
+                                                .font(.subheadline)
+                                                .foregroundColor(Color.white)
+                                                .padding(4)
+                                            
+                                        }
+                                        .background(Color.red.opacity(0.5))
+                                    }
+                                    
+                                    
+                                    
+                                    Text("Safety Stock Level:  \(viewModel.inventoryUnique.inventory.safetyStockLevel)")
+                                        .padding(8)
+                                    
+                                    
+                                    
                                 }
-
-
-
-                                Text("Safety Stock Level:  \(viewModel.inventoryUnique.inventory.safetyStockLevel)")
-                                    .padding(8)
-
-
-
+                                
+                                
                             }
-
-
+                            .frame(maxWidth: .infinity)
+                            .background(Color.white)
+                            .cornerRadius(10)
+                            .padding(10)
+                            
+                            
                         }
-                        .frame(maxWidth: .infinity)
-                        .background(Color.white)
-                        .padding(10)
-
-                        
+                        .background(Color.blue)
+                        .cornerRadius(20)
+                        .padding(8)
                     }
+                    
                 }
-                .background(Color.blue)
+                .background(Color.cyan)
                 .cornerRadius(20)
-                .padding(8)
-                .frame(maxWidth: .infinity)
+                .padding(20)
+                
             }
-            .frame(maxWidth: .infinity)
-            .padding(.top, 20)
-            .background(Color.cyan)
-            
-            
-        Spacer()
+        }
             
         }
-        .frame(maxWidth: .infinity)
-        .background(Color.cyan)
     }
 
 }

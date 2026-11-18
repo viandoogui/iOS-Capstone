@@ -17,21 +17,14 @@ struct ProductDetails:View{
         
         ScrollView {
             VStack(){
-//                HStack(){
-//                    Text("Home Button")
-//                        .padding(12)
-//                }
+                //                HStack(){
+                //                    Text("Home Button")
+                //                        .padding(12)
+                //                }
+                VStack(spacing: 0) {
                 Text("\(product.name)")
                     .font(Font.largeTitle)
-                
-                VStack(){
-//                    HStack(){
-//                        
-//                        
-//                        
-//                        
-//                        
-//                    }
+
                     VStack(){
                         
                         VStack(){
@@ -72,13 +65,13 @@ struct ProductDetails:View{
                                     AccessibilityDetailItem("Price:", priceString, "Product price of \(priceString)")
                                         .padding(8)
                                     
-//                                    Text("\n Inventory: N/A")
-//                                        .font(.caption)
-//                                        .foregroundColor(.gray)
+                                    //                                    Text("\n Inventory: N/A")
+                                    //                                        .font(.caption)
+                                    //                                        .foregroundColor(.gray)
                                     
                                 }
                                 
-
+                                
                             }
                             
                             if let summary = product.summary{
@@ -90,40 +83,42 @@ struct ProductDetails:View{
                             
                             if let color = product.color {
                                 Divider()
-
+                                
                                 AccessibilityDetailItem("Color:", color, "Product color of \(color)")
                                     .padding(8)
                             }
                             
                             Divider()
-
+                            
                             let warranty: String = product.warranty ?? "none"
                             AccessibilityDetailItem("Warranty:", warranty, "Product warranty of \(warranty)")
                                 .padding(12)
                         }
                         .frame(maxWidth: .infinity) //ensure horizontal center
                         .background(Color.white)
+                        .cornerRadius(10)
                         .padding(10)
                         
                     }
+                    .background(Color.blue)
+                    .cornerRadius(20)
+                    .padding(10)
+                    .frame(maxWidth: .infinity) //ensure horizontal center
                 }
-                .background(Color.blue)
+                .background(Color.cyan)
                 .cornerRadius(20)
-                .padding(10)
-                .frame(maxWidth: .infinity) //ensure horizontal center
-
+                .padding(20)
             }
-            .frame(maxWidth: .infinity) //ensure horizontal center
-            .padding(.top, 20)
-            .background(Color.cyan)
+                
+            
+            
             
             
         Spacer()
             
         }
-        .frame(maxWidth: .infinity) //ensure horizontal center
-        .background(Color.cyan)
-        //.padding(10)
+
+
     }
 
 }
