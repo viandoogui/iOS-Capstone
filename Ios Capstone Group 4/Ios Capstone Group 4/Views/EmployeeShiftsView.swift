@@ -41,6 +41,8 @@ struct EmployeeShiftsView: View {
                             Text("\(employee.firstName) \(employee.lastName)")
                             Text("Shift: \(employee.shift)")
                         }
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel("Employee \(employee.firstName) \(employee.lastName) has a shift of \(employee.shift)")
                     }
                 }
             }

@@ -40,6 +40,8 @@ struct ProductPerformanceView: View {
                         Text(product.productName)
                         Text("Units Sold: \(product.unitsSold)")
                     }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("\(product.productName) has sold \(product.unitsSold) units")
                 }
             }
         }

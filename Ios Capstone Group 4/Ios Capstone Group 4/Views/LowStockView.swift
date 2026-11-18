@@ -40,7 +40,10 @@ struct LowStockView: View {
                             Text("In Stock: \(product.stockLevel)")
                             Text("Reorder Point: \(product.reorderPoint)")
                         }
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel("Low stock product \(product.productName) has \(product.stockLevel) in stock and a reorder point of \(product.reorderPoint)")
                     }
+                    
                 }
             }
             .padding()
