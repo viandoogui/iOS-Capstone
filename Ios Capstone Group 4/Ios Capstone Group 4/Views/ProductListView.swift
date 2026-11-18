@@ -20,15 +20,16 @@ struct ProductListView: View {
     var body: some View {
 
         NavigationStack{
+            VStack{
                 VStack(){
-//                   HStack(){
-//                        //Text("Back button")
-//                        //  .padding(12)
-//                        Spacer()
-//                        Text("Home Button")
-//                            .padding(12)
-//                    }
-                
+                    //                   HStack(){
+                    //                        //Text("Back button")
+                    //                        //  .padding(12)
+                    //                        Spacer()
+                    //                        Text("Home Button")
+                    //                            .padding(12)
+                    //                    }
+                    
                     
                     
                     VStack(spacing: 0){
@@ -92,15 +93,15 @@ struct ProductListView: View {
                                 HStack(){
                                     Text("Product Number")
                                         .frame(width: 80, alignment: .center) // Fixed width for column 1
-                                       // .padding(4)
+                                    // .padding(4)
                                     
                                     Text("Name")
                                         .frame(maxWidth: .infinity, alignment: .center) // Fills middle space
-                                        //.padding(4)
+                                    //.padding(4)
                                     
                                     Text("Price")
                                         .frame(width: 90, alignment: .center) // Fixed width for column 3
-                                        //.padding(4)
+                                    //.padding(4)
                                 }
                                 .accessibilityElement(children: .ignore)
                                 .accessibilityLabel("Product fields: product number, name, and price")
@@ -111,11 +112,11 @@ struct ProductListView: View {
                                         ProgressView("Loading products...")
                                             .padding()
                                     }
-
+                                    
                                     if !viewModel.errormsg.isEmpty {
                                         Text(viewModel.errormsg)
                                             .foregroundColor(.black)
-
+                                        
                                         Button("Try Again") {
                                             Task {
                                                 await viewModel.loadProducts()
@@ -131,39 +132,40 @@ struct ProductListView: View {
                                             ForEach(viewModel.matchingProduct){product in
                                                 
                                                 ProductListRow(product: product) //each individual product row
-
+                                                
                                             }
-                                           
-
+                                            
+                                            
                                         }
                                     }
+                                }
                             }
-                        }
                             .task{
                                 if(viewModel.products.isEmpty){
                                     await viewModel.loadProducts()
                                     
                                 }
                             }
-                        .frame(maxWidth: .infinity) //ensure horizontal center
-                        .background(Color.white)
-                        .padding(8)
+                            .frame(maxWidth: .infinity) //ensure horizontal center
+                            .background(Color.white)
+                            .padding(8)
                             
-                    }//nav stack
+                        }//nav stack
                         .navigationTitle("Product List")
-                }//vstack
-                .background(Color.blue)
-                .cornerRadius(20)
-                .padding(8)
-                .frame(maxWidth: .infinity) //ensure horizontal center
+                    }//vstack
+                    .background(Color.blue)
+                    .cornerRadius(20)
+                    .padding(8)
+                    .frame(maxWidth: .infinity) //ensure horizontal center
                     
-        }//vstack with title
-        .background(Color.cyan)
-            
+                }//vstack with title
+                .background(Color.cyan)
+                .cornerRadius(20)
+            }
     }
             .frame(maxWidth: .infinity)
             .padding(10)
-            .background(Color.cyan)
+ 
 
 
     }//body

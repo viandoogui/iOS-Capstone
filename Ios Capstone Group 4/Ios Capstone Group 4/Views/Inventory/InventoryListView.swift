@@ -21,10 +21,14 @@ struct InventoryListView: View {
     var body: some View {
 
         NavigationStack{
-                VStack(){
+            VStack(){
                 
+                
+                    
                     Text("Inventory Catalog!")
                         .font(Font.largeTitle)
+                
+                VStack {
                     
                     VStack(){
                         HStack(){
@@ -50,14 +54,14 @@ struct InventoryListView: View {
                                     viewModel.sortZA()
                                 }
                                 .accessibilityLabel("Sort inventory product names from Z to A")
-
+                                
                                 Divider()
                                 
                                 Button("Products with low stock") {
                                     viewModel.lowStock()
                                 }
                                 .accessibilityLabel("Sort inventory products by lowest amount of stock")
-
+                                
                                 
                             } label: {
                                 
@@ -95,50 +99,52 @@ struct InventoryListView: View {
                                 .accessibilityLabel("Inventory product fields: product number, name, and location")
                                 
                                 
-                               
-                                    ScrollView(.vertical){
-                                        LazyVStack{
-
-                                            ForEach(viewModel.groupedArray, id: \.self){(inv: [InventoryUniqueItem]) in
-                                                
-                                                InventoryListRow(inv:inv,grouped:viewModel.groupedArray, repo:repo)
-                                                
-                                                
-                                            }
-
+                                
+                                ScrollView(.vertical){
+                                    LazyVStack{
+                                        
+                                        ForEach(viewModel.groupedArray, id: \.self){(inv: [InventoryUniqueItem]) in
+                                            
+                                            InventoryListRow(inv:inv,grouped:viewModel.groupedArray, repo:repo)
+                                            
+                                            
                                         }
-                                        .padding(8)
+                                        
                                     }
-                                    .refreshable{
-                                        viewModel.filter = ""
-                                        await viewModel.loadInventory()
-                                    }
-                            
-                        }
+                                    .padding(8)
+                                }
+                                .refreshable{
+                                    viewModel.filter = ""
+                                    await viewModel.loadInventory()
+                                }
+                                
+                            }
                             .task{
                                 if(viewModel.inventoryUniqueItems.isEmpty){
                                     await viewModel.loadInventory()
-
+                                    
                                 }
                             }
                             .background(Color.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(8)
+                            .frame(maxWidth: .infinity)
+                            .padding(8)
                             
+                        }
                     }
-                }
-                .background(Color.blue)
-                .cornerRadius(20)
-                .padding(8)
-                .frame(maxWidth: .infinity)
+                    .background(Color.blue)
+                    .cornerRadius(20)
+                    .padding(8)
+                    .frame(maxWidth: .infinity)
                     
-        }//vstack with title
-        .background(Color.cyan)
+                }//vstack with title
+                .background(Color.cyan)
+                .cornerRadius(20)
+            }
             
     }
             .frame(maxWidth: .infinity)
             .padding(10)
-            .background(Color.cyan)
+
 
 
     }//body

@@ -15,63 +15,69 @@ struct OrderListView: View {
     }
     
     var body: some View {
+        
+       
             
             VStack {
                 
-                if viewModel.isLoading {
-                    ProgressView("Loading orders...")
-                }
-
-                if !viewModel.errorMessage.isEmpty {
-                    Text(viewModel.errorMessage)
-                        .foregroundColor(.red)
-
-                    Button("Try Again") {
-                        Task {
-                            await viewModel.loadOrders()
-                        }
-                    }
-                }
-
-                
-                HStack {
-                    TextField("Search Orders...", text: $viewModel.filter)
-                        .textFieldStyle(.roundedBorder)
-                        .accessibilityLabel("Search for orders by order ID or store name")
-                      
-                    Menu {
-                        Button("None") {
-                            viewModel.clearSort()
-                            viewModel.refilterOrders()
-                        }
-                        .accessibilityLabel("No employee sorting")
-
-                        Button("A - Z") {
-                            viewModel.sortByAZ()
-                            viewModel.selectedSort()
-                        }
-                        .accessibilityLabel("Sort store names from A to Z")
-
-                        Button("Z - A") {
-                            viewModel.sortByZA()
-                            viewModel.selectedSort()
-                        }
-                        .accessibilityLabel("Sort store names from Z to A")
-                    } label: {
-                        Text("Sort By...")
-                            .padding(12)
-                            .background(Color.white, in: Capsule())
-                            .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
-                            .accessibilityLabel("Store name sorting")
-                            .accessibilityHint("Options to sort store names by alphabetical order")
-                    }
-                }
-                .padding(.horizontal, 20)
                 
                 VStack {
+                
+                VStack {
+                    HStack {
+                        TextField("Search Orders...", text: $viewModel.filter)
+                            .textFieldStyle(.roundedBorder)
+                            .accessibilityLabel("Search for orders by order ID or store name")
+                        
+                        Menu {
+                            Button("None") {
+                                viewModel.clearSort()
+                                viewModel.refilterOrders()
+                            }
+                            .accessibilityLabel("No employee sorting")
+                            
+                            Button("A - Z") {
+                                viewModel.sortByAZ()
+                                viewModel.selectedSort()
+                            }
+                            .accessibilityLabel("Sort store names from A to Z")
+                            
+                            Button("Z - A") {
+                                viewModel.sortByZA()
+                                viewModel.selectedSort()
+                            }
+                            .accessibilityLabel("Sort store names from Z to A")
+                        } label: {
+                            Text("Sort By...")
+                                .padding(12)
+                                .background(Color.white, in: Capsule())
+                                .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
+                                .accessibilityLabel("Store name sorting")
+                                .accessibilityHint("Options to sort store names by alphabetical order")
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 10)
+                    
+                    
+                    
+                    if !viewModel.errorMessage.isEmpty {
+                        Text(viewModel.errorMessage)
+                            .foregroundColor(.red)
+                        
+                        Button("Try Again") {
+                            Task {
+                                await viewModel.loadOrders()
+                            }
+                        }
+                    }
+                    
                     if viewModel.errorMessage.isEmpty {
                         VStack {
                             ScrollView {
+                                if viewModel.isLoading {
+                                    ProgressView("Loading orders...")
+                                }
                                 if viewModel.matchingOrders.isEmpty &&
                                     viewModel.errorMessage.isEmpty &&
                                     !viewModel.isLoading {
@@ -81,7 +87,7 @@ struct OrderListView: View {
                                 }
                                 ForEach(viewModel.matchingOrders) { order in
                                     OrderListItem(order: order, allOrders: viewModel.allOrders)
-
+                                    
                                 }
                             }
                             .refreshable {
@@ -103,13 +109,17 @@ struct OrderListView: View {
                 .navigationTitle("Order History")
                 
             }
-            .padding(.top, 20)
-            .background(Color.cyan)
+                .background(Color.cyan)
+                .cornerRadius(20)
+                .padding(20)
+            
             .task {
                 await viewModel.loadOrders()
             }
+        }
         
     }
+       
 }
 
 extension OrderListView {
