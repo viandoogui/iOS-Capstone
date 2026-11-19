@@ -21,7 +21,7 @@ struct EmployeeList: View {
                 VStack {
                     VStack(spacing: 0) {
                         
-                            HStack {
+                        HStack {
                             TextField("Search Full Name...", text: $viewModel.filter)
                                 .padding(5)
                                 .background(Color.white)
@@ -57,17 +57,17 @@ struct EmployeeList: View {
                             
                         }
                         .padding(10)
-                            
-                            HStack {
-                                TextField("Search Department...", text: $viewModel.departmentFilter)
-                                    .padding(5)
-                                    .background(Color.white)
-                                    .cornerRadius(5)
-                                    .accessibilityLabel("Employee department search")
-                                    .accessibilityHint("Find employees by their department's name")
-                            }
-                            .padding(.horizontal, 10)
-                            
+                        
+                        HStack {
+                            TextField("Search Department...", text: $viewModel.departmentFilter)
+                                .padding(5)
+                                .background(Color.white)
+                                .cornerRadius(5)
+                                .accessibilityLabel("Employee department search")
+                                .accessibilityHint("Find employees by their department's name")
+                        }
+                        .padding(.horizontal, 10)
+                        
                         Grid(horizontalSpacing: 0, verticalSpacing: 0){
                             
                             HStack {
@@ -84,26 +84,26 @@ struct EmployeeList: View {
                             
                             ScrollView {
                                 
-                            if viewModel.isLoading {
-                                ProgressView("Loading employees...")
-                            }
-                            
-                            if !viewModel.errorMessage.isEmpty {
-                                Text(viewModel.errorMessage)
-                                    .foregroundColor(.white)
-                                
-                                Button("Try Again") {
-                                    Task {
-                                        await viewModel.loadEmployees()
-                                    }
+                                if viewModel.isLoading {
+                                    ProgressView("Loading employees...")
                                 }
-                                .buttonStyle(.bordered)
-                                .padding(12)
-                                .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
-                                .accessibilityLabel("Try to load the employee list again")
-                            } else {
                                 
-                               
+                                if !viewModel.errorMessage.isEmpty {
+                                    Text(viewModel.errorMessage)
+                                        .foregroundColor(.white)
+                                    
+                                    Button("Try Again") {
+                                        Task {
+                                            await viewModel.loadEmployees()
+                                        }
+                                    }
+                                    .buttonStyle(.bordered)
+                                    .padding(12)
+                                    .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
+                                    .accessibilityLabel("Try to load the employee list again")
+                                } else {
+                                    
+                                    
                                     
                                     ForEach(viewModel.matchingEmployees) { employee in
                                         
@@ -111,16 +111,16 @@ struct EmployeeList: View {
                                             .padding(5)
                                     }
                                     
-                                
+                                    
+                                }
                             }
+                            
                         }
-                                
-                            }
-                            .refreshable {
-                                await viewModel.loadEmployees()
-                            }
-                            .background(Color.white)
-                            .padding(15)
+                        .refreshable {
+                            await viewModel.loadEmployees()
+                        }
+                        .background(Color.white)
+                        .padding(15)
                         
                         
                     }

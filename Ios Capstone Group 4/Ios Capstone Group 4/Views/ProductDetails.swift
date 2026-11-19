@@ -13,14 +13,9 @@ struct ProductDetails:View{
     
     var body: some View{
         
-        
-        
         ScrollView {
             VStack(){
-                //                HStack(){
-                //                    Text("Home Button")
-                //                        .padding(12)
-                //                }
+
                 VStack(spacing: 0) {
                 Text("\(product.name)")
                     .font(Font.largeTitle)
@@ -29,9 +24,7 @@ struct ProductDetails:View{
                         
                         VStack(){
                             HStack(){
-                                //base64 string can figure it out
-                                //"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.shutterstock.com%2Fimage-vector%2Fblank-image-photo-placeholder-icon-600nw-2501054919.jpg&f=1&nofb=1&ipt=1fe05258ed3420df3534141caa7f073cdf7ae982a02880f78da58d71b5819396&ipo=images"
-                                
+
                                 if(product.thumbnailPhotoFileName == "no_image_available_small.gif" || product.thumbnailPhotoFileName == "" || product.thumbnailPhotoFileName == "no_image_available.gif" || product.thumbnailPhotoFileName.isEmpty){
                                     EmptyView()
                                 }else{
@@ -64,10 +57,6 @@ struct ProductDetails:View{
                                     let priceString: String = "$\(String(format:"%.2f", product.listPrice))"
                                     AccessibilityDetailItem("Price:", priceString, "Product price of \(priceString)")
                                         .padding(8)
-                                    
-                                    //                                    Text("\n Inventory: N/A")
-                                    //                                        .font(.caption)
-                                    //                                        .foregroundColor(.gray)
                                     
                                 }
                                 
@@ -110,9 +99,6 @@ struct ProductDetails:View{
                 .padding(20)
             }
                 
-            
-            
-            
             
         Spacer()
             

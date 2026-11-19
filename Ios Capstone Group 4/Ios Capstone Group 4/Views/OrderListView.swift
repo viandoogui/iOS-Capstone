@@ -16,12 +16,10 @@ struct OrderListView: View {
     
     var body: some View {
         
-       
+        VStack {
+            
             
             VStack {
-                
-                
-                VStack {
                 
                 VStack {
                     HStack {
@@ -109,9 +107,9 @@ struct OrderListView: View {
                 .navigationTitle("Order History")
                 
             }
-                .background(Color.cyan)
-                .cornerRadius(20)
-                .padding(20)
+            .background(Color.cyan)
+            .cornerRadius(20)
+            .padding(20)
             
             .task {
                 await viewModel.loadOrders()
@@ -119,11 +117,11 @@ struct OrderListView: View {
         }
         
     }
-       
+    
 }
 
 extension OrderListView {
-
+    
     @Observable
     class ViewModel {
         
@@ -135,23 +133,23 @@ extension OrderListView {
                 refilterOrders()
             }
         }
-
+        
         var selectedSort: () -> Void = {}
-
+        
         func refilterOrders() {
             matchingOrders = orders.filter { order in
                 filter == "" ||
                 order.storeName.lowercased().contains(filter.lowercased()) ||
                 String(order.orderNumber).contains(filter)
             }
-
+            
             selectedSort()
         }
-
+        
         func clearSort() {
             selectedSort = {}
         }
-
+        
         func sortByAZ() {
             selectedSort = {
                 self.matchingOrders = self.matchingOrders.sorted(by: {
@@ -159,7 +157,7 @@ extension OrderListView {
                 })
             }
         }
-
+        
         func sortByZA() {
             selectedSort = {
                 self.matchingOrders = self.matchingOrders.sorted(by: {
@@ -170,18 +168,18 @@ extension OrderListView {
         
         var errorMessage = ""
         var isLoading = true
-
+        
         private let repo: any RepositoryProtocol<Order>
-
+        
         init(repository: any RepositoryProtocol<Order>) {
             self.repo = repository
         }
-
+        
         func loadOrders() async {
             
             isLoading = true
             errorMessage = ""
-
+            
             do {
                 let loadedOrders = try await repo.getAll()
                 allOrders = loadedOrders
@@ -200,7 +198,7 @@ extension OrderListView {
                 refilterOrders()
                 
                 isLoading = false
-
+                
             } catch {
                 errorMessage = "Couldn't load orders. Please try again."
                 isLoading = false

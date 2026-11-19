@@ -19,7 +19,7 @@ struct InventoryListView: View {
     }
     
     var body: some View {
-
+        
         NavigationStack{
             VStack(){
                 
@@ -133,17 +133,15 @@ struct InventoryListView: View {
             }
             .navigationTitle("Inventory Catalog")
             
+        }
+        .frame(maxWidth: .infinity)
+        .padding(10)
+        
+        
+        
     }
-            .frame(maxWidth: .infinity)
-            .padding(10)
-
-
-
-    }//body
-
-}//end
-
-
+    
+}
 
 
 extension InventoryListView {
@@ -157,9 +155,9 @@ extension InventoryListView {
         var currentSort = sortOptions.none
         
         var errormsg = ""
-
+        
         var selectedInventory: InventoryUniqueItem? = nil
-
+        
         
         private let repository: any RepositoryProtocol<Inventory>
         init(repository:any RepositoryProtocol<Inventory>){
@@ -168,7 +166,7 @@ extension InventoryListView {
         
         //base default inventory pulled from remote repo
         var inventory: [Inventory] = []
-      
+        
         
         //an array of the unique inventory objects. this can be looped over
         var inventoryUniqueItems: [InventoryUniqueItem] = []{
@@ -181,7 +179,7 @@ extension InventoryListView {
         
         
         //pull inventory from the remote repo
-        //wrapp the inventory objects in another object making them uniuqe,
+        //wrap the inventory objects in another object making them unique,
         //group the inventory based on similar productIds
         func loadInventory()async{
             do{
@@ -195,14 +193,14 @@ extension InventoryListView {
             }
         }
         
-    
+        
         //used to wrap inventory in a unique id object.
         //now every inventory object has a unique id to loop through in the view
         func wrapInv(inv:[Inventory]){
             for item in inventory{
                 inventoryUniqueItems.append(InventoryUniqueItem(inventory: item))
             }
-
+            
         }
         
         //this is the array that will be displayed.
@@ -217,16 +215,16 @@ extension InventoryListView {
         }
         
         
-         var filter:String="" {
-             didSet {
-                    selectedInventory = nil
-                    // Filter the items based on search text
-                    matchingInventory = inventoryUniqueItems.filter { item in
-                        filter.isEmpty || item.inventory.productName.lowercased().contains(filter.lowercased())
-                    }
+        var filter:String="" {
+            didSet {
+                selectedInventory = nil
+                // Filter the items based on search text
+                matchingInventory = inventoryUniqueItems.filter { item in
+                    filter.isEmpty || item.inventory.productName.lowercased().contains(filter.lowercased())
+                }
             }
         }
-       
+        
         //holds items for sorting. sort and filter here then load into groupedArray
         var matchingInventory:[InventoryUniqueItem] = []{
             didSet {
@@ -235,17 +233,17 @@ extension InventoryListView {
                 groupedArray = Array(dictionary.values)
             }
         }
-
-  
+        
+        
         
         
         //MARK: HELPERS FOR FILTERS
         func sortAZ(){
             currentSort = .az
-                
-                groupedArray.sort {
-                    ($0.first?.inventory.productName ?? "") < ($1.first?.inventory.productName ?? "")
-                }
+            
+            groupedArray.sort {
+                ($0.first?.inventory.productName ?? "") < ($1.first?.inventory.productName ?? "")
+            }
         }
         
         func sortZA(){
@@ -258,15 +256,15 @@ extension InventoryListView {
         func lowStock(){
             currentSort = .lowStock
             groupedArray.sort { box1, box2 in
-                    let min1 = box1.map { $0.inventory.quantity }.min() ?? 0
-                    let min2 = box2.map { $0.inventory.quantity }.min() ?? 0
-                    return min1 < min2
-                }
+                let min1 = box1.map { $0.inventory.quantity }.min() ?? 0
+                let min2 = box2.map { $0.inventory.quantity }.min() ?? 0
+                return min1 < min2
+            }
         }
-
         
         
-       
+        
+        
         
         
     }

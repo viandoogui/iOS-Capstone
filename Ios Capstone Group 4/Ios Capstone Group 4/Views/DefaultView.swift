@@ -23,8 +23,5 @@ struct DefaultView: View {
             }
         }
         
-       
-        
-        
     }
 }
