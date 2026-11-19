@@ -20,7 +20,6 @@ class AuthStatus: ObservableObject {
         let auth = storage.getToken(key: authKey)
         let refresh = storage.getToken(key: refreshKey)
         
-        // remove this later, demo code
         self.isLoggedIn = auth != nil && refresh != nil
     }
     

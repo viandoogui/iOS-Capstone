@@ -21,8 +21,6 @@ class RemoteWeeklySaleRepository: RepositoryProtocol <WeeklySale> {
         let (data, _) = try await URLSession.shared.data(from: url)
         
         do {
-            // this was necessary because the date format would cause a decodingError
-            // the compiler was expecting a double and got the date as a string.
             let formatter = DateFormatter()
             ApplyDateSettings(formatter)
             let decoder = ConfigureNewDecoder(formatter)

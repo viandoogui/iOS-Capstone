@@ -43,9 +43,5 @@ struct ProductListRow:View {
         .padding(8)
         
     }
-    //.frame(maxWidth: .infinity) //ensure horizontal center
-    //.background(Color.white)
-    //.padding(10)
-    
     
 }

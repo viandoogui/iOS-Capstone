@@ -21,7 +21,7 @@ struct EmployeeList: View {
                 VStack {
                     VStack(spacing: 0) {
                         
-                            HStack {
+                        HStack {
                             TextField("Search Full Name...", text: $viewModel.filter)
                                 .padding(5)
                                 .background(Color.white)
@@ -57,30 +57,32 @@ struct EmployeeList: View {
                             
                         }
                         .padding(10)
+                        
+                        HStack {
+                            TextField("Search Department...", text: $viewModel.departmentFilter)
+                                .padding(5)
+                                .background(Color.white)
+                                .cornerRadius(5)
+                                .accessibilityLabel("Employee department search")
+                                .accessibilityHint("Find employees by their department's name")
+                        }
+                        .padding(.horizontal, 10)
+                        
+                        Grid(horizontalSpacing: 0, verticalSpacing: 0){
                             
                             HStack {
-                                TextField("Search Department...", text: $viewModel.departmentFilter)
-                                    .padding(5)
-                                    .background(Color.white)
-                                    .cornerRadius(5)
-                                    .accessibilityLabel("Employee department search")
-                                    .accessibilityHint("Find employees by their department's name")
-                            }
-                            .padding(.horizontal, 10)
-                            
-                            Grid(horizontalSpacing: 0, verticalSpacing: 0){
-                                
-                                HStack {
-                                    GridRow {
-                                        Text("First Name")
-                                        Text("Last Name")
-                                        Text("Department")
-                                    }
-                                    .frame(maxWidth: .infinity)
+                                GridRow {
+                                    Text("First Name")
+                                    Text("Last Name")
+                                    Text("Department")
                                 }
-                                .accessibilityElement(children: .ignore)
-                                .accessibilityLabel("Employee fields: first name, last name, and department")
-                                .padding(5)
+                                .frame(maxWidth: .infinity)
+                            }
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel("Employee fields: first name, last name, and department")
+                            .padding(5)
+                            
+                            ScrollView {
                                 
                                 if viewModel.isLoading {
                                     ProgressView("Loading employees...")
@@ -101,28 +103,28 @@ struct EmployeeList: View {
                                     .accessibilityLabel("Try to load the employee list again")
                                 } else {
                                     
-                                    ScrollView {
+                                    
+                                    
+                                    ForEach(viewModel.matchingEmployees) { employee in
                                         
-                                        ForEach(viewModel.matchingEmployees) { employee in
-                                            
-                                            EmployeeListItem(employee: employee)
-                                                .padding(5)
-                                        }
-                                        
+                                        EmployeeListItem(employee: employee)
+                                            .padding(5)
                                     }
+                                    
+                                    
                                 }
-                                
                             }
-                            .refreshable {
-                                await viewModel.loadEmployees()
-                            }
-                            .background(Color.white)
-                            .padding(15)
+                            
+                        }
+                        .refreshable {
+                            await viewModel.loadEmployees()
+                        }
+                        .background(Color.white)
+                        .padding(15)
                         
                         
                     }
                     .navigationTitle("Employee List")
-                    .toolbarTitleDisplayMode(.inline)
                     .navigationDestination(for: Employee.self) { employee in
                         EmployeeDetails(employee: employee)
                     }

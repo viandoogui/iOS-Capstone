@@ -18,35 +18,49 @@ struct EmployeeShiftsView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 15) {
-
-                Text("Employee Shifts")
-                    .font(.title)
-
-                if viewModel.isLoading {
-                    ProgressView("Loading employees...")
-
-                } else if !viewModel.errorMessage.isEmpty {
-                    Text(viewModel.errorMessage)
-
-                    Button("Try Again") {
-                        Task {
-                            await viewModel.loadEmployees()
+            VStack {
+                VStack {
+                    VStack {
+                        VStack(spacing: 15) {
+                            
+                            Text("Employee Shifts")
+                                .font(.title)
+                            
+                            if viewModel.isLoading {
+                                ProgressView("Loading employees...")
+                                
+                            } else if !viewModel.errorMessage.isEmpty {
+                                Text(viewModel.errorMessage)
+                                
+                                Button("Try Again") {
+                                    Task {
+                                        await viewModel.loadEmployees()
+                                    }
+                                }
+                                
+                            } else {
+                                ForEach(viewModel.employees) { employee in
+                                    VStack {
+                                        Text("\(employee.firstName) \(employee.lastName)")
+                                        Text("Shift: \(employee.shift)")
+                                    }
+                                    .accessibilityElement(children: .ignore)
+                                    .accessibilityLabel("Employee \(employee.firstName) \(employee.lastName) has a shift of \(employee.shift)")
+                                }
+                            }
                         }
+                        .padding(10)
                     }
-
-                } else {
-                    ForEach(viewModel.employees) { employee in
-                        VStack {
-                            Text("\(employee.firstName) \(employee.lastName)")
-                            Text("Shift: \(employee.shift)")
-                        }
-                        .accessibilityElement(children: .ignore)
-                        .accessibilityLabel("Employee \(employee.firstName) \(employee.lastName) has a shift of \(employee.shift)")
-                    }
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .padding(10)
                 }
+                .background(Color.blue)
+                .cornerRadius(20)
+                .padding(10)
             }
-            .padding()
+            .background(Color.cyan)
+            .cornerRadius(20)
         }
         .task {
             await viewModel.loadEmployees()

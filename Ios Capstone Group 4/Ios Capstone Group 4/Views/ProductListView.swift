@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct ProductListView: View {
-    //@State private var viewModel:ViewModel = ViewModel()
-    //@Environment(\.MockProductRepository) private var repo
+
     @State var productName:String = ""
     
     @State private var viewModel:ViewModel
@@ -20,16 +19,8 @@ struct ProductListView: View {
     var body: some View {
 
         NavigationStack{
+            VStack{
                 VStack(){
-//                   HStack(){
-//                        //Text("Back button")
-//                        //  .padding(12)
-//                        Spacer()
-//                        Text("Home Button")
-//                            .padding(12)
-//                    }
-                
-                    
                     
                     VStack(spacing: 0){
                         HStack(){
@@ -38,18 +29,13 @@ struct ProductListView: View {
                                 .padding(20)
                                 .accessibilityLabel("Search for Products by name")
                             
-                            Spacer()
-                            
                             Menu {
                                 Button("No Sort") {
                                     viewModel.filter = ""
                                     viewModel.currentSort = .none
                                     viewModel.matchingProduct = viewModel.products
                                 }
-                                
-                                //                            Button("In Stock Only (MAYBE)") {
-                                //                                // Apply filter logic
-                                //                            }
+                                .accessibilityLabel("No product sorting")
                                 
                                 Button("A - Z") {
                                     viewModel.sortAZ()
@@ -70,16 +56,10 @@ struct ProductListView: View {
                                 }
                                 .accessibilityLabel("Sort product prices from highest to lowest")
                             } label: {
-                                
                                 Text("Sort By...")
-                                    .padding(18)
-                                    .foregroundColor(.black)
-                                    .background(Color.white)
-                                    .cornerRadius(20)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 20)
-                                            .stroke(Color.black, lineWidth: 1)
-                                    )
+                                    .padding(12)
+                                    .background(Color.white, in: Capsule())
+                                    .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
                                     .accessibilityLabel("Options to sort the products")
                             }
                             .padding(12)
@@ -92,15 +72,12 @@ struct ProductListView: View {
                                 HStack(){
                                     Text("Product Number")
                                         .frame(width: 80, alignment: .center) // Fixed width for column 1
-                                       // .padding(4)
                                     
                                     Text("Name")
                                         .frame(maxWidth: .infinity, alignment: .center) // Fills middle space
-                                        //.padding(4)
                                     
                                     Text("Price")
                                         .frame(width: 90, alignment: .center) // Fixed width for column 3
-                                        //.padding(4)
                                 }
                                 .accessibilityElement(children: .ignore)
                                 .accessibilityLabel("Product fields: product number, name, and price")
@@ -111,11 +88,11 @@ struct ProductListView: View {
                                         ProgressView("Loading products...")
                                             .padding()
                                     }
-
+                                    
                                     if !viewModel.errormsg.isEmpty {
                                         Text(viewModel.errormsg)
                                             .foregroundColor(.black)
-
+                                        
                                         Button("Try Again") {
                                             Task {
                                                 await viewModel.loadProducts()
@@ -131,44 +108,45 @@ struct ProductListView: View {
                                             ForEach(viewModel.matchingProduct){product in
                                                 
                                                 ProductListRow(product: product) //each individual product row
-
+                                                
                                             }
-                                           
-
+                                            
+                                            
                                         }
                                     }
+                                }
                             }
-                        }
                             .task{
                                 if(viewModel.products.isEmpty){
                                     await viewModel.loadProducts()
                                     
                                 }
                             }
-                        .frame(maxWidth: .infinity) //ensure horizontal center
-                        .background(Color.white)
-                        .padding(8)
+                            .frame(maxWidth: .infinity) //ensure horizontal center
+                            .background(Color.white)
+                            .padding(8)
                             
-                    }//nav stack
+                        }
                         .navigationTitle("Product List")
-                }//vstack
-                .background(Color.blue)
-                .cornerRadius(20)
-                .padding(8)
-                .frame(maxWidth: .infinity) //ensure horizontal center
+                    }
+                    .background(Color.blue)
+                    .cornerRadius(20)
+                    .padding(8)
+                    .frame(maxWidth: .infinity)
                     
-        }//vstack with title
-        .background(Color.cyan)
-            
+                }
+                .background(Color.cyan)
+                .cornerRadius(20)
+            }
     }
             .frame(maxWidth: .infinity)
             .padding(10)
-            .background(Color.cyan)
+ 
 
 
-    }//body
+    }
 
-}//end
+}
 
 
 
@@ -188,8 +166,6 @@ extension ProductListView {
 
         var selectedProduct: Product? = nil
 
-        
-        //var mockRepo = MockProductRepository()
         private let repository: any RepositoryProtocol<Product>
         init(repository:any RepositoryProtocol<Product>){
             self.repository = repository
@@ -212,16 +188,14 @@ extension ProductListView {
                 products = try await repository.getAll()
                 matchingProduct = products
                 isLoading = false
-                //print(products)
             } catch {
                 errormsg = "Couldn't load products. Please try again."
                 isLoading = false
-                //print(errormsg)
             }
         }
         
          var filter:String="" {
-            didSet{ //react to when changes have been made to this
+            didSet { //react to when changes have been made to this
                //put products in matching products if theres no filter or if the filter matches.
                 let trimmed = filter.trimmingCharacters(in: .whitespacesAndNewlines)
                 if !filter.isEmpty && trimmed.isEmpty {
@@ -249,8 +223,6 @@ extension ProductListView {
         
         //MARK: helpers for filters
         func sortAZ(){
-            //            currentSort = .az
-            //            matchingProduct = matchingProduct.sorted(by: { $0.name < $1.name })
             matchingProduct = matchingProduct.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
         }
         
@@ -268,10 +240,6 @@ extension ProductListView {
             currentSort = .priceLowToHigh
             matchingProduct = matchingProduct.sorted(by: { $0.listPrice < $1.listPrice })
         }
-        
-        
-        
-       
         
         
     }
