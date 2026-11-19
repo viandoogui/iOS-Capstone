@@ -32,7 +32,7 @@ struct OrderListView: View {
                                 viewModel.clearSort()
                                 viewModel.refilterOrders()
                             }
-                            .accessibilityLabel("No employee sorting")
+                            .accessibilityLabel("No order sorting")
                             
                             Button("A - Z") {
                                 viewModel.sortByAZ()

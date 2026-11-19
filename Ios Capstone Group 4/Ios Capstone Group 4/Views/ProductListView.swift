@@ -35,6 +35,7 @@ struct ProductListView: View {
                                     viewModel.currentSort = .none
                                     viewModel.matchingProduct = viewModel.products
                                 }
+                                .accessibilityLabel("No product sorting")
                                 
                                 Button("A - Z") {
                                     viewModel.sortAZ()
