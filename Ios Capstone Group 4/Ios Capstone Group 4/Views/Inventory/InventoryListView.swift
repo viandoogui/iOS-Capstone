@@ -23,11 +23,6 @@ struct InventoryListView: View {
         NavigationStack{
             VStack(){
                 
-                
-                    
-                    Text("Inventory Catalog!")
-                        .font(Font.largeTitle)
-                
                 VStack {
                     
                     VStack(){
@@ -140,6 +135,7 @@ struct InventoryListView: View {
                 .background(Color.cyan)
                 .cornerRadius(20)
             }
+            .navigationTitle("Inventory Catalog")
             
     }
             .frame(maxWidth: .infinity)
