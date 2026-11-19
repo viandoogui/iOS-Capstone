@@ -39,8 +39,6 @@ struct ProductListView: View {
                                 .padding(20)
                                 .accessibilityLabel("Search for Products by name")
                             
-                            Spacer()
-                            
                             Menu {
                                 Button("No Sort") {
                                     viewModel.filter = ""
@@ -71,16 +69,10 @@ struct ProductListView: View {
                                 }
                                 .accessibilityLabel("Sort product prices from highest to lowest")
                             } label: {
-                                
                                 Text("Sort By...")
-                                    .padding(18)
-                                    .foregroundColor(.black)
-                                    .background(Color.white)
-                                    .cornerRadius(20)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 20)
-                                            .stroke(Color.black, lineWidth: 1)
-                                    )
+                                    .padding(12)
+                                    .background(Color.white, in: Capsule())
+                                    .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
                                     .accessibilityLabel("Options to sort the products")
                             }
                             .padding(12)

@@ -60,15 +60,11 @@ struct InventoryListView: View {
                                 
                             } label: {
                                 
-                                Text("Filter")
-                                    .padding(18)
-                                    .foregroundColor(.black)
-                                    .background(Color.white)
-                                    .cornerRadius(20)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 20)
-                                            .stroke(Color.black, lineWidth: 1)
-                                    )
+                                Text("Sort By...")
+                                    .padding(12)
+                                    .background(Color.white, in: Capsule())
+                                    .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
+                                
                             }
                             .accessibilityLabel("Inventory product sorting")
                             .accessibilityHint("Options to sort inventory products")
