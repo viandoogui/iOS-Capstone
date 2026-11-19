@@ -68,49 +68,52 @@ struct EmployeeList: View {
                             }
                             .padding(.horizontal, 10)
                             
-                            Grid(horizontalSpacing: 0, verticalSpacing: 0){
+                        Grid(horizontalSpacing: 0, verticalSpacing: 0){
+                            
+                            HStack {
+                                GridRow {
+                                    Text("First Name")
+                                    Text("Last Name")
+                                    Text("Department")
+                                }
+                                .frame(maxWidth: .infinity)
+                            }
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel("Employee fields: first name, last name, and department")
+                            .padding(5)
+                            
+                            ScrollView {
                                 
-                                HStack {
-                                    GridRow {
-                                        Text("First Name")
-                                        Text("Last Name")
-                                        Text("Department")
+                            if viewModel.isLoading {
+                                ProgressView("Loading employees...")
+                            }
+                            
+                            if !viewModel.errorMessage.isEmpty {
+                                Text(viewModel.errorMessage)
+                                    .foregroundColor(.white)
+                                
+                                Button("Try Again") {
+                                    Task {
+                                        await viewModel.loadEmployees()
                                     }
-                                    .frame(maxWidth: .infinity)
                                 }
-                                .accessibilityElement(children: .ignore)
-                                .accessibilityLabel("Employee fields: first name, last name, and department")
-                                .padding(5)
+                                .buttonStyle(.bordered)
+                                .padding(12)
+                                .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
+                                .accessibilityLabel("Try to load the employee list again")
+                            } else {
                                 
-                                if viewModel.isLoading {
-                                    ProgressView("Loading employees...")
-                                }
-                                
-                                if !viewModel.errorMessage.isEmpty {
-                                    Text(viewModel.errorMessage)
-                                        .foregroundColor(.white)
+                               
                                     
-                                    Button("Try Again") {
-                                        Task {
-                                            await viewModel.loadEmployees()
-                                        }
+                                    ForEach(viewModel.matchingEmployees) { employee in
+                                        
+                                        EmployeeListItem(employee: employee)
+                                            .padding(5)
                                     }
-                                    .buttonStyle(.bordered)
-                                    .padding(12)
-                                    .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
-                                    .accessibilityLabel("Try to load the employee list again")
-                                } else {
                                     
-                                    ScrollView {
-                                        
-                                        ForEach(viewModel.matchingEmployees) { employee in
-                                            
-                                            EmployeeListItem(employee: employee)
-                                                .padding(5)
-                                        }
-                                        
-                                    }
-                                }
+                                
+                            }
+                        }
                                 
                             }
                             .refreshable {
