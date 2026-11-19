@@ -197,6 +197,7 @@ struct ContentView: View {
                     } ) {
                         Image(systemName: "house")
                     }
+                    .accessibilityLabel("Return to home menu")
                 }
                 
             }
