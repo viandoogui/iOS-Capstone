@@ -17,38 +17,53 @@ struct ProductPerformanceView: View {
     }
 
     var body: some View {
-        VStack(spacing: 15) {
-
-            Text("Product Performance")
-                .font(.title)
-
-            if viewModel.isLoading {
-                ProgressView("Loading products...")
-
-            } else if !viewModel.errorMessage.isEmpty {
-                Text(viewModel.errorMessage)
-
-                Button("Try Again") {
-                    Task {
+        VStack {
+            VStack {
+                VStack {
+                    VStack(spacing: 15) {
+                        
+                        Text("Product Performance")
+                            .font(.title)
+                        
+                        if viewModel.isLoading {
+                            ProgressView("Loading products...")
+                            
+                        } else if !viewModel.errorMessage.isEmpty {
+                            Text(viewModel.errorMessage)
+                            
+                            Button("Try Again") {
+                                Task {
+                                    await viewModel.loadProducts()
+                                }
+                            }
+                            
+                        } else {
+                            ForEach(viewModel.products) { product in
+                                VStack {
+                                    Text(product.productName)
+                                    Text("Units Sold: \(product.unitsSold)")
+                                }
+                                .accessibilityElement(children: .ignore)
+                                .accessibilityLabel("\(product.productName) has sold \(product.unitsSold) units")
+                            }
+                        }
+                    }
+                    .padding()
+                    .task {
                         await viewModel.loadProducts()
                     }
                 }
-
-            } else {
-                ForEach(viewModel.products) { product in
-                    VStack {
-                        Text(product.productName)
-                        Text("Units Sold: \(product.unitsSold)")
-                    }
-                    .accessibilityElement(children: .ignore)
-                    .accessibilityLabel("\(product.productName) has sold \(product.unitsSold) units")
-                }
+                .background(Color.white)
+                .cornerRadius(10)
+                .padding(10)
+                
             }
+            .background(Color.blue)
+            .cornerRadius(20)
+            .padding(10)
         }
-        .padding()
-        .task {
-            await viewModel.loadProducts()
-        }
+        .background(Color.cyan)
+        .cornerRadius(20)
     }
 }
 

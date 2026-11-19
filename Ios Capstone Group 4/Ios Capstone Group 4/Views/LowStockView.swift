@@ -18,35 +18,51 @@ struct LowStockView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 15) {
-                Text("Low Stock Products")
-                    .font(.title)
-
-                if viewModel.isLoading {
-                    ProgressView("Loading products...")
-
-                } else if !viewModel.errorMessage.isEmpty {
-                    Text(viewModel.errorMessage)
-
-                    Button("Try Again") {
-                        Task {
-                            await viewModel.loadProducts()
+            VStack {
+            VStack {
+                VStack(spacing: 15) {
+                    VStack {
+                        Text("Low Stock Products")
+                            .font(.title)
+                        
+                        if viewModel.isLoading {
+                            ProgressView("Loading products...")
+                            
+                        } else if !viewModel.errorMessage.isEmpty {
+                            Text(viewModel.errorMessage)
+                            
+                            Button("Try Again") {
+                                Task {
+                                    await viewModel.loadProducts()
+                                }
+                            }
+                        } else {
+                            ForEach(viewModel.products) { product in
+                                VStack {
+                                    Text(product.productName)
+                                    Text("In Stock: \(product.stockLevel)")
+                                    Text("Reorder Point: \(product.reorderPoint)")
+                                }
+                                .accessibilityElement(children: .ignore)
+                                .accessibilityLabel("Low stock product \(product.productName) has \(product.stockLevel) in stock and a reorder point of \(product.reorderPoint)")
+                            }
+                            
                         }
+                           
                     }
-                } else {
-                    ForEach(viewModel.products) { product in
-                        VStack {
-                            Text(product.productName)
-                            Text("In Stock: \(product.stockLevel)")
-                            Text("Reorder Point: \(product.reorderPoint)")
-                        }
-                        .accessibilityElement(children: .ignore)
-                        .accessibilityLabel("Low stock product \(product.productName) has \(product.stockLevel) in stock and a reorder point of \(product.reorderPoint)")
-                    }
+                    .padding(10)
                     
                 }
+                .background(Color.white)
+                .cornerRadius(10)
+                .padding(10)
             }
-            .padding()
+            .background(Color.blue)
+            .cornerRadius(20)
+            .padding(10)
+        }
+            .background(Color.cyan)
+            .cornerRadius(20)
         }
         .task {
             await viewModel.loadProducts()
