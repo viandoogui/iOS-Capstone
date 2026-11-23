@@ -32,7 +32,7 @@ struct ProductListRow:View {
                     .frame(alignment: .center)
 
             }
-            .frame(maxWidth: .infinity) //ensure horizontal center
+            .frame(maxWidth: .infinity) 
             .background(Color.white)
             .foregroundStyle(Color(red: 0.0, green: 0.1, blue: 0.6))
             .padding(8)

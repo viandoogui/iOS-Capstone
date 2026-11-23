@@ -129,7 +129,7 @@ struct ProductListView: View {
                                     
                                 }
                             }
-                            .frame(maxWidth: .infinity) //ensure horizontal center
+                            .frame(maxWidth: .infinity) 
                             .background(Color.white)
                             .padding(8)
                             

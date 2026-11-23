@@ -34,7 +34,7 @@ struct InventoryListView: View {
                             
                             Spacer()
                             Menu {
-                                Button("ID") {
+                                Button("No Sort") {
                                     viewModel.setSortDefault()
                                     viewModel.refreshInventories()
                                 }
@@ -131,7 +131,7 @@ struct InventoryListView: View {
                     .padding(8)
                     .frame(maxWidth: .infinity)
                     
-                }//vstack with title
+                }
                 .background(Color.cyan)
                 .cornerRadius(20)
             }

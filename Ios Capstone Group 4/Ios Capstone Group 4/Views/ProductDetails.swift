@@ -32,8 +32,8 @@ struct ProductDetails:View{
                                         
                                         Image(uiImage: image)
                                             .resizable()
-                                            .scaledToFill() // Try scaledToFill or scaledToFit
-                                            .frame(width: image.size.width / 0.5, height: image.size.height / 0.5)                                            .clipped() // Crops any overflow if using scaledToFill
+                                            .scaledToFill() 
+                                            .frame(width: image.size.width / 0.5, height: image.size.height / 0.5)                                            .clipped()
                                             .padding(8)
                                             .accessibilityLabel(Text("Image of \(product.name)"))
                                     }
@@ -83,7 +83,7 @@ struct ProductDetails:View{
                             AccessibilityDetailItem("Warranty:", warranty, "Product warranty of \(warranty)")
                                 .padding(12)
                         }
-                        .frame(maxWidth: .infinity) //ensure horizontal center
+                        .frame(maxWidth: .infinity)
                         .background(Color.white)
                         .cornerRadius(10)
                         .padding(10)
@@ -92,7 +92,7 @@ struct ProductDetails:View{
                     .background(Color.blue)
                     .cornerRadius(20)
                     .padding(10)
-                    .frame(maxWidth: .infinity) //ensure horizontal center
+                    .frame(maxWidth: .infinity)
                 }
                 .background(Color.cyan)
                 .cornerRadius(20)
