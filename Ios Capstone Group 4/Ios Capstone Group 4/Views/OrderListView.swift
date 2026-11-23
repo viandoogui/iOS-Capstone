@@ -28,21 +28,45 @@ struct OrderListView: View {
                             .accessibilityLabel("Search for orders by order ID or store name")
                         
                         Menu {
-                            Button("None") {
+                            Button {
                                 viewModel.clearSort()
                                 viewModel.refilterOrders()
+                            } label: {
+                                HStack {
+                                    Text("None")
+                                    
+                                    if(viewModel.currentSort == .none) {
+                                        Image(systemName: "checkmark")
+                                    }
+                                }
                             }
                             .accessibilityLabel("No order sorting")
                             
-                            Button("A - Z") {
+                            Button {
                                 viewModel.sortByAZ()
                                 viewModel.selectedSort()
+                            } label: {
+                                HStack {
+                                    Text("A - Z")
+                                    
+                                    if(viewModel.currentSort == .az) {
+                                        Image(systemName: "checkmark")
+                                    }
+                                }
                             }
                             .accessibilityLabel("Sort store names from A to Z")
                             
-                            Button("Z - A") {
+                            Button {
                                 viewModel.sortByZA()
                                 viewModel.selectedSort()
+                            } label: {
+                                HStack {
+                                    Text("Z - A")
+                                    
+                                    if(viewModel.currentSort == .za) {
+                                        Image(systemName: "checkmark")
+                                    }
+                                }
                             }
                             .accessibilityLabel("Sort store names from Z to A")
                         } label: {
@@ -134,6 +158,12 @@ extension OrderListView {
             }
         }
         
+        enum sortOptions{
+            case none,az,za
+        }
+        
+        var currentSort: sortOptions = .none
+        
         var selectedSort: () -> Void = {}
         
         func refilterOrders() {
@@ -148,6 +178,7 @@ extension OrderListView {
         
         func clearSort() {
             selectedSort = {}
+            currentSort = .none
         }
         
         func sortByAZ() {
@@ -156,6 +187,7 @@ extension OrderListView {
                     $0.storeName < $1.storeName
                 })
             }
+            currentSort = .az
         }
         
         func sortByZA() {
@@ -164,6 +196,7 @@ extension OrderListView {
                     $0.storeName > $1.storeName
                 })
             }
+            currentSort = .za
         }
         
         var errorMessage = ""

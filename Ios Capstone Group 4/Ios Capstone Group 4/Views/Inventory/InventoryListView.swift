@@ -34,34 +34,64 @@ struct InventoryListView: View {
                             
                             Spacer()
                             Menu {
-                                Button("No Sort") {
+                                Button {
                                     viewModel.setSortDefault()
                                     viewModel.refreshInventories()
+                                } label: {
+                                    HStack{
+                                        Text("No Sort")
+                                        
+                                        if(viewModel.currentSort == .none) {
+                                            Image(systemName: "checkmark")
+                                        }
+                                    }
                                 }
                                 .accessibilityLabel("Sort inventory product names by product ID")
                                 
-                                Button("A - Z") {
+                                Button {
                                     viewModel.setSortAZ()
                                     viewModel.selectedSort()
+                                } label: {
+                                    HStack{
+                                        Text("A - Z")
+                                        
+                                        if(viewModel.currentSort == .az) {
+                                            Image(systemName: "checkmark")
+                                        }
+                                    }
                                 }
                                 .accessibilityLabel("Sort inventory product names from A to Z")
                                 
-                                Button("Z - A"){
+                                Button {
                                     viewModel.setSortZA()
                                     viewModel.selectedSort()
 
+                                } label: {
+                                    HStack{
+                                        Text("Z - A")
+                                        
+                                        if(viewModel.currentSort == .za) {
+                                            Image(systemName: "checkmark")
+                                        }
+                                    }
                                 }
                                 .accessibilityLabel("Sort inventory product names from Z to A")
                                 
                                 Divider()
                                 
-                                Button("Products with low stock") {
+                                Button {
                                     viewModel.setLowStock()
                                     viewModel.selectedSort()
-
+                                } label: {
+                                    HStack{
+                                        Text("Products with low stock")
+                                        
+                                        if(viewModel.currentSort == .lowStock) {
+                                            Image(systemName: "checkmark")
+                                        }
+                                    }
                                 }
                                 .accessibilityLabel("Sort inventory products by lowest amount of stock")
-                                
                                 
                             } label: {
                                 
@@ -163,6 +193,12 @@ extension InventoryListView {
             self.repository = repository
         }
         
+        enum sortOptions{
+            case none,az,za,lowStock
+        }
+        
+        var currentSort: sortOptions = .none
+        
         //base default inventory pulled from remote repo
         var inventory: [Inventory] = []
         
@@ -243,6 +279,7 @@ extension InventoryListView {
         //MARK: HELPERS FOR FILTERS
         func setSortDefault() {
             selectedSort = {}
+            currentSort = .none
         }
         
         func setSortAZ(){
@@ -251,6 +288,7 @@ extension InventoryListView {
                     ($0.first?.inventory.productName ?? "") < ($1.first?.inventory.productName ?? "")
                 }
             }
+            currentSort = .az
         }
         
         func setSortZA(){
@@ -259,6 +297,7 @@ extension InventoryListView {
                     ($0.first?.inventory.productName ?? "") > ($1.first?.inventory.productName ?? "")
                 }
             }
+            currentSort = .za
         }
         
         func setLowStock(){
@@ -269,6 +308,7 @@ extension InventoryListView {
                     return min1 < min2
                 }
             }
+            currentSort = .lowStock
         }
         
     }

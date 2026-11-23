@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+internal import Combine
 
 struct ProductListView: View {
 
@@ -30,35 +31,76 @@ struct ProductListView: View {
                                 .accessibilityLabel("Search for Products by name")
                             
                             Menu {
-                                Button("No Sort") {
+                                Button {
                                     viewModel.clearSort()
                                     viewModel.refilterProducts()
+                                } label: {
+                                    HStack{
+                                        Text("No Sort")
+                                        
+                                        if(viewModel.currentSort == .none) {
+                                            Image(systemName: "checkmark")
+                                        }
+                                    }
                                 }
+                            
                                 .accessibilityLabel("No product sorting")
                                 
-                                Button("A - Z") {
+                                Button() {
                                     viewModel.setSortAZ()
                                     viewModel.selectedSort()
+                                } label: {
+                                    HStack{
+                                        Text("A - Z")
+                                        
+                                        if(viewModel.currentSort == .az) {
+                                            Image(systemName: "checkmark")
+                                        }
+                                    }
                                 }
                                 .accessibilityLabel("Sort product names from A to Z")
                                 
-                                Button("Z - A"){
+                                Button(){
                                     viewModel.setSortZA()
                                     viewModel.selectedSort()
+                                } label: {
+                                    HStack{
+                                        Text("Z - A")
+                                        
+                                        if(viewModel.currentSort == .za) {
+                                            Image(systemName: "checkmark")
+                                        }
+                                    }
                                 }
                                 .accessibilityLabel("Sort product names from Z to A")
                                 
                                 Divider()
                                 
-                                Button("Price: Low to High") {
+                                Button() {
                                     viewModel.setLowToHigh()
                                     viewModel.selectedSort()
+                                } label: {
+                                    HStack{
+                                        Text("Price: Low to High")
+                                        
+                                        if(viewModel.currentSort == .priceLowToHigh) {
+                                            Image(systemName: "checkmark")
+                                        }
+                                    }
                                 }
                                 .accessibilityLabel("Sort product prices from lowest to highest")
                                 
-                                Button("Price: High to Low") {
+                                Button() {
                                     viewModel.setHighToLow()
                                     viewModel.selectedSort()
+                                } label: {
+                                    HStack{
+                                        Text("Price: High to Low")
+                                        
+                                        if(viewModel.currentSort == .priceHighToLow) {
+                                            Image(systemName: "checkmark")
+                                        }
+                                    }
                                 }
                                 .accessibilityLabel("Sort product prices from highest to lowest")
                                 
@@ -168,6 +210,12 @@ extension ProductListView {
 
         var selectedProduct: Product? = nil
 
+        enum sortOptions{
+            case none,az,za,priceLowToHigh,priceHighToLow
+        }
+        
+        var currentSort: sortOptions = .none
+        
         private let repository: any RepositoryProtocol<Product>
         init(repository:any RepositoryProtocol<Product>){
             self.repository = repository
@@ -230,30 +278,35 @@ extension ProductListView {
         
         func clearSort() {
             selectedSort = {}
+            currentSort = sortOptions.none
         }
         
         func setSortAZ(){
             selectedSort = {
                 self.matchingProduct = self.matchingProduct.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
             }
+            currentSort = sortOptions.az
         }
         
         func setSortZA(){
             selectedSort = {
                 self.matchingProduct = self.matchingProduct.sorted { $0.name.localizedStandardCompare($1.name) == .orderedDescending }
             }
+            currentSort = sortOptions.za
         }
         
         func setHighToLow(){
             selectedSort = {
                 self.matchingProduct = self.matchingProduct.sorted(by: { $0.listPrice > $1.listPrice })
             }
+            currentSort = sortOptions.priceHighToLow
         }
         
         func setLowToHigh(){
             selectedSort = {
                 self.matchingProduct = self.matchingProduct.sorted(by: { $0.listPrice < $1.listPrice })
             }
+            currentSort = sortOptions.priceLowToHigh
         }
         
         
