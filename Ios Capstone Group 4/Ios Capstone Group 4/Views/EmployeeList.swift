@@ -29,19 +29,43 @@ struct EmployeeList: View {
                                 .accessibilityLabel("Employee full name search")
                             Spacer()
                             Menu {
-                                Button("None") {
+                                Button() {
                                     viewModel.clearSort()
                                     viewModel.refilterEmployees()
+                                } label: {
+                                    HStack {
+                                        Text("None")
+                                        
+                                        if(viewModel.currentSort == .none) {
+                                            Image(systemName: "checkmark")
+                                        }
+                                    }
                                 }
                                 .accessibilityLabel("No employee sorting")
-                                Button("A - Z"){
+                                Button(){
                                     viewModel.sortByAZ()
                                     viewModel.selectedSort()
+                                } label: {
+                                    HStack {
+                                        Text("A - Z")
+                                            
+                                        if(viewModel.currentSort == .az) {
+                                            Image(systemName: "checkmark")
+                                        }
+                                    }
                                 }
                                 .accessibilityLabel("Sort employee names from A to Z")
-                                Button("Z - A"){
+                                Button {
                                     viewModel.sortByZA()
                                     viewModel.selectedSort()
+                                } label: {
+                                    HStack {
+                                        Text("Z - A")
+                                            
+                                        if(viewModel.currentSort == .za) {
+                                            Image(systemName: "checkmark")
+                                        }
+                                    }
                                 }
                                 .accessibilityLabel("Sort employee names from Z to A")
                             }
@@ -164,6 +188,12 @@ extension EmployeeList {
             self.repository = repository
         }
         
+        enum sortOptions{
+            case none,az,za
+        }
+        
+        var currentSort: sortOptions = .none
+        
         var employees: [Employee] = [] {
             didSet {
                 filter = ""
@@ -217,14 +247,17 @@ extension EmployeeList {
         
         func clearSort() {
             selectedSort = {}
+            currentSort = .none
         }
         
         func sortByAZ() {
             selectedSort = { self.matchingEmployees = self.matchingEmployees.sorted(by: {$0.firstName < $1.firstName}) }
+            currentSort = .az
         }
         
         func sortByZA() {
             selectedSort = { self.matchingEmployees = self.matchingEmployees.sorted(by: {$0.firstName > $1.firstName}) }
+            currentSort = .za
         }
         
     }
