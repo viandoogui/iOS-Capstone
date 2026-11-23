@@ -34,11 +34,11 @@ struct InventoryListView: View {
                             
                             Spacer()
                             Menu {
-                                Button("Remove Sort") {
-                                    viewModel.clearSort()
+                                Button("ID") {
+                                    viewModel.setSortDefault()
                                     viewModel.refreshInventories()
                                 }
-                                .accessibilityLabel("No inventory product sorting")
+                                .accessibilityLabel("Sort inventory product names by product ID")
                                 
                                 Button("A - Z") {
                                     viewModel.setSortAZ()
@@ -241,7 +241,7 @@ extension InventoryListView {
         var selectedSort: () -> Void = {}
 
         //MARK: HELPERS FOR FILTERS
-        func clearSort() {
+        func setSortDefault() {
             selectedSort = {}
         }
         
