@@ -1,9 +1,3 @@
-//
-//  ProductListRow.swift
-//  Ios Capstone Group 4
-//
-//  Created by user302999 on 10/15/26.
-//
 
 import SwiftUI
 struct InventoryListRow:View {
