@@ -47,10 +47,6 @@ struct LoginView : View{
                     }
                     .padding(10)
                     
-                    if viewModel.isBusy {
-                        ProgressView()
-                    }
-                    
                     Button("Log in") {
                         Task {
                             let response = await viewModel.login()
@@ -63,15 +59,26 @@ struct LoginView : View{
                         }
                     }
                     .buttonStyle(.borderedProminent)
+                    .disabled(viewModel.loginDisabled)
                     .background(Color.white, in: Capsule())
                     .padding(.bottom, 10)
-                    .disabled(viewModel.loginDisabled)
                     
-                    if !viewModel.errorMessage.isEmpty {
-                        Text(viewModel.errorMessage)
-                            .foregroundColor(Color.red)
+                    if !viewModel.errorMessage.isEmpty && !viewModel.isBusy {
+                        HStack{
+                            Text(viewModel.errorMessage)
+                                .font(.subheadline)
+                                .foregroundColor(Color.white)
+                                .padding(4)
+                            
+                        }
+                        .background(Color.red.opacity(0.5))
+                        .padding(.bottom, 10)
+                    }
+                
+                    if viewModel.isBusy {
+                        ProgressView()
+                            .tint(Color.white)
                             .padding(.bottom, 10)
-
                     }
                     
                 }
@@ -87,9 +94,6 @@ struct LoginView : View{
         .background(Color.cyan)
         .cornerRadius(10)
         .frame(maxHeight: .infinity)
-        
-        
-        
                 
     }
         

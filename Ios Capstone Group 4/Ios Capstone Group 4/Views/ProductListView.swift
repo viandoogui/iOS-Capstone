@@ -31,30 +31,37 @@ struct ProductListView: View {
                             
                             Menu {
                                 Button("No Sort") {
-                                    viewModel.filter = ""
-                                    viewModel.currentSort = .none
-                                    viewModel.matchingProduct = viewModel.products
+                                    viewModel.clearSort()
+                                    viewModel.refilterProducts()
                                 }
                                 .accessibilityLabel("No product sorting")
                                 
                                 Button("A - Z") {
-                                    viewModel.sortAZ()
+                                    viewModel.setSortAZ()
+                                    viewModel.selectedSort()
                                 }
                                 .accessibilityLabel("Sort product names from A to Z")
                                 
                                 Button("Z - A"){
-                                    viewModel.sortZA()
+                                    viewModel.setSortZA()
+                                    viewModel.selectedSort()
                                 }
                                 .accessibilityLabel("Sort product names from Z to A")
+                                
                                 Divider()
+                                
                                 Button("Price: Low to High") {
-                                    viewModel.LowToHigh()
+                                    viewModel.setLowToHigh()
+                                    viewModel.selectedSort()
                                 }
                                 .accessibilityLabel("Sort product prices from lowest to highest")
+                                
                                 Button("Price: High to Low") {
-                                    viewModel.HighToLow()
+                                    viewModel.setHighToLow()
+                                    viewModel.selectedSort()
                                 }
                                 .accessibilityLabel("Sort product prices from highest to lowest")
+                                
                             } label: {
                                 Text("Sort By...")
                                     .padding(12)
@@ -156,11 +163,6 @@ extension ProductListView {
     @Observable
     class ViewModel{
         
-        enum sortOptions{
-            case none,az,za,priceLowToHigh,priceHighToLow
-        }
-        var currentSort = sortOptions.none
-        
         var errormsg = ""
         var isLoading = true
 
@@ -177,9 +179,8 @@ extension ProductListView {
                 selectedProduct = nil
             }
         }
-            
         
-        func loadProducts()async{
+        func loadProducts() async {
 
             isLoading = true
             errormsg = ""
@@ -197,19 +198,23 @@ extension ProductListView {
          var filter:String="" {
             didSet { //react to when changes have been made to this
                //put products in matching products if theres no filter or if the filter matches.
-                let trimmed = filter.trimmingCharacters(in: .whitespacesAndNewlines)
-                if !filter.isEmpty && trimmed.isEmpty {
-                    matchingProduct = []
-                }else{
-                    
-                    matchingProduct = products.filter{ product in
-                        filter.isEmpty || product.name.lowercased().contains(filter.lowercased())
-                    }
-                }
-                
+                refilterProducts()
             }
         }
        
+        func refilterProducts() {
+            let trimmed = filter.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !filter.isEmpty && trimmed.isEmpty {
+                matchingProduct = []
+            } else{
+                matchingProduct = products.filter{ product in
+                    filter.isEmpty || product.name.lowercased().contains(filter.lowercased())
+                }
+            }
+            
+            selectedSort()
+        }
+        
         var matchingProduct:[Product] = []{
             didSet{
                 if let selected = selectedProduct,
@@ -219,26 +224,36 @@ extension ProductListView {
             }
         }
         
-        
-        
         //MARK: helpers for filters
-        func sortAZ(){
-            matchingProduct = matchingProduct.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+        
+        var selectedSort: () -> Void = {}
+        
+        func clearSort() {
+            selectedSort = {}
         }
         
-        func sortZA(){
-            currentSort = .za
-            matchingProduct = matchingProduct.sorted { $0.name.localizedStandardCompare($1.name) == .orderedDescending }
+        func setSortAZ(){
+            selectedSort = {
+                self.matchingProduct = self.matchingProduct.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+            }
         }
         
-        func HighToLow(){
-            currentSort = .priceHighToLow
-            matchingProduct = matchingProduct.sorted(by: { $0.listPrice > $1.listPrice })
+        func setSortZA(){
+            selectedSort = {
+                self.matchingProduct = self.matchingProduct.sorted { $0.name.localizedStandardCompare($1.name) == .orderedDescending }
+            }
         }
         
-        func LowToHigh(){
-            currentSort = .priceLowToHigh
-            matchingProduct = matchingProduct.sorted(by: { $0.listPrice < $1.listPrice })
+        func setHighToLow(){
+            selectedSort = {
+                self.matchingProduct = self.matchingProduct.sorted(by: { $0.listPrice > $1.listPrice })
+            }
+        }
+        
+        func setLowToHigh(){
+            selectedSort = {
+                self.matchingProduct = self.matchingProduct.sorted(by: { $0.listPrice < $1.listPrice })
+            }
         }
         
         

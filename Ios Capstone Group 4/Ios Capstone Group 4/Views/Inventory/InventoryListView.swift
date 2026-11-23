@@ -34,26 +34,31 @@ struct InventoryListView: View {
                             
                             Spacer()
                             Menu {
-                                Button("Remove Filters") {
-                                    viewModel.filter = ""
-                                    viewModel.currentSort = .none
+                                Button("ID") {
+                                    viewModel.setSortDefault()
+                                    viewModel.refreshInventories()
                                 }
-                                .accessibilityLabel("No inventory product sorting")
+                                .accessibilityLabel("Sort inventory product names by product ID")
                                 
                                 Button("A - Z") {
-                                    viewModel.sortAZ()
+                                    viewModel.setSortAZ()
+                                    viewModel.selectedSort()
                                 }
                                 .accessibilityLabel("Sort inventory product names from A to Z")
                                 
                                 Button("Z - A"){
-                                    viewModel.sortZA()
+                                    viewModel.setSortZA()
+                                    viewModel.selectedSort()
+
                                 }
                                 .accessibilityLabel("Sort inventory product names from Z to A")
                                 
                                 Divider()
                                 
                                 Button("Products with low stock") {
-                                    viewModel.lowStock()
+                                    viewModel.setLowStock()
+                                    viewModel.selectedSort()
+
                                 }
                                 .accessibilityLabel("Sort inventory products by lowest amount of stock")
                                 
@@ -97,7 +102,6 @@ struct InventoryListView: View {
                                         ForEach(viewModel.groupedArray, id: \.self){(inv: [InventoryUniqueItem]) in
                                             
                                             InventoryListRow(inv:inv,grouped:viewModel.groupedArray, repo:repo)
-                                            
                                             
                                         }
                                         
@@ -149,11 +153,6 @@ extension InventoryListView {
     @Observable
     class ViewModel{
         
-        enum sortOptions{
-            case none,az,za,lowStock
-        }
-        var currentSort = sortOptions.none
-        
         var errormsg = ""
         
         var selectedInventory: InventoryUniqueItem? = nil
@@ -171,7 +170,6 @@ extension InventoryListView {
         //an array of the unique inventory objects. this can be looped over
         var inventoryUniqueItems: [InventoryUniqueItem] = []{
             didSet{
-                filter = ""
                 selectedInventory = nil
                 matchingInventory = inventoryUniqueItems
             }
@@ -217,12 +215,18 @@ extension InventoryListView {
         
         var filter:String="" {
             didSet {
-                selectedInventory = nil
-                // Filter the items based on search text
-                matchingInventory = inventoryUniqueItems.filter { item in
-                    filter.isEmpty || item.inventory.productName.lowercased().contains(filter.lowercased())
-                }
+                refreshInventories()
             }
+        }
+        
+        func refreshInventories() {
+            selectedInventory = nil
+            // Filter the items based on search text
+            matchingInventory = inventoryUniqueItems.filter { item in
+                filter.isEmpty || item.inventory.productName.lowercased().contains(filter.lowercased())
+            }
+            
+            selectedSort()
         }
         
         //holds items for sorting. sort and filter here then load into groupedArray
@@ -230,42 +234,42 @@ extension InventoryListView {
             didSet {
                 // Automatically re-group whenever matchingInventory changes
                 let dictionary = Dictionary(grouping: matchingInventory) { $0.inventory.productName }
-                groupedArray = Array(dictionary.values)
+                groupedArray = Array(dictionary.values).sorted(by: { $0.first!.inventory.productId < $1.first!.inventory.productId })
             }
         }
         
-        
-        
-        
+        var selectedSort: () -> Void = {}
+
         //MARK: HELPERS FOR FILTERS
-        func sortAZ(){
-            currentSort = .az
-            
-            groupedArray.sort {
-                ($0.first?.inventory.productName ?? "") < ($1.first?.inventory.productName ?? "")
+        func setSortDefault() {
+            selectedSort = {}
+        }
+        
+        func setSortAZ(){
+            selectedSort = {
+                self.groupedArray.sort {
+                    ($0.first?.inventory.productName ?? "") < ($1.first?.inventory.productName ?? "")
+                }
             }
         }
         
-        func sortZA(){
-            currentSort = .za
-            groupedArray.sort {
-                ($0.first?.inventory.productName ?? "") > ($1.first?.inventory.productName ?? "")
+        func setSortZA(){
+            selectedSort = {
+                self.groupedArray.sort {
+                    ($0.first?.inventory.productName ?? "") > ($1.first?.inventory.productName ?? "")
+                }
             }
         }
         
-        func lowStock(){
-            currentSort = .lowStock
-            groupedArray.sort { box1, box2 in
-                let min1 = box1.map { $0.inventory.quantity }.min() ?? 0
-                let min2 = box2.map { $0.inventory.quantity }.min() ?? 0
-                return min1 < min2
+        func setLowStock(){
+            selectedSort = {
+                self.groupedArray.sort { box1, box2 in
+                    let min1 = box1.map { $0.inventory.quantity }.min() ?? 0
+                    let min2 = box2.map { $0.inventory.quantity }.min() ?? 0
+                    return min1 < min2
+                }
             }
         }
-        
-        
-        
-        
-        
         
     }
     

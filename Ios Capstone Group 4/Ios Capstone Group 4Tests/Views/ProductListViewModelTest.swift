@@ -89,7 +89,8 @@ struct ProductListViewModelTests {
         
         await viewModel.loadProducts()
         
-        viewModel.sortAZ()
+        viewModel.setSortAZ()
+        viewModel.selectedSort()
         
         let names = viewModel.matchingProduct.map { $0.name }
         
@@ -101,7 +102,8 @@ struct ProductListViewModelTests {
         
         await viewModel.loadProducts()
         
-        viewModel.sortZA()
+        viewModel.setSortZA()
+        viewModel.selectedSort()
         
         let names = viewModel.matchingProduct.map { $0.name }
         
@@ -115,7 +117,8 @@ struct ProductListViewModelTests {
         await viewModel.loadProducts()
         
         viewModel.filter = "R"
-        viewModel.sortAZ()
+        viewModel.setSortAZ()
+        viewModel.selectedSort()
         
         let names = viewModel.matchingProduct.map { $0.name }
         
@@ -129,7 +132,8 @@ struct ProductListViewModelTests {
         
         await viewModel.loadProducts()
         
-        viewModel.LowToHigh()
+        viewModel.setLowToHigh()
+        viewModel.selectedSort()
         
         let prices = viewModel.matchingProduct.map { $0.listPrice }
         
@@ -143,7 +147,8 @@ struct ProductListViewModelTests {
         
         await viewModel.loadProducts()
         
-        viewModel.HighToLow()
+        viewModel.setHighToLow()
+        viewModel.selectedSort()
         
         let prices = viewModel.matchingProduct.map { $0.listPrice }
         
