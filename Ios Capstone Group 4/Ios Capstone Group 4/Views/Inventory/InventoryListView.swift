@@ -1,9 +1,3 @@
-//
-//  ProductListView.swift
-//  Ios Capstone Group 4
-//
-//  Created by user302999 on 10/1/26.
-//
 
 import SwiftUI
 
@@ -131,7 +125,7 @@ struct InventoryListView: View {
                     .padding(8)
                     .frame(maxWidth: .infinity)
                     
-                }//vstack with title
+                }
                 .background(Color.cyan)
                 .cornerRadius(20)
             }
@@ -227,12 +221,10 @@ extension InventoryListView {
                     filter.isEmpty || item.inventory.productName.lowercased().contains(filter.lowercased())
                 }
 
-                // Group once in a consistent way without forcing a sort
                 let dictionary = Dictionary(grouping: filtered) { $0.inventory.productName }
                 baseGroupedArray = Array(dictionary.values)
                 groupedArray = baseGroupedArray
 
-                // Apply active sort (if any) on top of the unsorted base
                 selectedSort()
         }
         
