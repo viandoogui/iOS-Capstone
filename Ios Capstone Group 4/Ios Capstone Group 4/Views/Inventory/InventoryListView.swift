@@ -30,7 +30,7 @@ struct InventoryListView: View {
                             Menu {
                                 Button("No Sort") {
                                     viewModel.setSortDefault()
-                                    viewModel.refreshInventories()
+                                    //viewModel.refreshInventories()
                                 }
                                 .accessibilityLabel("Sort inventory product names by product ID")
                                 
@@ -169,6 +169,7 @@ extension InventoryListView {
             }
         }
         
+        private var defaultGroupedArray: [[InventoryUniqueItem]] = []
         
         //pull inventory from the remote repo
         //wrap the inventory objects in another object making them unique,
@@ -179,7 +180,8 @@ extension InventoryListView {
                 wrapInv(inv: inventory)
                 groupInv(inventoryUnique: inventoryUniqueItems)
                 matchingInventory = inventoryUniqueItems
-                refreshInventories()
+                defaultGroupedArray = groupedArray
+              // refreshInventories()
             }catch{
                 errormsg = "error loading inventory: \(error)"
                 print(errormsg)
@@ -242,8 +244,7 @@ extension InventoryListView {
         //MARK: HELPERS FOR FILTERS
         func setSortDefault() {
             selectedSort = {}
-            filter = ""
-            groupedArray = baseGroupedArray
+            groupedArray = defaultGroupedArray
         }
         
         func setSortAZ(){
