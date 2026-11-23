@@ -149,9 +149,6 @@ struct EmployeeList: View {
                         
                     }
                     .navigationTitle("Employee List")
-                    .navigationDestination(for: Employee.self) { employee in
-                        EmployeeDetails(employee: employee)
-                    }
                     .background(Color.blue)
                     .cornerRadius(20)
                     .padding(10)
@@ -166,7 +163,9 @@ struct EmployeeList: View {
             }
             .frame(alignment: .top)
             .task {
-                await viewModel.loadEmployees()
+                if (viewModel.employees.isEmpty) {
+                    await viewModel.loadEmployees()
+                }
             }
             
         }
