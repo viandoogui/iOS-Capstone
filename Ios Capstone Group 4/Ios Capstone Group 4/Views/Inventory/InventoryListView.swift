@@ -34,7 +34,7 @@ struct InventoryListView: View {
                             
                             Spacer()
                             Menu {
-                                Button("ID") {
+                                Button("No Sort") {
                                     viewModel.setSortDefault()
                                     viewModel.refreshInventories()
                                 }
@@ -165,7 +165,7 @@ extension InventoryListView {
         
         //base default inventory pulled from remote repo
         var inventory: [Inventory] = []
-        
+        private var baseGroupedArray: [[InventoryUniqueItem]] = []
         
         //an array of the unique inventory objects. this can be looped over
         var inventoryUniqueItems: [InventoryUniqueItem] = []{
@@ -185,6 +185,7 @@ extension InventoryListView {
                 wrapInv(inv: inventory)
                 groupInv(inventoryUnique: inventoryUniqueItems)
                 matchingInventory = inventoryUniqueItems
+                refreshInventories()
             }catch{
                 errormsg = "error loading inventory: \(error)"
                 print(errormsg)
@@ -221,12 +222,18 @@ extension InventoryListView {
         
         func refreshInventories() {
             selectedInventory = nil
-            // Filter the items based on search text
-            matchingInventory = inventoryUniqueItems.filter { item in
-                filter.isEmpty || item.inventory.productName.lowercased().contains(filter.lowercased())
-            }
-            
-            selectedSort()
+
+                let filtered = inventoryUniqueItems.filter { item in
+                    filter.isEmpty || item.inventory.productName.lowercased().contains(filter.lowercased())
+                }
+
+                // Group once in a consistent way without forcing a sort
+                let dictionary = Dictionary(grouping: filtered) { $0.inventory.productName }
+                baseGroupedArray = Array(dictionary.values)
+                groupedArray = baseGroupedArray
+
+                // Apply active sort (if any) on top of the unsorted base
+                selectedSort()
         }
         
         //holds items for sorting. sort and filter here then load into groupedArray
@@ -243,6 +250,8 @@ extension InventoryListView {
         //MARK: HELPERS FOR FILTERS
         func setSortDefault() {
             selectedSort = {}
+            filter = ""
+            groupedArray = baseGroupedArray
         }
         
         func setSortAZ(){
