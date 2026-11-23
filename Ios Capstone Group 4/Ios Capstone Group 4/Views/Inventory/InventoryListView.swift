@@ -129,10 +129,15 @@ struct InventoryListView: View {
                                 ScrollView(.vertical){
                                     LazyVStack{
                                         
-                                        ForEach(viewModel.groupedArray, id: \.self){(inv: [InventoryUniqueItem]) in
-                                            
-                                            InventoryListRow(inv:inv,grouped:viewModel.groupedArray, repo:repo)
-                                            
+                                        if(!viewModel.inventory.isEmpty){
+                                            ForEach(viewModel.groupedArray, id: \.self){(inv: [InventoryUniqueItem]) in
+                                                
+                                                InventoryListRow(inv:inv,grouped:viewModel.groupedArray, repo:repo)
+                                                
+                                            }
+                                        }else{
+                                            Text(viewModel.errormsg)
+                                                .foregroundColor(Color.red)
                                         }
                                         
                                     }
@@ -146,8 +151,9 @@ struct InventoryListView: View {
                             }
                             .task{
                                 if(viewModel.inventoryUniqueItems.isEmpty){
-                                    await viewModel.loadInventory()
                                     
+                                        await viewModel.loadInventory()
+                                  
                                 }
                             }
                             .background(Color.white)
@@ -211,18 +217,22 @@ extension InventoryListView {
             }
         }
         
+//        enum DemoError:Error{
+//            case demoError
+//        }
         
         //pull inventory from the remote repo
         //wrap the inventory objects in another object making them unique,
         //group the inventory based on similar productIds
         func loadInventory()async{
             do{
+               // throw DemoError.demoError
                 inventory = try await repository.getAll()
                 wrapInv(inv: inventory)
                 groupInv(inventoryUnique: inventoryUniqueItems)
                 matchingInventory = inventoryUniqueItems
             }catch{
-                errormsg = "error loading inventory: \(error)"
+                errormsg = "There was an error loading inventory: \(error). Please try refreshing."
                 print(errormsg)
             }
         }
